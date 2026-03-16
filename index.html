@@ -339,13 +339,14 @@
         }
 
         .section-content {
-            max-height: 5000px;
-            overflow: hidden;
+            max-height: 50000px;
+            overflow: visible;
             transition: max-height 0.3s ease;
         }
 
         .section-content.collapsed {
             max-height: 0;
+            overflow: hidden;
         }
 
         .table-wrapper {
@@ -547,8 +548,13 @@
 
         /* ===== RESPONSIVE — MOBILE (iPhone) ===== */
         @media (max-width: 480px) {
-            body {
+            html, body {
                 -webkit-text-size-adjust: 100%;
+                overflow-x: hidden;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                height: auto;
+                min-height: 100vh;
             }
 
             .dashboard-header {
@@ -696,7 +702,8 @@
 
             /* Tables — card layout on mobile */
             .table-wrapper {
-                overflow-x: hidden;
+                overflow-x: visible;
+                overflow-y: visible;
             }
 
             table {
@@ -1007,7 +1014,19 @@
                 </div>
                 <div class="section-content collapsed">
                     <div class="table-wrapper">
-                        <div class="empty-message" id="selfLearningEmptyMessage" style="display: block;">No self-learning tasks yet. Add them via iMessage or edit TASKS.md directly.</div>
+                        <table id="selfLearningTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Task</th>
+                                    <th>Owner</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="selfLearningBody"></tbody>
+                        </table>
+                        <div class="empty-message" id="selfLearningEmptyMessage" style="display: none;">No self-learning tasks yet. Add them via Apple Notes or edit TASKS.md directly.</div>
                     </div>
                 </div>
             </div>
@@ -1091,6 +1110,13 @@
             { id: 'TMW-025', task: 'Complete Google Ads campaign setup — upload logo, set bid strategy, budget, payment, launch + install conversion tracking tag. Ad copy v1 saved. Decide on spend by end of March.', owner: 'Rohan', department: 'Marketing', priority: 'Medium' }
         ];
 
+        const selfLearningTasks = [
+            { id: 'SL-001', task: 'Advanced Claude API prompt engineering', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started' },
+            { id: 'SL-002', task: 'Google Garage — Digital Marketing course', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started' },
+            { id: 'SL-003', task: 'Google Garage — SEO course', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started' },
+            { id: 'SL-004', task: 'Claude SEO skill — learn and apply', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started' }
+        ];
+
         // Password hash function (SHA-256)
         async function hashPassword(password) {
             const encoder = new TextEncoder();
@@ -1171,6 +1197,7 @@
             renderActiveTasks();
             renderCompletedTasks();
             renderBacklogTasks();
+            renderSelfLearningTasks();
             renderCharts();
         }
 
@@ -1267,6 +1294,38 @@
             document.getElementById('backlogCount').textContent = filtered.length;
         }
 
+        function renderSelfLearningTasks() {
+            const tbody = document.getElementById('selfLearningBody');
+            const searchTerm = getSearchTerm();
+            const filtered = selfLearningTasks.filter(task => {
+                if (!searchTerm) return true;
+                return task.task.toLowerCase().includes(searchTerm) ||
+                       task.id.toLowerCase().includes(searchTerm) ||
+                       task.owner.toLowerCase().includes(searchTerm);
+            });
+
+            tbody.innerHTML = '';
+            if (filtered.length === 0) {
+                document.getElementById('selfLearningEmptyMessage').style.display = 'block';
+                document.getElementById('selfLearningTable').style.display = 'none';
+            } else {
+                document.getElementById('selfLearningEmptyMessage').style.display = 'none';
+                document.getElementById('selfLearningTable').style.display = '';
+                filtered.forEach(task => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td data-label="ID"><span class="task-id">${task.id}</span></td>
+                        <td data-label="Task"><span class="task-name">${task.task}</span></td>
+                        <td data-label="Owner">${task.owner}</td>
+                        <td data-label="Priority">${getPriorityBadge(task.priority)}</td>
+                        <td data-label="Status">${getStatusBadge(task.status)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            document.getElementById('selfLearningCount').textContent = filtered.length;
+        }
+
         function getPriorityBadge(priority) {
             const className = `priority-${priority.toLowerCase()}`;
             return `<span class="badge ${className}">${priority}</span>`;
@@ -1345,6 +1404,7 @@
             renderActiveTasks();
             renderCompletedTasks();
             renderBacklogTasks();
+            renderSelfLearningTasks();
             renderCharts();
         }
 

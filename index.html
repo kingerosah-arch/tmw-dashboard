@@ -1,0 +1,1449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackMyWings - Task Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ===== LOGIN SCREEN ===== */
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .login-container {
+            background: rgba(30, 41, 59, 0.95);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 16px;
+            padding: 48px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .login-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #cbd5e1;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .password-field input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .password-field input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .login-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-error {
+            display: none;
+            padding: 12px;
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 6px;
+            color: #fca5a5;
+            font-size: 13px;
+            text-align: center;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* ===== DASHBOARD SCREEN ===== */
+        .dashboard-screen {
+            display: none;
+        }
+
+        .dashboard-header {
+            background: rgba(15, 23, 42, 0.8);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            padding: 24px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-branding {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            font-size: 32px;
+        }
+
+        .header-branding h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .last-updated {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: rgba(220, 38, 38, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(220, 38, 38, 0.25);
+            border-color: rgba(220, 38, 38, 0.5);
+        }
+
+        .filters-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-select, .search-input {
+            padding: 8px 12px;
+            background: rgba(15, 23, 42, 0.7);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 6px;
+            color: #e2e8f0;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-select:focus, .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .search-input {
+            min-width: 200px;
+            cursor: text;
+        }
+
+        .dashboard-content {
+            padding: 32px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* ===== STATS SECTION ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(148, 163, 184, 0.4);
+            background: rgba(30, 41, 59, 0.8);
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* ===== TABLES ===== */
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .section-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-toggle {
+            font-size: 20px;
+            transition: transform 0.3s ease;
+            color: #64748b;
+        }
+
+        .section-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .section-content {
+            max-height: 5000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .section-content.collapsed {
+            max-height: 0;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: rgba(15, 23, 42, 0.9);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        th {
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        tbody tr:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .task-id {
+            font-weight: 600;
+            color: #60a5fa;
+            font-family: 'Courier New', monospace;
+        }
+
+        .task-name {
+            color: #e2e8f0;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+
+        /* ===== BADGES ===== */
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .priority-high {
+            background: rgba(220, 38, 38, 0.15);
+            color: #fca5a5;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
+        .priority-medium {
+            background: rgba(251, 146, 60, 0.15);
+            color: #fdba74;
+            border: 1px solid rgba(251, 146, 60, 0.3);
+        }
+
+        .priority-low {
+            background: rgba(34, 197, 94, 0.15);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-not-started {
+            background: rgba(107, 114, 128, 0.15);
+            color: #d1d5db;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+
+        .status-wip {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .status-draft-ready {
+            background: rgba(34, 197, 94, 0.15);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-under-review {
+            background: rgba(168, 85, 247, 0.15);
+            color: #d8b4fe;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        /* ===== CHARTS ===== */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .chart-card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            min-height: 300px;
+        }
+
+        .chart-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #e2e8f0;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 250px;
+        }
+
+        /* ===== RESPONSIVE — TABLET ===== */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 16px;
+            }
+
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .header-branding h1 {
+                font-size: 20px;
+            }
+
+            .filters-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .filter-group {
+                flex-direction: column;
+                width: 100%;
+                gap: 4px;
+            }
+
+            .filter-select, .search-input {
+                width: 100%;
+            }
+
+            .dashboard-content {
+                padding: 16px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 16px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .login-container {
+                padding: 32px 24px;
+                margin: 16px;
+            }
+        }
+
+        /* ===== RESPONSIVE — MOBILE (iPhone) ===== */
+        @media (max-width: 480px) {
+            body {
+                -webkit-text-size-adjust: 100%;
+            }
+
+            .dashboard-header {
+                padding: 12px;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: rgba(15, 23, 42, 0.97);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+            }
+
+            .header-top {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 12px;
+            }
+
+            .header-icon {
+                font-size: 24px;
+            }
+
+            .header-branding h1 {
+                font-size: 16px;
+            }
+
+            .header-actions {
+                gap: 8px;
+            }
+
+            .last-updated {
+                display: none;
+            }
+
+            .logout-btn {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            /* Filters — horizontal scroll on mobile */
+            .filters-row {
+                flex-direction: row;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                gap: 8px;
+                padding-bottom: 8px;
+                scrollbar-width: none;
+            }
+
+            .filters-row::-webkit-scrollbar {
+                display: none;
+            }
+
+            .filter-group {
+                flex-direction: row;
+                flex-shrink: 0;
+                width: auto;
+                gap: 4px;
+            }
+
+            .filter-label {
+                display: none;
+            }
+
+            .filter-select {
+                width: auto;
+                min-width: 100px;
+                padding: 8px 10px;
+                font-size: 12px;
+                -webkit-appearance: none;
+            }
+
+            .search-input {
+                min-width: 140px;
+                width: auto;
+                flex-shrink: 0;
+                font-size: 14px;
+                padding: 10px 12px;
+            }
+
+            /* Content area */
+            .dashboard-content {
+                padding: 12px;
+            }
+
+            /* Stats — 2 columns, compact */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                margin-bottom: 20px;
+            }
+
+            .stat-card {
+                padding: 12px;
+                border-radius: 8px;
+            }
+
+            .stat-label {
+                font-size: 10px;
+                margin-bottom: 4px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+            }
+
+            /* Charts — smaller on mobile */
+            .charts-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .chart-card {
+                padding: 16px;
+                min-height: 220px;
+                border-radius: 8px;
+            }
+
+            .chart-card h3 {
+                font-size: 13px;
+                margin-bottom: 12px;
+            }
+
+            .chart-container {
+                height: 180px;
+            }
+
+            /* Section headers — bigger tap target */
+            .section {
+                margin-bottom: 20px;
+            }
+
+            .section-header {
+                padding: 12px 0;
+                margin-bottom: 8px;
+            }
+
+            .section-header h2 {
+                font-size: 15px;
+            }
+
+            /* Tables — card layout on mobile */
+            .table-wrapper {
+                overflow-x: hidden;
+            }
+
+            table {
+                display: block;
+                border: none;
+                background: none;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tbody {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            tbody tr {
+                display: flex;
+                flex-direction: column;
+                background: rgba(30, 41, 59, 0.6);
+                border: 1px solid rgba(148, 163, 184, 0.15);
+                border-radius: 8px;
+                padding: 12px;
+                gap: 6px;
+            }
+
+            tbody tr:hover {
+                background: rgba(30, 41, 59, 0.8);
+            }
+
+            td {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                padding: 2px 0;
+                border-bottom: none;
+                font-size: 13px;
+                line-height: 1.4;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-size: 10px;
+                font-weight: 700;
+                color: #64748b;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                min-width: 70px;
+                flex-shrink: 0;
+                padding-top: 2px;
+            }
+
+            .task-name {
+                max-width: none;
+                text-align: right;
+            }
+
+            .task-id {
+                font-size: 12px;
+            }
+
+            .badge {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+
+            /* Login screen mobile */
+            .login-container {
+                padding: 28px 20px;
+                margin: 12px;
+                border-radius: 12px;
+            }
+
+            .login-icon {
+                font-size: 36px;
+            }
+
+            .login-header h1 {
+                font-size: 22px;
+            }
+
+            .login-form input[type="password"],
+            .password-field input {
+                font-size: 16px;
+                padding: 14px;
+            }
+
+            .login-btn {
+                padding: 14px;
+                font-size: 15px;
+            }
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-icon">✈️</div>
+                <h1>TrackMyWings</h1>
+                <p>Task Management Dashboard</p>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="password-field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" autofocus>
+                </div>
+                <button type="submit" class="login-btn">Enter</button>
+                <div class="login-error" id="loginError">Incorrect password</div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SCREEN -->
+    <div class="dashboard-screen" id="dashboardScreen">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="header-top">
+                <div class="header-branding">
+                    <div class="header-icon">✈️</div>
+                    <h1>TrackMyWings</h1>
+                </div>
+                <div class="header-actions">
+                    <div class="last-updated">Last updated: 2026-03-16</span></div>
+                    <button class="logout-btn" id="logoutBtn">Logout</button>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label class="filter-label">🔍 Search</label>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search tasks...">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Department</label>
+                    <select class="filter-select" id="departmentFilter">
+                        <option value="">All Departments</option>
+                        <option value="Legal">Legal</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Sales">Sales</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Operations">Operations</option>
+                        <option value="Product">Product</option>
+                        <option value="Design">Design</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Strategy">Strategy</option>
+                        <option value="People">People</option>
+                        <option value="Self Learning">Self Learning</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Priority</label>
+                    <select class="filter-select" id="priorityFilter">
+                        <option value="">All Priorities</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Status</label>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="Not Started">Not Started</option>
+                        <option value="WIP">WIP</option>
+                        <option value="Draft Ready">Draft Ready</option>
+                        <option value="Under Legal Review">Under Legal Review</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="dashboard-content">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Active Tasks</div>
+                    <div class="stat-value" id="activeTasksCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">High Priority</div>
+                    <div class="stat-value" id="highPriorityCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Completed Tasks</div>
+                    <div class="stat-value" id="completedCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Completion Rate</div>
+                    <div class="stat-value" id="completionRate">0%</div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Tasks by Department</h3>
+                    <div class="chart-container">
+                        <canvas id="departmentChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Tasks by Priority</h3>
+                    <div class="chart-container">
+                        <canvas id="priorityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Active Tasks Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span>📋</span> Active Tasks (<span id="activeCount">0</span>)</h2>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="table-wrapper">
+                        <table id="activeTasksTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Task</th>
+                                    <th>Owner</th>
+                                    <th>Department</th>
+                                    <th>Priority</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                </tr>
+                            </thead>
+                            <tbody id="activeTasksBody">
+                            </tbody>
+                        </table>
+                        <div class="empty-message" id="activeEmptyMessage" style="display: none;">No active tasks found</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed Tasks Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span>✅</span> Completed Tasks (<span id="completedTaskCount">0</span>)</h2>
+                    <span class="section-toggle collapsed">▼</span>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="table-wrapper">
+                        <table id="completedTasksTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Task</th>
+                                    <th>Owner</th>
+                                    <th>Department</th>
+                                    <th>Completed</th>
+                                </tr>
+                            </thead>
+                            <tbody id="completedTasksBody">
+                            </tbody>
+                        </table>
+                        <div class="empty-message" id="completedEmptyMessage" style="display: none;">No completed tasks found</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backlog Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span>📦</span> Backlog (<span id="backlogCount">0</span>)</h2>
+                    <span class="section-toggle collapsed">▼</span>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="table-wrapper">
+                        <table id="backlogTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Task</th>
+                                    <th>Owner</th>
+                                    <th>Department</th>
+                                    <th>Priority</th>
+                                </tr>
+                            </thead>
+                            <tbody id="backlogBody">
+                            </tbody>
+                        </table>
+                        <div class="empty-message" id="backlogEmptyMessage" style="display: none;">No backlog items found</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Self Learning Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span>🧠</span> Self Learning (<span id="selfLearningCount">0</span>)</h2>
+                    <span class="section-toggle collapsed">▼</span>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="table-wrapper">
+                        <div class="empty-message" id="selfLearningEmptyMessage" style="display: block;">No self-learning tasks yet. Add them via iMessage or edit TASKS.md directly.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Task data - hardcoded from TASKS.md
+        const activeTasks = [
+            { id: 'TMW-001', task: 'Update Privacy Policy from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Not Started', created: '2026-03-13' },
+            { id: 'TMW-002', task: 'Update Terms of Service from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Not Started', created: '2026-03-13' },
+            { id: 'TMW-003', task: 'Finalize Founders Agreement (MoU v3)', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Under Legal Review — feedback expected Wed 18 Mar', created: '2026-03-13' },
+            { id: 'TMW-004', task: 'Finalize Shareholders Agreement', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Draft Ready', created: '2026-03-13' },
+            { id: 'TMW-005', task: 'Finalize Term Sheet', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'WIP', created: '2026-03-13' },
+            { id: 'TMW-006', task: 'Build pre-launch email sequence for waitlist', owner: 'Adhi + Rohan', department: 'Marketing', priority: 'High', status: 'Not Started', created: '2026-03-13' },
+            { id: 'TMW-007', task: 'Populate Marketing/Content folder with launch content', owner: 'Adhi', department: 'Marketing', priority: 'Medium', status: 'Not Started', created: '2026-03-13' },
+            { id: 'TMW-008', task: 'Populate Sales/Pipeline with CRM structure', owner: 'Rohan', department: 'Sales', priority: 'Medium', status: 'Not Started', created: '2026-03-13' },
+            { id: 'TMW-009', task: 'Run SEO audit on trackmywings.com', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Medium', status: 'Not Started', created: '2026-03-13' },
+            { id: 'TMW-010', task: 'Review and update 60-Month Operating Plan', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', created: '2026-03-13' },
+            { id: 'TMW-012', task: 'Re-upload updated system files to Claude Project weekly', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Not Started', created: '2026-03-13' },
+            { id: 'TMW-013', task: 'Share MVP_FEATURE_LIST.md + PRODUCT_ROADMAP.md with Amol for effort estimates and timeline', owner: 'Rohan', department: 'Product', priority: 'High', status: 'Not Started', created: '2026-03-15' },
+            { id: 'TMW-014', task: 'Share UX_DESIGN_DIRECTION.md with Ruchi, start Figma design system', owner: 'Rohan', department: 'Design', priority: 'High', status: 'Not Started', created: '2026-03-15' },
+            { id: 'TMW-015', task: 'Decide on timeline scenario (A/B/C/D) based on Amol capacity assessment', owner: 'Rohan + Amol', department: 'Product', priority: 'High', status: 'Not Started', created: '2026-03-15' },
+            { id: 'TMW-016', task: 'Write detailed feature specs for Track 1 (Foundation) and Track 2 (Core Tracking)', owner: 'Rohan', department: 'Product', priority: 'Medium', status: 'Not Started', created: '2026-03-15' },
+            { id: 'TMW-017', task: 'Share UI/UX Screen Specs + Design Handoff with Ruchi for Figma implementation', owner: 'Rohan', department: 'Design', priority: 'High', status: 'Not Started', created: '2026-03-15' },
+            { id: 'TMW-018', task: 'Review and validate Master Feature Breakdown (607 components) with Amol for engineering accuracy', owner: 'Rohan + Amol', department: 'Engineering', priority: 'Medium', status: 'Not Started', created: '2026-03-15' },
+            { id: 'TMW-019', task: 'Review MIS workbook formulas in Excel (open file, check Dashboard charts render, verify sample data)', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', created: '2026-03-16' },
+            { id: 'TMW-020', task: 'Enter actual March 2026 expenses into Expenses sheet once CA is finalized', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', created: '2026-03-16' },
+            { id: 'TMW-023', task: 'Analyze survey responses once 20+ collected — use Results Tracker', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Not Started', created: '2026-03-16' },
+            { id: 'TMW-024', task: 'Website experiment: Apply Lovable follow-up fixes (10 items) and decide build approach — Lovable credits, manual code, or alternate tool', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Not Started', created: '2026-03-16' },
+            { id: 'TMW-025', task: 'Complete Google Ads campaign setup — upload logo, set bid strategy, budget, payment, launch + install conversion tracking tag', owner: 'Rohan', department: 'Marketing', priority: 'High', status: 'WIP — paused after ad creation screen (S007)', created: '2026-03-16' },
+            { id: 'TMW-026', task: 'Weekly Sync with Amol — every Saturday 4–6 PM IST (recurring, Google Calendar event created)', owner: 'Rohan + Amol', department: 'Product', priority: 'High', status: 'Done — Calendar event live', created: '2026-03-16' },
+            { id: 'TMW-027', task: 'Schedule discussion with Mihir sir on organic growth strategy — find mutual time', owner: 'Rohan + Claude', department: 'Strategy', priority: 'High', status: 'Pending Confirmation — need Mihir\'s availability', created: '2026-03-16' }
+        ];
+
+        const completedTasks = [
+            { id: 'TMW-011', task: 'Set up Claude Project at claude.ai with custom instructions and knowledge files', owner: 'Rohan', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-S003-A', task: 'Score all 118 features on 5 parameters (composite score + combined phase)', owner: 'Rohan + Amol', department: 'Product', completed: '2026-03-15' },
+            { id: 'TMW-S003-B', task: 'Map 118 features against 10 competitors (Y/PRO/P/N)', owner: 'Claude', department: 'Product', completed: '2026-03-15' },
+            { id: 'TMW-S003-C', task: 'Create Free vs Pro tier bifurcation for all 118 features', owner: 'Claude', department: 'Product', completed: '2026-03-15' },
+            { id: 'TMW-S003-D', task: 'Build Master Feature Breakdown (118 features → 607 components) with 16 categories', owner: 'Claude', department: 'Product', completed: '2026-03-15' },
+            { id: 'TMW-S003-E', task: 'Build UI/UX Screen Specs Excel (85 screens, 396 components, IA tree, design system)', owner: 'Claude', department: 'Design', completed: '2026-03-15' },
+            { id: 'TMW-S003-F', task: 'Build UI/UX Design Handoff Word doc (2,630 paragraphs, per-screen specs)', owner: 'Claude', department: 'Design', completed: '2026-03-15' },
+            { id: 'TMW-S003-G', task: 'Copy product files from Strategy/Product to Product/ with date suffix', owner: 'Claude', department: 'Operations', completed: '2026-03-15' },
+            { id: 'TMW-S003-H', task: 'Update FOLDER_MAP.md with reorganized Strategy/Product/Features structure', owner: 'Claude', department: 'Operations', completed: '2026-03-15' },
+            { id: 'TMW-S004-A', task: 'Update MIS pricing from 4 tiers to 6 tiers (Free, Day Pass, 72hr, Monthly, Yearly, Lifetime)', owner: 'Claude', department: 'Finance', completed: '2026-03-16' },
+            { id: 'TMW-S004-B', task: 'Update MIS equity split from 50/50 to 62% Rohan / 38% Amol', owner: 'Claude', department: 'Finance', completed: '2026-03-16' },
+            { id: 'TMW-S004-C', task: 'Rebuild MIS workbook from scratch (build_mis_v2.py) — 12 sheets, 1,126 formulas, 0 errors', owner: 'Claude', department: 'Finance', completed: '2026-03-16' },
+            { id: 'TMW-S004-D', task: 'Create Welcome & Guide sheet with legend, sheet directory, how-to-use, pricing reference, data flow', owner: 'Claude', department: 'Finance', completed: '2026-03-16' },
+            { id: 'TMW-S004-E', task: 'Add Dashboard charts (Revenue vs Expenses bar, Net P/L line, Expense distribution pie)', owner: 'Claude', department: 'Finance', completed: '2026-03-16' },
+            { id: 'TMW-S004-F', task: 'Apply visual polish (navy title bars, blue subtitle bars) across all 12 sheets', owner: 'Claude', department: 'Design', completed: '2026-03-16' },
+            { id: 'TMW-S004-G', task: 'Run session save checkpoint — update all 7 system files for S004', owner: 'Claude', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-S005-A', task: 'Design and refine Frequent Flyer survey questionnaire (14 questions, anonymous framing)', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S005-B', task: 'Write WhatsApp message for Operator Circle distribution', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S005-C', task: 'Build Survey Results Tracker Excel (4 sheets, 68 formulas, auto-calculated dashboard)', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S005-D', task: 'Create Survey Kit markdown with all deliverables and change rationale', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S005-E', task: 'Run session save checkpoint — update all 7 system files for S005', owner: 'Claude', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-021', task: 'Create Google Form from survey questionnaire and get shareable link', owner: 'Rohan', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-022', task: 'Send survey message to Operator Circle WhatsApp group + personal outreach', owner: 'Rohan', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S006-A', task: 'Write comprehensive Lovable website prompt (5 pages, full design system, competitor comparison)', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S006-B', task: 'Review Lovable-generated code (5 pages, Navbar, Footer, CSS, config) and identify 10 issues', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S006-C', task: 'Write 10-item Lovable follow-up fix prompt', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S007-A', task: 'Expand Google Ads business description (362 → ~1,200 chars) and recommend product tags', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S007-B', task: 'Configure campaign goal, search themes, ad copy (headlines, descriptions, sitelinks)', owner: 'Claude + Rohan', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S007-C', task: 'Review GA4 analytics data and provide traffic insights', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' }
+        ];
+
+        const backlogTasks = [
+            { id: 'TMW-B01', task: 'Set up brand guidelines document from Ruchi\'s Figma work', owner: 'Ruchi + Rohan', department: 'Design', priority: 'Medium' },
+            { id: 'TMW-B02', task: 'Create investor pitch deck', owner: 'Rohan', department: 'Strategy', priority: 'Medium' },
+            { id: 'TMW-B04', task: 'Document engineering architecture (ADR format)', owner: 'Amol', department: 'Engineering', priority: 'Medium' },
+            { id: 'TMW-B05', task: 'Create onboarding docs for new team members', owner: 'Rohan', department: 'People', priority: 'Low' }
+        ];
+
+        // Password hash function (SHA-256)
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        // Password hash for "tmw2026"
+        const CORRECT_HASH = '2e7d1236fba12ba3c4c6c6c5c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6';
+        const expectedHash = 'c2f6e8c6f3e8c6c3e8c6e8c6e8e8e8e8e8e8e8e8e8e8e8e8e8e8e8e8e8e8'; // Will be set on load
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Set the correct hash
+            const correctHash = await hashPassword('tmw2026');
+            window.correctHash = correctHash;
+
+            setupEventListeners();
+            checkAuthStatus();
+            renderDashboard();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
+            document.getElementById('searchInput').addEventListener('input', filterTasks);
+            document.getElementById('departmentFilter').addEventListener('change', filterTasks);
+            document.getElementById('priorityFilter').addEventListener('change', filterTasks);
+            document.getElementById('statusFilter').addEventListener('change', filterTasks);
+        }
+
+        function checkAuthStatus() {
+            const isAuthenticated = sessionStorage.getItem('tmw_authenticated');
+            if (isAuthenticated === 'true') {
+                showDashboard();
+            } else {
+                showLogin();
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const hash = await hashPassword(password);
+
+            if (hash === window.correctHash) {
+                sessionStorage.setItem('tmw_authenticated', 'true');
+                document.getElementById('password').value = '';
+                document.getElementById('loginError').classList.remove('show');
+                showDashboard();
+            } else {
+                document.getElementById('loginError').classList.add('show');
+                document.getElementById('password').value = '';
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('tmw_authenticated');
+            showLogin();
+            document.getElementById('password').focus();
+        }
+
+        function showLogin() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('dashboardScreen').style.display = 'none';
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('dashboardScreen').style.display = 'block';
+            renderDashboard();
+        }
+
+        function renderDashboard() {
+            renderStats();
+            renderActiveTasks();
+            renderCompletedTasks();
+            renderBacklogTasks();
+            renderCharts();
+        }
+
+        function renderStats() {
+            const activeCount = activeTasks.length;
+            const highPriorityCount = activeTasks.filter(t => t.priority === 'High').length;
+            const completedCount = completedTasks.length;
+            const totalTasks = activeCount + completedCount;
+            const completionRate = Math.round((completedCount / totalTasks) * 100);
+
+            document.getElementById('activeTasksCount').textContent = activeCount;
+            document.getElementById('highPriorityCount').textContent = highPriorityCount;
+            document.getElementById('completedCount').textContent = completedCount;
+            document.getElementById('completionRate').textContent = completionRate + '%';
+        }
+
+        function renderActiveTasks() {
+            const tbody = document.getElementById('activeTasksBody');
+            const filtered = getFilteredActiveTasks();
+
+            tbody.innerHTML = '';
+            if (filtered.length === 0) {
+                document.getElementById('activeEmptyMessage').style.display = 'block';
+                document.getElementById('activeTasksTable').style.display = 'none';
+            } else {
+                document.getElementById('activeEmptyMessage').style.display = 'none';
+                document.getElementById('activeTasksTable').style.display = '';
+                filtered.forEach(task => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td data-label="ID"><span class="task-id">${task.id}</span></td>
+                        <td data-label="Task"><span class="task-name">${task.task}</span></td>
+                        <td data-label="Owner">${task.owner}</td>
+                        <td data-label="Dept">${task.department}</td>
+                        <td data-label="Priority">${getPriorityBadge(task.priority)}</td>
+                        <td data-label="Status">${getStatusBadge(task.status)}</td>
+                        <td data-label="Created">${task.created}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            document.getElementById('activeCount').textContent = filtered.length;
+        }
+
+        function renderCompletedTasks() {
+            const tbody = document.getElementById('completedTasksBody');
+            const filtered = getFilteredCompletedTasks();
+
+            tbody.innerHTML = '';
+            if (filtered.length === 0) {
+                document.getElementById('completedEmptyMessage').style.display = 'block';
+                document.getElementById('completedTasksTable').style.display = 'none';
+            } else {
+                document.getElementById('completedEmptyMessage').style.display = 'none';
+                document.getElementById('completedTasksTable').style.display = '';
+                filtered.forEach(task => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td data-label="ID"><span class="task-id">${task.id}</span></td>
+                        <td data-label="Task"><span class="task-name">${task.task}</span></td>
+                        <td data-label="Owner">${task.owner}</td>
+                        <td data-label="Dept">${task.department}</td>
+                        <td data-label="Done">${task.completed}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            document.getElementById('completedTaskCount').textContent = filtered.length;
+        }
+
+        function renderBacklogTasks() {
+            const tbody = document.getElementById('backlogBody');
+            const filtered = getFilteredBacklogTasks();
+
+            tbody.innerHTML = '';
+            if (filtered.length === 0) {
+                document.getElementById('backlogEmptyMessage').style.display = 'block';
+                document.getElementById('backlogTable').style.display = 'none';
+            } else {
+                document.getElementById('backlogEmptyMessage').style.display = 'none';
+                document.getElementById('backlogTable').style.display = '';
+                filtered.forEach(task => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td data-label="ID"><span class="task-id">${task.id}</span></td>
+                        <td data-label="Task"><span class="task-name">${task.task}</span></td>
+                        <td data-label="Owner">${task.owner}</td>
+                        <td data-label="Dept">${task.department}</td>
+                        <td data-label="Priority">${getPriorityBadge(task.priority)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            document.getElementById('backlogCount').textContent = filtered.length;
+        }
+
+        function getPriorityBadge(priority) {
+            const className = `priority-${priority.toLowerCase()}`;
+            return `<span class="badge ${className}">${priority}</span>`;
+        }
+
+        function getStatusBadge(status) {
+            let className = 'status-not-started';
+            if (status === 'WIP') className = 'status-wip';
+            else if (status === 'Draft Ready') className = 'status-draft-ready';
+            else if (status === 'Under Legal Review') className = 'status-under-review';
+
+            return `<span class="badge ${className}">${status}</span>`;
+        }
+
+        function getSearchTerm() {
+            return document.getElementById('searchInput').value.toLowerCase();
+        }
+
+        function getDepartmentFilter() {
+            return document.getElementById('departmentFilter').value;
+        }
+
+        function getPriorityFilter() {
+            return document.getElementById('priorityFilter').value;
+        }
+
+        function getStatusFilter() {
+            return document.getElementById('statusFilter').value;
+        }
+
+        function matchesSearch(task, searchTerm) {
+            if (!searchTerm) return true;
+            return task.task.toLowerCase().includes(searchTerm) ||
+                   task.id.toLowerCase().includes(searchTerm) ||
+                   task.owner.toLowerCase().includes(searchTerm) ||
+                   task.department.toLowerCase().includes(searchTerm);
+        }
+
+        function getFilteredActiveTasks() {
+            const searchTerm = getSearchTerm();
+            const department = getDepartmentFilter();
+            const priority = getPriorityFilter();
+            const status = getStatusFilter();
+
+            return activeTasks.filter(task => {
+                return matchesSearch(task, searchTerm) &&
+                       (!department || task.department === department) &&
+                       (!priority || task.priority === priority) &&
+                       (!status || task.status === status);
+            });
+        }
+
+        function getFilteredCompletedTasks() {
+            const searchTerm = getSearchTerm();
+            const department = getDepartmentFilter();
+
+            return completedTasks.filter(task => {
+                return matchesSearch(task, searchTerm) &&
+                       (!department || task.department === department);
+            });
+        }
+
+        function getFilteredBacklogTasks() {
+            const searchTerm = getSearchTerm();
+            const department = getDepartmentFilter();
+            const priority = getPriorityFilter();
+
+            return backlogTasks.filter(task => {
+                return matchesSearch(task, searchTerm) &&
+                       (!department || task.department === department) &&
+                       (!priority || task.priority === priority);
+            });
+        }
+
+        function filterTasks() {
+            renderActiveTasks();
+            renderCompletedTasks();
+            renderBacklogTasks();
+            renderCharts();
+        }
+
+        function renderCharts() {
+            renderDepartmentChart();
+            renderPriorityChart();
+        }
+
+        function renderDepartmentChart() {
+            const filtered = getFilteredActiveTasks();
+            const departments = {};
+
+            filtered.forEach(task => {
+                departments[task.department] = (departments[task.department] || 0) + 1;
+            });
+
+            const ctx = document.getElementById('departmentChart').getContext('2d');
+
+            if (window.departmentChartInstance) {
+                window.departmentChartInstance.destroy();
+            }
+
+            const colors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#06b6d4', '#6366f1', '#06b6d4'];
+            const labels = Object.keys(departments);
+            const data = Object.values(departments);
+
+            window.departmentChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderColor: 'rgba(15, 23, 42, 0.95)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#cbd5e1',
+                                font: { size: 12, weight: '600' },
+                                padding: 16
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderPriorityChart() {
+            const filtered = getFilteredActiveTasks();
+            const highCount = filtered.filter(t => t.priority === 'High').length;
+            const mediumCount = filtered.filter(t => t.priority === 'Medium').length;
+            const lowCount = filtered.filter(t => t.priority === 'Low').length;
+
+            const ctx = document.getElementById('priorityChart').getContext('2d');
+
+            if (window.priorityChartInstance) {
+                window.priorityChartInstance.destroy();
+            }
+
+            window.priorityChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['High', 'Medium', 'Low'],
+                    datasets: [{
+                        label: 'Tasks by Priority',
+                        data: [highCount, mediumCount, lowCount],
+                        backgroundColor: ['#dc2626', '#f59e0b', '#22c55e'],
+                        borderColor: ['#991b1b', '#d97706', '#16a34a'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            beginAtZero: true
+                        },
+                        y: {
+                            ticks: { color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggleSection(header) {
+            const toggle = header.querySelector('.section-toggle');
+            const content = header.nextElementSibling;
+
+            toggle.classList.toggle('collapsed');
+            content.classList.toggle('collapsed');
+        }
+    </script>
+</body>
+</html>

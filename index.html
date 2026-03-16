@@ -458,6 +458,76 @@
             border: 1px solid rgba(168, 85, 247, 0.3);
         }
 
+        /* ===== SORTABLE HEADERS ===== */
+        th.sortable {
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            padding-right: 22px;
+            transition: color 0.2s ease;
+        }
+
+        th.sortable:hover {
+            color: #60a5fa;
+        }
+
+        th.sortable::after {
+            content: '⇅';
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 10px;
+            opacity: 0.4;
+        }
+
+        th.sortable.sort-asc::after {
+            content: '▲';
+            opacity: 0.9;
+            color: #60a5fa;
+        }
+
+        th.sortable.sort-desc::after {
+            content: '▼';
+            opacity: 0.9;
+            color: #60a5fa;
+        }
+
+        /* ===== DEADLINE & OVERDUE ===== */
+        .deadline-overdue {
+            color: #fca5a5;
+            font-weight: 700;
+        }
+
+        .deadline-overdue::before {
+            content: '🔴 ';
+        }
+
+        .deadline-due-soon {
+            color: #fdba74;
+            font-weight: 600;
+        }
+
+        .deadline-due-soon::before {
+            content: '🟡 ';
+        }
+
+        .deadline-on-track {
+            color: #86efac;
+        }
+
+        .deadline-none {
+            color: #64748b;
+        }
+
+        tr.row-overdue {
+            border-left: 3px solid #dc2626;
+        }
+
+        tr.row-due-soon {
+            border-left: 3px solid #f59e0b;
+        }
+
         /* ===== CHARTS ===== */
         .charts-grid {
             display: grid;
@@ -937,13 +1007,14 @@
                         <table id="activeTasksTable">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Task</th>
-                                    <th>Owner</th>
-                                    <th>Department</th>
-                                    <th>Priority</th>
-                                    <th>Status</th>
-                                    <th>Created</th>
+                                    <th class="sortable" data-sort="id" data-table="active">ID</th>
+                                    <th class="sortable" data-sort="task" data-table="active">Task</th>
+                                    <th class="sortable" data-sort="owner" data-table="active">Owner</th>
+                                    <th class="sortable" data-sort="department" data-table="active">Dept</th>
+                                    <th class="sortable" data-sort="priority" data-table="active">Priority</th>
+                                    <th class="sortable" data-sort="status" data-table="active">Status</th>
+                                    <th class="sortable" data-sort="deadline" data-table="active">Deadline</th>
+                                    <th class="sortable" data-sort="created" data-table="active">Created</th>
                                 </tr>
                             </thead>
                             <tbody id="activeTasksBody">
@@ -965,11 +1036,11 @@
                         <table id="completedTasksTable">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Task</th>
-                                    <th>Owner</th>
-                                    <th>Department</th>
-                                    <th>Completed</th>
+                                    <th class="sortable" data-sort="id" data-table="completed">ID</th>
+                                    <th class="sortable" data-sort="task" data-table="completed">Task</th>
+                                    <th class="sortable" data-sort="owner" data-table="completed">Owner</th>
+                                    <th class="sortable" data-sort="department" data-table="completed">Dept</th>
+                                    <th class="sortable" data-sort="completed" data-table="completed">Completed</th>
                                 </tr>
                             </thead>
                             <tbody id="completedTasksBody">
@@ -991,11 +1062,11 @@
                         <table id="backlogTable">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Task</th>
-                                    <th>Owner</th>
-                                    <th>Department</th>
-                                    <th>Priority</th>
+                                    <th class="sortable" data-sort="id" data-table="backlog">ID</th>
+                                    <th class="sortable" data-sort="task" data-table="backlog">Task</th>
+                                    <th class="sortable" data-sort="owner" data-table="backlog">Owner</th>
+                                    <th class="sortable" data-sort="department" data-table="backlog">Dept</th>
+                                    <th class="sortable" data-sort="priority" data-table="backlog">Priority</th>
                                 </tr>
                             </thead>
                             <tbody id="backlogBody">
@@ -1017,11 +1088,12 @@
                         <table id="selfLearningTable">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Task</th>
-                                    <th>Owner</th>
-                                    <th>Priority</th>
-                                    <th>Status</th>
+                                    <th class="sortable" data-sort="id" data-table="selfLearning">ID</th>
+                                    <th class="sortable" data-sort="task" data-table="selfLearning">Task</th>
+                                    <th class="sortable" data-sort="owner" data-table="selfLearning">Owner</th>
+                                    <th class="sortable" data-sort="priority" data-table="selfLearning">Priority</th>
+                                    <th class="sortable" data-sort="status" data-table="selfLearning">Status</th>
+                                    <th class="sortable" data-sort="deadline" data-table="selfLearning">Deadline</th>
                                 </tr>
                             </thead>
                             <tbody id="selfLearningBody"></tbody>
@@ -1036,29 +1108,29 @@
     <script>
         // Task data - hardcoded from TASKS.md
         const activeTasks = [
-            { id: 'TMW-001', task: 'Update Privacy Policy from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Not Started', created: '2026-03-13' },
-            { id: 'TMW-002', task: 'Update Terms of Service from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Not Started', created: '2026-03-13' },
-            { id: 'TMW-003', task: 'Finalize Founders Agreement (MoU v3)', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Under Legal Review — feedback expected Wed 18 Mar', created: '2026-03-13' },
-            { id: 'TMW-004', task: 'Finalize Shareholders Agreement', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Draft Ready', created: '2026-03-13' },
-            { id: 'TMW-005', task: 'Finalize Term Sheet', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'WIP', created: '2026-03-13' },
-            { id: 'TMW-006', task: 'Build pre-launch email sequence for waitlist', owner: 'Adhi + Rohan', department: 'Marketing', priority: 'High', status: 'Not Started', created: '2026-03-13' },
-            { id: 'TMW-007', task: 'Populate Marketing/Content folder with launch content', owner: 'Adhi', department: 'Marketing', priority: 'Medium', status: 'Not Started', created: '2026-03-13' },
-            { id: 'TMW-008', task: 'Populate Sales/Pipeline with CRM structure', owner: 'Rohan', department: 'Sales', priority: 'Medium', status: 'Not Started', created: '2026-03-13' },
-            { id: 'TMW-009', task: 'Run SEO audit on trackmywings.com', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Medium', status: 'Not Started', created: '2026-03-13' },
-            { id: 'TMW-010', task: 'Review and update 60-Month Operating Plan', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', created: '2026-03-13' },
-            { id: 'TMW-012', task: 'Re-upload updated system files to Claude Project weekly', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Not Started', created: '2026-03-13' },
-            { id: 'TMW-013', task: 'Share MVP_FEATURE_LIST.md + PRODUCT_ROADMAP.md with Amol for effort estimates and timeline', owner: 'Rohan', department: 'Product', priority: 'High', status: 'Not Started', created: '2026-03-15' },
-            { id: 'TMW-014', task: 'Share UX_DESIGN_DIRECTION.md with Ruchi, start Figma design system', owner: 'Rohan', department: 'Design', priority: 'High', status: 'Not Started', created: '2026-03-15' },
-            { id: 'TMW-015', task: 'Decide on timeline scenario (A/B/C/D) based on Amol capacity assessment', owner: 'Rohan + Amol', department: 'Product', priority: 'High', status: 'Not Started', created: '2026-03-15' },
-            { id: 'TMW-016', task: 'Write detailed feature specs for Track 1 (Foundation) and Track 2 (Core Tracking)', owner: 'Rohan', department: 'Product', priority: 'Medium', status: 'Not Started', created: '2026-03-15' },
-            { id: 'TMW-017', task: 'Share UI/UX Screen Specs + Design Handoff with Ruchi for Figma implementation', owner: 'Rohan', department: 'Design', priority: 'High', status: 'Not Started', created: '2026-03-15' },
-            { id: 'TMW-018', task: 'Review and validate Master Feature Breakdown (607 components) with Amol for engineering accuracy', owner: 'Rohan + Amol', department: 'Engineering', priority: 'Medium', status: 'Not Started', created: '2026-03-15' },
-            { id: 'TMW-019', task: 'Review MIS workbook formulas in Excel (open file, check Dashboard charts render, verify sample data)', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', created: '2026-03-16' },
-            { id: 'TMW-020', task: 'Enter actual March 2026 expenses into Expenses sheet once CA is finalized', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', created: '2026-03-16' },
-            { id: 'TMW-023', task: 'Analyze survey responses once 20+ collected — use Results Tracker', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Not Started', created: '2026-03-16' },
-            { id: 'TMW-024', task: 'Website experiment: Apply Lovable follow-up fixes (10 items) and decide build approach — Lovable credits, manual code, or alternate tool', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Not Started', created: '2026-03-16' },
-            { id: 'TMW-027', task: 'Schedule discussion with Mihir sir on organic growth strategy — find mutual time', owner: 'Rohan + Claude', department: 'Strategy', priority: 'High', status: 'Pending Confirmation — need Mihir\'s availability', created: '2026-03-16' },
-            { id: 'TMW-028', task: 'Use Lovable for follow-up changes on website when credits refresh', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Not Started', created: '2026-03-16' }
+            { id: 'TMW-001', task: 'Update Privacy Policy from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Not Started', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-002', task: 'Update Terms of Service from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Not Started', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-003', task: 'Finalize Founders Agreement (MoU v3)', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Under Legal Review — feedback expected Wed 18 Mar', deadline: '2026-03-18', created: '2026-03-13' },
+            { id: 'TMW-004', task: 'Finalize Shareholders Agreement', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'Draft Ready', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-005', task: 'Finalize Term Sheet', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'WIP', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-006', task: 'Build pre-launch email sequence for waitlist', owner: 'Adhi + Rohan', department: 'Marketing', priority: 'High', status: 'Not Started', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-007', task: 'Populate Marketing/Content folder with launch content', owner: 'Adhi', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-008', task: 'Populate Sales/Pipeline with CRM structure', owner: 'Rohan', department: 'Sales', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-009', task: 'Run SEO audit on trackmywings.com', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-010', task: 'Review and update 60-Month Operating Plan', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-012', task: 'Re-upload updated system files to Claude Project weekly', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-013', task: 'Share MVP_FEATURE_LIST.md + PRODUCT_ROADMAP.md with Amol for effort estimates and timeline', owner: 'Rohan', department: 'Product', priority: 'High', status: 'Not Started', deadline: '2026-03-22', created: '2026-03-15' },
+            { id: 'TMW-014', task: 'Share UX_DESIGN_DIRECTION.md with Ruchi, start Figma design system', owner: 'Rohan', department: 'Design', priority: 'High', status: 'Not Started', deadline: '2026-03-22', created: '2026-03-15' },
+            { id: 'TMW-015', task: 'Decide on timeline scenario (A/B/C/D) based on Amol capacity assessment', owner: 'Rohan + Amol', department: 'Product', priority: 'High', status: 'Not Started', deadline: '—', created: '2026-03-15' },
+            { id: 'TMW-016', task: 'Write detailed feature specs for Track 1 (Foundation) and Track 2 (Core Tracking)', owner: 'Rohan', department: 'Product', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-15' },
+            { id: 'TMW-017', task: 'Share UI/UX Screen Specs + Design Handoff with Ruchi for Figma implementation', owner: 'Rohan', department: 'Design', priority: 'High', status: 'Not Started', deadline: '2026-03-22', created: '2026-03-15' },
+            { id: 'TMW-018', task: 'Review and validate Master Feature Breakdown (607 components) with Amol for engineering accuracy', owner: 'Rohan + Amol', department: 'Engineering', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-15' },
+            { id: 'TMW-019', task: 'Review MIS workbook formulas in Excel (open file, check Dashboard charts render, verify sample data)', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-16' },
+            { id: 'TMW-020', task: 'Enter actual March 2026 expenses into Expenses sheet once CA is finalized', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', deadline: '2026-03-31', created: '2026-03-16' },
+            { id: 'TMW-023', task: 'Analyze survey responses once 20+ collected — use Results Tracker', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-16' },
+            { id: 'TMW-024', task: 'Website experiment: Apply Lovable follow-up fixes (10 items) and decide build approach — Lovable credits, manual code, or alternate tool', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-16' },
+            { id: 'TMW-027', task: 'Schedule discussion with Mihir sir on organic growth strategy — find mutual time', owner: 'Rohan + Claude', department: 'Strategy', priority: 'High', status: 'Pending Confirmation — need Mihir\'s availability', deadline: '—', created: '2026-03-16' },
+            { id: 'TMW-028', task: 'Use Lovable for follow-up changes on website when credits refresh', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: '2026-03-31', created: '2026-03-16' }
         ];
 
         const completedTasks = [
@@ -1111,10 +1183,10 @@
         ];
 
         const selfLearningTasks = [
-            { id: 'SL-001', task: 'Advanced Claude API prompt engineering', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started' },
-            { id: 'SL-002', task: 'Google Garage — Digital Marketing course', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started' },
-            { id: 'SL-003', task: 'Google Garage — SEO course', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started' },
-            { id: 'SL-004', task: 'Claude SEO skill — learn and apply', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started' }
+            { id: 'SL-001', task: 'Advanced Claude API prompt engineering', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started', deadline: '—' },
+            { id: 'SL-002', task: 'Google Garage — Digital Marketing course', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started', deadline: '—' },
+            { id: 'SL-003', task: 'Google Garage — SEO course', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started', deadline: '—' },
+            { id: 'SL-004', task: 'Claude SEO skill — learn and apply', owner: 'Rohan', department: 'Self Learning', priority: 'Medium', status: 'Not Started', deadline: '—' }
         ];
 
         // Password hash function (SHA-256)
@@ -1141,6 +1213,14 @@
             renderDashboard();
         });
 
+        // Sort state per table
+        const sortState = {
+            active: { key: null, dir: 'asc' },
+            completed: { key: null, dir: 'asc' },
+            backlog: { key: null, dir: 'asc' },
+            selfLearning: { key: null, dir: 'asc' }
+        };
+
         function setupEventListeners() {
             document.getElementById('loginForm').addEventListener('submit', handleLogin);
             document.getElementById('logoutBtn').addEventListener('click', handleLogout);
@@ -1148,6 +1228,97 @@
             document.getElementById('departmentFilter').addEventListener('change', filterTasks);
             document.getElementById('priorityFilter').addEventListener('change', filterTasks);
             document.getElementById('statusFilter').addEventListener('change', filterTasks);
+
+            // Sortable column headers
+            document.querySelectorAll('th.sortable').forEach(th => {
+                th.addEventListener('click', function() {
+                    const sortKey = this.dataset.sort;
+                    const tableName = this.dataset.table;
+                    const state = sortState[tableName];
+
+                    // Toggle direction or set new key
+                    if (state.key === sortKey) {
+                        state.dir = state.dir === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        state.key = sortKey;
+                        state.dir = 'asc';
+                    }
+
+                    // Update header classes
+                    this.closest('tr').querySelectorAll('th.sortable').forEach(h => {
+                        h.classList.remove('sort-asc', 'sort-desc');
+                    });
+                    this.classList.add(state.dir === 'asc' ? 'sort-asc' : 'sort-desc');
+
+                    // Re-render the relevant table
+                    if (tableName === 'active') renderActiveTasks();
+                    else if (tableName === 'completed') renderCompletedTasks();
+                    else if (tableName === 'backlog') renderBacklogTasks();
+                    else if (tableName === 'selfLearning') renderSelfLearningTasks();
+                });
+            });
+        }
+
+        // Priority sort order
+        const priorityOrder = { 'High': 0, 'Medium': 1, 'Low': 2 };
+
+        function sortTasks(tasks, tableName) {
+            const state = sortState[tableName];
+            if (!state.key) return tasks;
+
+            const sorted = [...tasks].sort((a, b) => {
+                let valA = a[state.key] || '';
+                let valB = b[state.key] || '';
+
+                // Special sort for priority
+                if (state.key === 'priority') {
+                    valA = priorityOrder[valA] !== undefined ? priorityOrder[valA] : 99;
+                    valB = priorityOrder[valB] !== undefined ? priorityOrder[valB] : 99;
+                    return state.dir === 'asc' ? valA - valB : valB - valA;
+                }
+
+                // Special sort for dates (deadline, created, completed)
+                if (state.key === 'deadline' || state.key === 'created' || state.key === 'completed') {
+                    const dateA = valA && valA !== '—' ? new Date(valA) : new Date('9999-12-31');
+                    const dateB = valB && valB !== '—' ? new Date(valB) : new Date('9999-12-31');
+                    return state.dir === 'asc' ? dateA - dateB : dateB - dateA;
+                }
+
+                // String sort
+                valA = valA.toString().toLowerCase();
+                valB = valB.toString().toLowerCase();
+                if (valA < valB) return state.dir === 'asc' ? -1 : 1;
+                if (valA > valB) return state.dir === 'asc' ? 1 : -1;
+                return 0;
+            });
+            return sorted;
+        }
+
+        function getDeadlineClass(deadline) {
+            if (!deadline || deadline === '—') return 'deadline-none';
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const dl = new Date(deadline);
+            dl.setHours(0, 0, 0, 0);
+            const daysUntil = Math.ceil((dl - today) / (1000 * 60 * 60 * 24));
+
+            if (daysUntil < 0) return 'deadline-overdue';
+            if (daysUntil <= 3) return 'deadline-due-soon';
+            return 'deadline-on-track';
+        }
+
+        function getRowClass(deadline) {
+            if (!deadline || deadline === '—') return '';
+            const cls = getDeadlineClass(deadline);
+            if (cls === 'deadline-overdue') return 'row-overdue';
+            if (cls === 'deadline-due-soon') return 'row-due-soon';
+            return '';
+        }
+
+        function formatDeadline(deadline) {
+            if (!deadline || deadline === '—') return '<span class="deadline-none">—</span>';
+            const cls = getDeadlineClass(deadline);
+            return '<span class="' + cls + '">' + deadline + '</span>';
         }
 
         function checkAuthStatus() {
@@ -1216,7 +1387,8 @@
 
         function renderActiveTasks() {
             const tbody = document.getElementById('activeTasksBody');
-            const filtered = getFilteredActiveTasks();
+            let filtered = getFilteredActiveTasks();
+            filtered = sortTasks(filtered, 'active');
 
             tbody.innerHTML = '';
             if (filtered.length === 0) {
@@ -1227,6 +1399,8 @@
                 document.getElementById('activeTasksTable').style.display = '';
                 filtered.forEach(task => {
                     const row = document.createElement('tr');
+                    const rowCls = getRowClass(task.deadline);
+                    if (rowCls) row.classList.add(rowCls);
                     row.innerHTML = `
                         <td data-label="ID"><span class="task-id">${task.id}</span></td>
                         <td data-label="Task"><span class="task-name">${task.task}</span></td>
@@ -1234,6 +1408,7 @@
                         <td data-label="Dept">${task.department}</td>
                         <td data-label="Priority">${getPriorityBadge(task.priority)}</td>
                         <td data-label="Status">${getStatusBadge(task.status)}</td>
+                        <td data-label="Deadline">${formatDeadline(task.deadline)}</td>
                         <td data-label="Created">${task.created}</td>
                     `;
                     tbody.appendChild(row);
@@ -1244,7 +1419,8 @@
 
         function renderCompletedTasks() {
             const tbody = document.getElementById('completedTasksBody');
-            const filtered = getFilteredCompletedTasks();
+            let filtered = getFilteredCompletedTasks();
+            filtered = sortTasks(filtered, 'completed');
 
             tbody.innerHTML = '';
             if (filtered.length === 0) {
@@ -1270,7 +1446,8 @@
 
         function renderBacklogTasks() {
             const tbody = document.getElementById('backlogBody');
-            const filtered = getFilteredBacklogTasks();
+            let filtered = getFilteredBacklogTasks();
+            filtered = sortTasks(filtered, 'backlog');
 
             tbody.innerHTML = '';
             if (filtered.length === 0) {
@@ -1297,12 +1474,13 @@
         function renderSelfLearningTasks() {
             const tbody = document.getElementById('selfLearningBody');
             const searchTerm = getSearchTerm();
-            const filtered = selfLearningTasks.filter(task => {
+            let filtered = selfLearningTasks.filter(task => {
                 if (!searchTerm) return true;
                 return task.task.toLowerCase().includes(searchTerm) ||
                        task.id.toLowerCase().includes(searchTerm) ||
                        task.owner.toLowerCase().includes(searchTerm);
             });
+            filtered = sortTasks(filtered, 'selfLearning');
 
             tbody.innerHTML = '';
             if (filtered.length === 0) {
@@ -1313,12 +1491,15 @@
                 document.getElementById('selfLearningTable').style.display = '';
                 filtered.forEach(task => {
                     const row = document.createElement('tr');
+                    const rowCls = getRowClass(task.deadline);
+                    if (rowCls) row.classList.add(rowCls);
                     row.innerHTML = `
                         <td data-label="ID"><span class="task-id">${task.id}</span></td>
                         <td data-label="Task"><span class="task-name">${task.task}</span></td>
                         <td data-label="Owner">${task.owner}</td>
                         <td data-label="Priority">${getPriorityBadge(task.priority)}</td>
                         <td data-label="Status">${getStatusBadge(task.status)}</td>
+                        <td data-label="Deadline">${formatDeadline(task.deadline)}</td>
                     `;
                     tbody.appendChild(row);
                 });

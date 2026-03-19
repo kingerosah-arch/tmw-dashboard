@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="1800">
     <title>TrackMyWings - Task Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -1457,6 +1458,109 @@
                 margin-top: 4px;
             }
         }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            body {
+                background: white !important;
+                color: #1a1f3d !important;
+                font-size: 11px;
+            }
+
+            .login-screen, .logout-btn, .view-toggle, .filters-row,
+            .dashboard-header, .section-toggle {
+                display: none !important;
+            }
+
+            .dashboard-screen {
+                display: block !important;
+            }
+
+            .dashboard-content {
+                padding: 0 !important;
+            }
+
+            .stat-card, .chart-card, .activity-feed, .section,
+            .kanban-card, .day-column, .dependency-item {
+                background: white !important;
+                border: 1px solid #ddd !important;
+                color: #1a1f3d !important;
+                box-shadow: none !important;
+                break-inside: avoid;
+            }
+
+            .section-content {
+                max-height: none !important;
+                overflow: visible !important;
+                display: block !important;
+            }
+
+            .section-content.collapsed {
+                max-height: none !important;
+                overflow: visible !important;
+                display: block !important;
+            }
+
+            .stat-label, .feed-text, .milestone-desc,
+            .dependency-reason, h2, h3 {
+                color: #333 !important;
+            }
+
+            .stat-value, .milestone-title, .section-header h2 {
+                color: #1a1f3d !important;
+            }
+
+            .feed-time, .milestone-date {
+                color: #666 !important;
+            }
+
+            table {
+                display: table !important;
+            }
+
+            table thead {
+                display: table-header-group !important;
+            }
+
+            table tr {
+                display: table-row !important;
+                background: white !important;
+                border: none !important;
+                border-bottom: 1px solid #eee !important;
+            }
+
+            table td {
+                display: table-cell !important;
+                color: #333 !important;
+                border-bottom: 1px solid #eee !important;
+            }
+
+            table td::before {
+                display: none !important;
+            }
+
+            table th {
+                background: #f5f5f5 !important;
+                color: #1a1f3d !important;
+            }
+
+            .badge {
+                border: 1px solid #999 !important;
+                color: #333 !important;
+                background: #f0f0f0 !important;
+            }
+
+            .charts-grid {
+                display: none !important;
+            }
+
+            a { color: #1a1f3d !important; }
+
+            @page {
+                margin: 1cm;
+                size: A4 landscape;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2756,6 +2860,18 @@
             renderBacklogTasks();
             renderSelfLearningTasks();
             renderCharts();
+            updateTabTitle();
+        }
+
+        function updateTabTitle() {
+            const overdue = analyticsData.velocity ? analyticsData.velocity.overdue : 0;
+            const stale = analyticsData.velocity ? analyticsData.velocity.stale : 0;
+            const active = activeTasks.length;
+            let badge = '';
+            if (overdue > 0) badge = `(${overdue} overdue) `;
+            else if (stale > 0) badge = `(${stale} stale) `;
+            else badge = `(${active} active) `;
+            document.title = `✈️ TMW ${badge}— Dashboard`;
         }
 
         function renderStats() {

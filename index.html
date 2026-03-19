@@ -1233,10 +1233,6 @@
     <script>
         // Task data - hardcoded from TASKS.md
         const activeTasks = [
-            { id: 'TMW-001', task: 'Update Privacy Policy from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'WIP', deadline: '—', created: '2026-03-13' },
-            { id: 'TMW-002', task: 'Update Terms of Service from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'WIP', deadline: '—', created: '2026-03-13' },
-            { id: 'TMW-004', task: 'Finalize Shareholders Agreement', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'WIP', deadline: '—', created: '2026-03-13' },
-            { id: 'TMW-005', task: 'Finalize Term Sheet', owner: 'Rohan + Legal', department: 'Legal', priority: 'High', status: 'WIP', deadline: '—', created: '2026-03-13' },
             { id: 'TMW-006', task: 'Build pre-launch email sequence for waitlist', owner: 'Adhi + Rohan', department: 'Marketing', priority: 'High', status: 'Not Started', deadline: '—', created: '2026-03-13' },
             { id: 'TMW-007', task: 'Populate Marketing/Content folder with launch content', owner: 'Adhi', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-13' },
             { id: 'TMW-008', task: 'Populate Sales/Pipeline with CRM structure', owner: 'Rohan', department: 'Sales', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-13' },
@@ -1255,8 +1251,10 @@
             { id: 'TMW-056', task: 'Define exact ad placements on finalized UI/UX screens (depends on Ruchi\'s Figma work)', owner: 'Rohan + Ruchi', department: 'Product', priority: 'Medium', status: 'Blocked — waiting on UI/UX', deadline: '—', created: '2026-03-18' },
             { id: 'TMW-057', task: 'Email Raman (CA) — company objects, name options, partner details (after legal discussion)', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', deadline: '2026-03-21', created: '2026-03-18' },
             { id: 'TMW-058', task: 'Amol to share self-attested PAN + Aadhaar for DSC application', owner: 'Amol', department: 'Finance', priority: 'Medium', status: 'Not Started', deadline: '2026-03-21', created: '2026-03-18' },
+            { id: 'TMW-059', task: 'Share Privacy Policy + ToS drafts with legal team (Anshul Bansal + Anshul Attri) for review', owner: 'Rohan', department: 'Legal', priority: 'High', status: 'Not Started', deadline: '2026-03-22', created: '2026-03-19' },
+            { id: 'TMW-060', task: 'Share SHA + Term Sheet drafts with legal team for review', owner: 'Rohan', department: 'Legal', priority: 'High', status: 'Not Started', deadline: '2026-03-27', created: '2026-03-19' },
             { id: 'TMW-032', task: 'Check insta saved reels and figure out useful todo', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-17' },
-            { id: 'TMW-033', task: 'Get guidance on various Insurances needed', owner: 'Rohan + Legal', department: 'Legal', priority: 'Medium', status: 'WIP', deadline: '—', created: '2026-03-17' },
+            { id: 'TMW-033', task: 'Review insurance guide and decide on coverage (research done — Legal/Compliance/Startup_Insurance_Guide.md)', owner: 'Rohan', department: 'Legal', priority: 'Low', status: 'Parked', deadline: '2026-05-15', created: '2026-03-17' },
             { id: 'TMW-036', task: 'Finalize Font / Typeface', owner: 'Rohan + Ruchi', department: 'Design', priority: 'High', status: 'WIP', deadline: '2026-03-20', created: '2026-03-17' },
             { id: 'TMW-037', task: 'Brand Book', owner: 'Ruchi', department: 'Design', priority: 'High', status: 'WIP', deadline: '2026-03-20', created: '2026-03-17' },
             { id: 'TMW-038', task: 'Update Website to new guidelines', owner: 'Rohan + Ruchi', department: 'Design', priority: 'High', status: 'Not Started', deadline: '2026-03-24', created: '2026-03-17' },
@@ -1380,6 +1378,20 @@
             { id: 'TMW-S020-A', task: 'Diagnose GSC redirect errors (trackmywings.com → www redirect mismatch)', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
             { id: 'TMW-S020-B', task: 'Migrate 268 URLs across 28 files from trackmywings.com to www.trackmywings.com', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
             { id: 'TMW-S020-C', task: 'Run session save — update all system files for S020', owner: 'Claude', department: 'Operations', completed: '2026-03-19' },
+            { id: 'TMW-S021-A', task: 'Draft Privacy Policy (TrackMyWings) — reformatted with professional Word formatting', owner: 'Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-S021-B', task: 'Draft Terms of Service (TrackMyWings) — reformatted with professional Word formatting', owner: 'Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-S021-C', task: 'Redo Shareholders Agreement from scratch (was copy of ToS), aligned with MoU v6', owner: 'Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-S021-D', task: 'Reformat Term Sheet with tables and clean professional layout', owner: 'Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-S021-E', task: 'Insurance research guide — 8 types, India providers, priority matrix', owner: 'Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-S021-F', task: '3 India keyword pages (IndiGo, Air India, SpiceJet) + sitemap updated to 15 URLs', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-S021-G', task: 'Content freshness script (update_dates.py) for 2-week dateModified updates', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-S021-H', task: 'Track 1 Foundation Spec (7 features, 29KB) + Track 2 Core Tracking Spec (6 features, 42KB)', owner: 'Claude', department: 'Product', completed: '2026-03-19' },
+            { id: 'TMW-S021-I', task: '5 SEO blog posts (800-1200 words each) for content depth', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-S021-J', task: 'Operating Plan review with gap analysis and update roadmap', owner: 'Claude', department: 'Finance', completed: '2026-03-19' },
+            { id: 'TMW-001', task: 'Update Privacy Policy from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', completed: '2026-03-13' },
+            { id: 'TMW-002', task: 'Update Terms of Service from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', completed: '2026-03-13' },
+            { id: 'TMW-004', task: 'Finalize Shareholders Agreement', owner: 'Rohan + Legal', department: 'Legal', completed: '2026-03-13' },
+            { id: 'TMW-005', task: 'Finalize Term Sheet', owner: 'Rohan + Legal', department: 'Legal', completed: '2026-03-13' },
             { id: 'TMW-040', task: 'AWS $1000 credit received (Activate Founder Program)', owner: 'Rohan', department: 'Finance', completed: '2026-03-18' }
         ];
 
@@ -1402,8 +1414,8 @@
             "dailyVelocity": [
                         {
                                     "date": "2026-03-13",
-                                    "completed": 0,
-                                    "added": 9
+                                    "completed": 4,
+                                    "added": 5
                         },
                         {
                                     "date": "2026-03-15",
@@ -1427,33 +1439,37 @@
                         },
                         {
                                     "date": "2026-03-19",
-                                    "completed": 3,
-                                    "added": 111
+                                    "completed": 13,
+                                    "added": 127
                         }
             ],
             "weeklyVelocity": [
                         {
                                     "week": "2026-03-09",
-                                    "completed": 8,
-                                    "added": 12
+                                    "completed": 12,
+                                    "added": 8
                         },
                         {
                                     "week": "2026-03-16",
-                                    "completed": 103,
-                                    "added": 133
+                                    "completed": 113,
+                                    "added": 149
                         }
             ],
             "statusDistribution": [
                         {
                                     "status": "Not Started",
-                                    "count": 18
+                                    "count": 20
                         },
                         {
                                     "status": "WIP",
-                                    "count": 14
+                                    "count": 9
                         },
                         {
                                     "status": "Blocked \u2014 waiting on UI/UX",
+                                    "count": 1
+                        },
+                        {
+                                    "status": "Parked",
                                     "count": 1
                         },
                         {
@@ -1481,15 +1497,9 @@
                                     "overdue": 0
                         },
                         {
-                                    "owner": "Legal",
-                                    "active": 5,
-                                    "high_priority": 4,
-                                    "overdue": 0
-                        },
-                        {
                                     "owner": "Rohan",
-                                    "active": 27,
-                                    "high_priority": 13,
+                                    "active": 25,
+                                    "high_priority": 11,
                                     "overdue": 0
                         },
                         {
@@ -1520,12 +1530,12 @@
                         },
                         {
                                     "department": "Legal",
-                                    "active": 5,
-                                    "wip": 5,
-                                    "not_started": 0,
+                                    "active": 3,
+                                    "wip": 0,
+                                    "not_started": 2,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 5
+                                    "avg_age_days": 0
                         },
                         {
                                     "department": "Marketing",
@@ -1601,42 +1611,42 @@
             ],
             "deadlineStats": {
                         "overdue": 0,
-                        "due_3days": 8,
+                        "due_3days": 9,
                         "deadline_hit_rate": "0%"
             },
             "burndownData": [
                         {
                                     "date": "2026-03-19",
-                                    "remaining": 34
+                                    "remaining": 32
                         },
                         {
                                     "date": "2026-03-18",
-                                    "remaining": 34
+                                    "remaining": 30
                         },
                         {
                                     "date": "2026-03-17",
-                                    "remaining": 22
+                                    "remaining": 18
                         },
                         {
                                     "date": "2026-03-16",
-                                    "remaining": 16
-                        },
-                        {
-                                    "date": "2026-03-15",
                                     "remaining": 12
                         },
                         {
+                                    "date": "2026-03-15",
+                                    "remaining": 8
+                        },
+                        {
                                     "date": "2026-03-14",
-                                    "remaining": 9
+                                    "remaining": 5
                         },
                         {
                                     "date": "2026-03-13",
-                                    "remaining": 9
+                                    "remaining": 5
                         }
             ],
             "velocity": {
-                        "today": 3,
-                        "this_week": 103,
+                        "today": 13,
+                        "this_week": 113,
                         "overdue": 0,
                         "stale": 4
             }

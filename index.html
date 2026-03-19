@@ -590,9 +590,11 @@
 
         .feed-text {
             color: #ceabca;
-            white-space: nowrap;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            text-overflow: ellipsis;
+            line-height: 1.4;
         }
 
         .feed-time {
@@ -1532,8 +1534,20 @@
                         <option value="">All Status</option>
                         <option value="Not Started">Not Started</option>
                         <option value="WIP">WIP</option>
-                        <option value="Draft Ready">Draft Ready</option>
-                        <option value="Under Legal Review">Under Legal Review</option>
+                        <option value="Blocked">Blocked</option>
+                        <option value="Scheduled">Scheduled</option>
+                        <option value="Parked">Parked</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Owner</label>
+                    <select class="filter-select" id="ownerFilter">
+                        <option value="">All Owners</option>
+                        <option value="Rohan">Rohan</option>
+                        <option value="Amol">Amol</option>
+                        <option value="Ruchi">Ruchi</option>
+                        <option value="Adhi">Adhi</option>
+                        <option value="Claude">Claude</option>
                     </select>
                 </div>
             </div>
@@ -2543,6 +2557,7 @@
             document.getElementById('departmentFilter').addEventListener('change', filterTasks);
             document.getElementById('priorityFilter').addEventListener('change', filterTasks);
             document.getElementById('statusFilter').addEventListener('change', filterTasks);
+            document.getElementById('ownerFilter').addEventListener('change', filterTasks);
 
             // Sortable column headers
             document.querySelectorAll('th.sortable').forEach(th => {
@@ -2857,6 +2872,16 @@
             return document.getElementById('statusFilter').value;
         }
 
+        function getOwnerFilter() {
+            const el = document.getElementById('ownerFilter');
+            return el ? el.value : '';
+        }
+
+        function matchesOwner(task, ownerFilter) {
+            if (!ownerFilter) return true;
+            return task.owner && task.owner.includes(ownerFilter);
+        }
+
         function matchesSearch(task, searchTerm) {
             if (!searchTerm) return true;
             return task.task.toLowerCase().includes(searchTerm) ||
@@ -2870,22 +2895,27 @@
             const department = getDepartmentFilter();
             const priority = getPriorityFilter();
             const status = getStatusFilter();
+            const owner = getOwnerFilter();
 
             return activeTasks.filter(task => {
+                const statusMatch = !status || task.status === status || (status === 'Blocked' && task.status.includes('Blocked')) || (status === 'Parked' && task.status.includes('Parked'));
                 return matchesSearch(task, searchTerm) &&
                        (!department || task.department === department) &&
                        (!priority || task.priority === priority) &&
-                       (!status || task.status === status);
+                       statusMatch &&
+                       matchesOwner(task, owner);
             });
         }
 
         function getFilteredCompletedTasks() {
             const searchTerm = getSearchTerm();
             const department = getDepartmentFilter();
+            const owner = getOwnerFilter();
 
             return completedTasks.filter(task => {
                 return matchesSearch(task, searchTerm) &&
-                       (!department || task.department === department);
+                       (!department || task.department === department) &&
+                       matchesOwner(task, owner);
             });
         }
 
@@ -2893,11 +2923,13 @@
             const searchTerm = getSearchTerm();
             const department = getDepartmentFilter();
             const priority = getPriorityFilter();
+            const owner = getOwnerFilter();
 
             return backlogTasks.filter(task => {
                 return matchesSearch(task, searchTerm) &&
                        (!department || task.department === department) &&
-                       (!priority || task.priority === priority);
+                       (!priority || task.priority === priority) &&
+                       matchesOwner(task, owner);
             });
         }
 

@@ -704,46 +704,56 @@
                 font-size: 11px;
             }
 
-            /* Filters — horizontal scroll on mobile */
+            /* Filters — vertical stack on mobile */
             .filters-row {
-                flex-direction: row;
+                flex-direction: column;
                 flex-wrap: nowrap;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                gap: 8px;
+                overflow-x: visible;
+                gap: 10px;
                 padding-bottom: 8px;
-                scrollbar-width: none;
-            }
-
-            .filters-row::-webkit-scrollbar {
-                display: none;
             }
 
             .filter-group {
-                flex-direction: row;
+                flex-direction: column;
                 flex-shrink: 0;
-                width: auto;
+                width: 100%;
                 gap: 4px;
             }
 
             .filter-label {
-                display: none;
+                display: block;
+                font-size: 11px;
+                color: #f2b95f;
+                font-weight: 600;
             }
 
             .filter-select {
-                width: auto;
-                min-width: 100px;
-                padding: 8px 10px;
-                font-size: 12px;
+                width: 100%;
+                min-width: unset;
+                padding: 12px 14px;
+                font-size: 14px;
                 -webkit-appearance: none;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f2b95f' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                background-size: 12px;
+                border-radius: 8px;
+                touch-action: manipulation;
+            }
+
+            .filter-select:focus {
+                outline: 2px solid #f2b95f;
+                outline-offset: -2px;
             }
 
             .search-input {
-                min-width: 140px;
-                width: auto;
+                min-width: unset;
+                width: 100%;
                 flex-shrink: 0;
                 font-size: 14px;
-                padding: 10px 12px;
+                padding: 12px 14px;
+                border-radius: 8px;
             }
 
             /* Content area */
@@ -772,7 +782,7 @@
                 font-size: 20px;
             }
 
-            /* Charts — smaller on mobile */
+            /* Charts — stack vertically on mobile */
             .charts-grid {
                 grid-template-columns: 1fr;
                 gap: 12px;
@@ -781,8 +791,19 @@
 
             .chart-card {
                 padding: 16px;
-                min-height: 220px;
+                min-height: 250px;
                 border-radius: 8px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Department health chart needs extra height for horizontal bars */
+            .chart-card[style*="grid-column"] {
+                min-height: 300px;
+            }
+
+            .chart-card[style*="grid-column"] .chart-container {
+                height: 250px !important;
             }
 
             .chart-card h3 {
@@ -1291,12 +1312,17 @@
             { id: 'TMW-047', task: 'Check GSC indexation status (scheduled task: March 21 9AM)', owner: 'Claude', department: 'Marketing', priority: 'High', status: 'Scheduled', deadline: '2026-03-21', created: '2026-03-18' },
             { id: 'TMW-048', task: 'Submit TrackMyWings to startup directories (AlternativeTo, BetaList, SaaSHub, Capterra)', owner: 'Rohan', department: 'Marketing', priority: 'High', status: 'Not Started', deadline: '2026-03-25', created: '2026-03-18' },
             { id: 'TMW-049', task: 'Create branded OG image (1200x630px) and add og:image to all V2 pages', owner: 'Rohan + Claude', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: '2026-03-25', created: '2026-03-18' },
-            { id: 'TMW-050', task: 'Add India-specific keyword pages (IndiGo, Air India, SpiceJet flight status)', owner: 'Claude', department: 'Marketing', priority: 'High', status: 'WIP', deadline: '2026-03-25', created: '2026-03-18' },
-            { id: 'TMW-051', task: 'Write first 5 blog posts for SEO content depth', owner: 'Adhi + Claude', department: 'Marketing', priority: 'High', status: 'WIP', deadline: '2026-04-01', created: '2026-03-18' },
-            { id: 'TMW-052', task: 'Set up content freshness protocol (update dateModified every 2 weeks)', owner: 'Claude', department: 'Marketing', priority: 'Medium', status: 'WIP', deadline: '2026-03-25', created: '2026-03-18' }
+            { id: 'TMW-051', task: 'Write first 5 blog posts for SEO content depth', owner: 'Adhi + Claude', department: 'Marketing', priority: 'High', status: 'WIP', deadline: '2026-04-01', created: '2026-03-18' }
         ];
 
         const completedTasks = [
+            { id: 'TMW-001', task: 'Update Privacy Policy to TrackMyWings branding (DRAFT for legal review)', owner: 'Rohan + Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-002', task: 'Update Terms of Service to TrackMyWings branding (DRAFT for legal review)', owner: 'Rohan + Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-004', task: 'Finalize Shareholders Agreement (DRAFT aligned with MoU v6)', owner: 'Rohan + Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-005', task: 'Finalize Term Sheet (DRAFT aligned with MoU v6)', owner: 'Rohan + Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-040', task: 'AWS $1000 credit received (Activate Founder Program)', owner: 'Rohan', department: 'Finance', completed: '2026-03-19' },
+            { id: 'TMW-050', task: 'India keyword pages + gap fill (IndiGo, Air India, SpiceJet, Air India Express, Emirates, TripIt, blog = 7 new pages)', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-052', task: 'Content freshness protocol (update_dates.py script built)', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
             { id: 'TMW-013', task: 'Share MVP_FEATURE_LIST.md + PRODUCT_ROADMAP.md with Amol', owner: 'Rohan', department: 'Product', completed: '2026-03-18' },
             { id: 'TMW-015', task: 'Timeline decided — mobile apps in 2 months (May 2026), desktop/web TBD', owner: 'Rohan + Amol', department: 'Product', completed: '2026-03-18' },
             { id: 'TMW-018', task: 'Validate Master Feature Breakdown (607 components) with Amol', owner: 'Rohan + Amol', department: 'Engineering', completed: '2026-03-18' },
@@ -1417,11 +1443,8 @@
             { id: 'TMW-S021-H', task: 'Track 1 Foundation Spec (7 features, 29KB) + Track 2 Core Tracking Spec (6 features, 42KB)', owner: 'Claude', department: 'Product', completed: '2026-03-19' },
             { id: 'TMW-S021-I', task: '5 SEO blog posts (800-1200 words each) for content depth', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
             { id: 'TMW-S021-J', task: 'Operating Plan review with gap analysis and update roadmap', owner: 'Claude', department: 'Finance', completed: '2026-03-19' },
-            { id: 'TMW-001', task: 'Update Privacy Policy from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', completed: '2026-03-13' },
-            { id: 'TMW-002', task: 'Update Terms of Service from WingWatch/Flight Community branding to TrackMyWings', owner: 'Rohan + Legal', department: 'Legal', completed: '2026-03-13' },
-            { id: 'TMW-004', task: 'Finalize Shareholders Agreement', owner: 'Rohan + Legal', department: 'Legal', completed: '2026-03-13' },
-            { id: 'TMW-005', task: 'Finalize Term Sheet', owner: 'Rohan + Legal', department: 'Legal', completed: '2026-03-13' },
-            { id: 'TMW-040', task: 'AWS $1000 credit received (Activate Founder Program)', owner: 'Rohan', department: 'Finance', completed: '2026-03-18' }
+            { id: 'TMW-050', task: 'Add India-specific keyword pages (IndiGo, Air India, SpiceJet + Air India Express, Emirates, TripIt, blog)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-052', task: 'Set up content freshness protocol (update_dates.py built, ready to deploy)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' }
         ];
 
         const backlogTasks = [
@@ -1443,7 +1466,7 @@
             "dailyVelocity": [
                         {
                                     "date": "2026-03-13",
-                                    "completed": 4,
+                                    "completed": 0,
                                     "added": 5
                         },
                         {
@@ -1463,30 +1486,30 @@
                         },
                         {
                                     "date": "2026-03-18",
-                                    "completed": 68,
-                                    "added": 12
+                                    "completed": 69,
+                                    "added": 10
                         },
                         {
                                     "date": "2026-03-19",
-                                    "completed": 13,
+                                    "completed": 20,
                                     "added": 3
                         },
                         {
                                     "date": "2026-03-20",
                                     "completed": 0,
-                                    "added": 125
+                                    "added": 129
                         }
             ],
             "weeklyVelocity": [
                         {
                                     "week": "2026-03-09",
-                                    "completed": 12,
+                                    "completed": 8,
                                     "added": 8
                         },
                         {
                                     "week": "2026-03-16",
-                                    "completed": 113,
-                                    "added": 150
+                                    "completed": 121,
+                                    "added": 152
                         }
             ],
             "statusDistribution": [
@@ -1496,7 +1519,7 @@
                         },
                         {
                                     "status": "WIP",
-                                    "count": 9
+                                    "count": 7
                         },
                         {
                                     "status": "Blocked \u2014 waiting on UI/UX",
@@ -1526,8 +1549,8 @@
                         },
                         {
                                     "owner": "Claude",
-                                    "active": 6,
-                                    "high_priority": 4,
+                                    "active": 4,
+                                    "high_priority": 3,
                                     "overdue": 0
                         },
                         {
@@ -1573,8 +1596,8 @@
                         },
                         {
                                     "department": "Marketing",
-                                    "active": 11,
-                                    "wip": 3,
+                                    "active": 9,
+                                    "wip": 1,
                                     "not_started": 7,
                                     "overdue": 0,
                                     "stale": 2,
@@ -1651,15 +1674,15 @@
             "burndownData": [
                         {
                                     "date": "2026-03-20",
-                                    "remaining": 33
+                                    "remaining": 31
                         },
                         {
                                     "date": "2026-03-19",
-                                    "remaining": 33
+                                    "remaining": 31
                         },
                         {
                                     "date": "2026-03-18",
-                                    "remaining": 30
+                                    "remaining": 28
                         },
                         {
                                     "date": "2026-03-17",
@@ -1684,7 +1707,7 @@
             ],
             "velocity": {
                         "today": 0,
-                        "this_week": 113,
+                        "this_week": 121,
                         "overdue": 0,
                         "stale": 4
             }
@@ -2317,13 +2340,13 @@
             analyticsData.departmentHealth.forEach(dept => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${dept.department}</td>
-                    <td>${dept.active}</td>
-                    <td>${dept.wip}</td>
-                    <td>${dept.not_started}</td>
-                    <td>${dept.overdue > 0 ? '<span style="color: #dc2626;">' + dept.overdue + '</span>' : '0'}</td>
-                    <td>${dept.stale > 0 ? '<span style="color: #f2b95f;">' + dept.stale + '</span>' : '0'}</td>
-                    <td>${dept.avg_age_days}</td>
+                    <td data-label="Department">${dept.department}</td>
+                    <td data-label="Active">${dept.active}</td>
+                    <td data-label="WIP">${dept.wip}</td>
+                    <td data-label="Not Started">${dept.not_started}</td>
+                    <td data-label="Overdue">${dept.overdue > 0 ? '<span style="color: #dc2626;">' + dept.overdue + '</span>' : '0'}</td>
+                    <td data-label="Stale">${dept.stale > 0 ? '<span style="color: #f2b95f;">' + dept.stale + '</span>' : '0'}</td>
+                    <td data-label="Avg Age">${dept.avg_age_days}d</td>
                 `;
                 tbody.appendChild(row);
             });
@@ -2389,10 +2412,10 @@
             analyticsData.ownerWorkload.forEach(owner => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${owner.owner}</td>
-                    <td>${owner.active}</td>
-                    <td>${owner.high_priority}</td>
-                    <td>${owner.overdue > 0 ? '<span style="color: #dc2626;">' + owner.overdue + '</span>' : '0'}</td>
+                    <td data-label="Owner">${owner.owner}</td>
+                    <td data-label="Active">${owner.active}</td>
+                    <td data-label="High Priority">${owner.high_priority}</td>
+                    <td data-label="Overdue">${owner.overdue > 0 ? '<span style="color: #dc2626;">' + owner.overdue + '</span>' : '0'}</td>
                 `;
                 tbody.appendChild(row);
             });

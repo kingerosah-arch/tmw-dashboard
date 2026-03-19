@@ -996,6 +996,131 @@
                 </div>
             </div>
 
+            <!-- Velocity & Insights Section -->
+            <div class="section" style="border-top: 2px solid rgba(59, 130, 246, 0.3); margin-top: 32px; padding-top: 24px;">
+                <h2 style="margin-bottom: 20px;"><span>⚡</span> Velocity & Insights</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Today's Velocity</div>
+                        <div class="stat-value" id="todayVelocity">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">This Week</div>
+                        <div class="stat-value" id="thisWeekVelocity">0</div>
+                    </div>
+                    <div class="stat-card" style="border-color: rgba(220, 38, 38, 0.3);">
+                        <div class="stat-label">Overdue</div>
+                        <div class="stat-value" id="overdueCount" style="color: #fca5a5;">0</div>
+                    </div>
+                    <div class="stat-card" style="border-color: rgba(251, 146, 60, 0.3);">
+                        <div class="stat-label">Stale Tasks</div>
+                        <div class="stat-value" id="staleCount" style="color: #fdba74;">0</div>
+                    </div>
+                </div>
+
+                <div class="charts-grid" style="margin-top: 24px;">
+                    <div class="chart-card">
+                        <h3>Daily Velocity (14 days)</h3>
+                        <div class="chart-container">
+                            <canvas id="dailyVelocityChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Weekly Velocity (4 weeks)</h3>
+                        <div class="chart-container">
+                            <canvas id="weeklyVelocityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Department Health Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span>🏥</span> Department Health <span id="deptHealthToggle"></span></h2>
+                    <span class="section-toggle">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="charts-grid">
+                        <div class="chart-card" style="grid-column: 1 / -1;">
+                            <h3>Active Tasks by Department</h3>
+                            <div class="chart-container">
+                                <canvas id="departmentHealthChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper" style="margin-top: 24px;">
+                        <table id="departmentHealthTable">
+                            <thead>
+                                <tr>
+                                    <th>Department</th>
+                                    <th>Active</th>
+                                    <th>WIP</th>
+                                    <th>Not Started</th>
+                                    <th>Overdue</th>
+                                    <th>Stale</th>
+                                    <th>Avg Age (days)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="departmentHealthBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Owner Workload Section -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span>👥</span> Owner Workload <span id="ownerWorkloadToggle"></span></h2>
+                    <span class="section-toggle collapsed">▼</span>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="charts-grid">
+                        <div class="chart-card" style="grid-column: 1 / -1;">
+                            <h3>Priority Distribution by Owner</h3>
+                            <div class="chart-container">
+                                <canvas id="ownerWorkloadChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-wrapper" style="margin-top: 24px;">
+                        <table id="ownerWorkloadTable">
+                            <thead>
+                                <tr>
+                                    <th>Owner</th>
+                                    <th>Active Tasks</th>
+                                    <th>High Priority</th>
+                                    <th>Overdue</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ownerWorkloadBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Burndown Chart -->
+            <div class="section">
+                <div class="section-header" onclick="toggleSection(this)">
+                    <h2><span>📉</span> Burndown Chart (14 days) <span id="burndownToggle"></span></h2>
+                    <span class="section-toggle collapsed">▼</span>
+                </div>
+                <div class="section-content collapsed">
+                    <div class="charts-grid">
+                        <div class="chart-card" style="grid-column: 1 / -1;">
+                            <div class="chart-container">
+                                <canvas id="burndownChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Active Tasks Section -->
             <div class="section">
                 <div class="section-header" onclick="toggleSection(this)">
@@ -1921,6 +2046,375 @@
         function renderCharts() {
             renderDepartmentChart();
             renderPriorityChart();
+            renderAnalyticsCharts();
+        }
+
+        function renderAnalyticsCharts() {
+            // Update velocity stats
+            if (analyticsData.velocity) {
+                document.getElementById('todayVelocity').textContent = analyticsData.velocity.today || 0;
+                document.getElementById('thisWeekVelocity').textContent = analyticsData.velocity.this_week || 0;
+                document.getElementById('overdueCount').textContent = analyticsData.velocity.overdue || 0;
+                document.getElementById('staleCount').textContent = analyticsData.velocity.stale || 0;
+            }
+
+            // Daily velocity chart
+            if (analyticsData.dailyVelocity && analyticsData.dailyVelocity.length > 0) {
+                renderDailyVelocityChart();
+            }
+
+            // Weekly velocity chart
+            if (analyticsData.weeklyVelocity && analyticsData.weeklyVelocity.length > 0) {
+                renderWeeklyVelocityChart();
+            }
+
+            // Department health
+            if (analyticsData.departmentHealth && analyticsData.departmentHealth.length > 0) {
+                renderDepartmentHealthChart();
+                renderDepartmentHealthTable();
+            }
+
+            // Owner workload
+            if (analyticsData.ownerWorkload && analyticsData.ownerWorkload.length > 0) {
+                renderOwnerWorkloadChart();
+                renderOwnerWorkloadTable();
+            }
+
+            // Burndown chart
+            if (analyticsData.burndownData && analyticsData.burndownData.length > 0) {
+                renderBurndownChart();
+            }
+        }
+
+        function renderDailyVelocityChart() {
+            const ctx = document.getElementById('dailyVelocityChart').getContext('2d');
+            if (window.dailyVelocityChartInstance) {
+                window.dailyVelocityChartInstance.destroy();
+            }
+
+            const dates = analyticsData.dailyVelocity.map(d => d.date.slice(-5));
+            const completed = analyticsData.dailyVelocity.map(d => d.completed);
+            const added = analyticsData.dailyVelocity.map(d => d.added);
+
+            window.dailyVelocityChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Completed',
+                            data: completed,
+                            backgroundColor: '#10b981',
+                            borderColor: '#059669',
+                            borderWidth: 1,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Added',
+                            data: added,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            type: 'line',
+                            tension: 0.4,
+                            yAxisID: 'y'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#cbd5e1', font: { size: 11 }, padding: 12 }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            beginAtZero: true
+                        },
+                        x: {
+                            ticks: { color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderWeeklyVelocityChart() {
+            const ctx = document.getElementById('weeklyVelocityChart').getContext('2d');
+            if (window.weeklyVelocityChartInstance) {
+                window.weeklyVelocityChartInstance.destroy();
+            }
+
+            const weeks = analyticsData.weeklyVelocity.map(w => 'W' + w.week.slice(-5));
+            const completed = analyticsData.weeklyVelocity.map(w => w.completed);
+            const added = analyticsData.weeklyVelocity.map(w => w.added);
+
+            window.weeklyVelocityChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: weeks,
+                    datasets: [
+                        {
+                            label: 'Completed',
+                            data: completed,
+                            backgroundColor: '#10b981',
+                            borderColor: '#059669',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Added',
+                            data: added,
+                            backgroundColor: '#3b82f6',
+                            borderColor: '#1d4ed8',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: { color: '#cbd5e1', font: { size: 11 }, padding: 12 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: false,
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                        },
+                        y: {
+                            stacked: false,
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderDepartmentHealthChart() {
+            const ctx = document.getElementById('departmentHealthChart').getContext('2d');
+            if (window.departmentHealthChartInstance) {
+                window.departmentHealthChartInstance.destroy();
+            }
+
+            const depts = analyticsData.departmentHealth.map(d => d.department);
+            const active = analyticsData.departmentHealth.map(d => d.active);
+            const overdue = analyticsData.departmentHealth.map(d => d.overdue);
+            const stale = analyticsData.departmentHealth.map(d => d.stale);
+
+            window.departmentHealthChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: depts,
+                    datasets: [
+                        {
+                            label: 'Active',
+                            data: active,
+                            backgroundColor: '#3b82f6',
+                            borderColor: '#1d4ed8',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Overdue',
+                            data: overdue,
+                            backgroundColor: '#dc2626',
+                            borderColor: '#991b1b',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Stale',
+                            data: stale,
+                            backgroundColor: '#f59e0b',
+                            borderColor: '#d97706',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#cbd5e1', font: { size: 11 }, padding: 12 } }
+                    },
+                    scales: {
+                        x: {
+                            stacked: false,
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            beginAtZero: true
+                        },
+                        y: {
+                            ticks: { color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderDepartmentHealthTable() {
+            const tbody = document.getElementById('departmentHealthBody');
+            tbody.innerHTML = '';
+            analyticsData.departmentHealth.forEach(dept => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${dept.department}</td>
+                    <td>${dept.active}</td>
+                    <td>${dept.wip}</td>
+                    <td>${dept.not_started}</td>
+                    <td>${dept.overdue > 0 ? '<span style="color: #fca5a5;">' + dept.overdue + '</span>' : '0'}</td>
+                    <td>${dept.stale > 0 ? '<span style="color: #fdba74;">' + dept.stale + '</span>' : '0'}</td>
+                    <td>${dept.avg_age_days}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function renderOwnerWorkloadChart() {
+            const ctx = document.getElementById('ownerWorkloadChart').getContext('2d');
+            if (window.ownerWorkloadChartInstance) {
+                window.ownerWorkloadChartInstance.destroy();
+            }
+
+            const owners = analyticsData.ownerWorkload.map(o => o.owner);
+            const highPriority = analyticsData.ownerWorkload.map(o => o.high_priority);
+            const mediumPriority = analyticsData.ownerWorkload.map(o => (o.active - o.high_priority - o.overdue));
+
+            window.ownerWorkloadChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: owners,
+                    datasets: [
+                        {
+                            label: 'High Priority',
+                            data: highPriority,
+                            backgroundColor: '#dc2626',
+                            borderColor: '#991b1b',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Other Priority',
+                            data: mediumPriority,
+                            backgroundColor: '#3b82f6',
+                            borderColor: '#1d4ed8',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            beginAtZero: true
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: { color: '#94a3b8' }
+                        }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#cbd5e1', font: { size: 11 }, padding: 12 } }
+                    }
+                }
+            });
+        }
+
+        function renderOwnerWorkloadTable() {
+            const tbody = document.getElementById('ownerWorkloadBody');
+            tbody.innerHTML = '';
+            analyticsData.ownerWorkload.forEach(owner => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${owner.owner}</td>
+                    <td>${owner.active}</td>
+                    <td>${owner.high_priority}</td>
+                    <td>${owner.overdue > 0 ? '<span style="color: #fca5a5;">' + owner.overdue + '</span>' : '0'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function renderBurndownChart() {
+            const ctx = document.getElementById('burndownChart').getContext('2d');
+            if (window.burndownChartInstance) {
+                window.burndownChartInstance.destroy();
+            }
+
+            const dates = analyticsData.burndownData.map(d => d.date.slice(-5));
+            const remaining = analyticsData.burndownData.map(d => d.remaining);
+
+            // Calculate trendline
+            const trendline = [];
+            if (remaining.length > 1) {
+                const start = remaining[0];
+                const end = remaining[remaining.length - 1];
+                const slope = (end - start) / (remaining.length - 1);
+                for (let i = 0; i < remaining.length; i++) {
+                    trendline.push(Math.max(0, Math.round(start + slope * i)));
+                }
+            }
+
+            window.burndownChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Remaining Tasks',
+                            data: remaining,
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Trend',
+                            data: trendline,
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#cbd5e1', font: { size: 11 }, padding: 12 } }
+                    },
+                    scales: {
+                        y: {
+                            ticks: { color: '#94a3b8' },
+                            grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                            beginAtZero: true
+                        },
+                        x: {
+                            ticks: { color: '#94a3b8' }
+                        }
+                    }
+                }
+            });
         }
 
         function renderDepartmentChart() {

@@ -1597,7 +1597,7 @@
                         <button class="view-btn active" onclick="toggleView('table')">📊 Table</button>
                         <button class="view-btn" onclick="toggleView('kanban')">📋 Kanban</button>
                     </div>
-                    <div class="last-updated">Last updated: 2026-03-22</span></div>
+                    <div class="last-updated">Last updated: 2026-03-23</span></div>
                     <button class="logout-btn" id="logoutBtn">Logout</button>
                 </div>
             </div>
@@ -2138,61 +2138,18 @@
         // Calendar Events - populated by rebuild script
         const calendarEvents = [
             {
-                        "summary": "Meeting with Ruchi",
-                        "date": "2026-03-17",
-                        "time": "6:00 PM",
-                        "duration": "4hr",
-                        "location": "Blue Tokai Coffee Roasters, AECS Layout, Brookefield, Bengaluru",
-                        "link": "https://www.google.com/calendar/event?eid=cGpwamE4bDUwNHV2bGE4OGZ2M2c2YmdtNzAgcm9oYW5AdHJhY2tteXdpbmdzLmNvbQ&ctz=Asia/Kolkata"
-            },
-            {
-                        "summary": "Discussion - About TrackMyWings",
-                        "date": "2026-03-18",
-                        "time": "12:00 AM",
-                        "duration": "2hr",
-                        "link": "https://www.google.com/calendar/event?eid=YTh2cHE2a2lrcjBjaGh2aXBoazc3am5taDQgcm9oYW5AdHJhY2tteXdpbmdzLmNvbQ&ctz=Asia/Kolkata"
-            },
-            {
-                        "summary": "Company Incorporation Discussion",
-                        "date": "2026-03-18",
-                        "time": "4:00 PM",
-                        "duration": "1hr",
-                        "link": "https://www.google.com/calendar/event?eid=M3I4OTE1cHFmZWRxNWJmbW0wcHZubzFnMjUgcm9oYW5AdHJhY2tteXdpbmdzLmNvbQ&ctz=Asia/Kolkata"
-            },
-            {
-                        "summary": "MoU",
-                        "date": "2026-03-18",
-                        "time": "5:00 PM",
-                        "duration": "1hr",
-                        "link": "https://www.google.com/calendar/event?eid=MXMzZXBwcDZ1cWdqYW5tc2RtZnNxZ3I3dmQgcm9oYW5AdHJhY2tteXdpbmdzLmNvbQ&ctz=Asia/Kolkata"
-            },
-            {
-                        "summary": "Marketing Strategy Sync Part 1",
-                        "date": "2026-03-18",
-                        "time": "6:30 PM",
-                        "duration": "4hr",
-                        "link": "https://www.google.com/calendar/event?eid=NWRwMmdqaHFlN2p1dmR1MG9lN2I0Z2w2cmQgcm9oYW5AdHJhY2tteXdpbmdzLmNvbQ&ctz=Asia/Kolkata"
-            },
-            {
-                        "summary": "Website discuss",
-                        "date": "2026-03-19",
-                        "time": "6:30 PM",
-                        "duration": "1hr",
-                        "link": "https://www.google.com/calendar/event?eid=NWdsdTh0MTk5YTgwbTliNjd0cGNqMm9jZWcgcm9oYW5AdHJhY2tteXdpbmdzLmNvbQ&ctz=Asia/Kolkata"
-            },
-            {
-                        "summary": "Product UI/UX brainstorming",
-                        "date": "2026-03-21",
-                        "time": "5:00 PM",
-                        "duration": "2hr",
-                        "link": "https://www.google.com/calendar/event?eid=ZGtwMWtlamswNDhhcWVyOWFyMDZndXE4MHMgcm9oYW5AdHJhY2tteXdpbmdzLmNvbQ&ctz=Asia/Kolkata"
-            },
-            {
                         "summary": "Weekly Sync with Amol",
                         "date": "2026-03-28",
                         "time": "4:00 PM",
                         "duration": "2hr",
                         "link": "https://www.google.com/calendar/event?eid=NTNjYjN1M244aWNtbWFkMzFsZ3E1dGoza2tfMjAyNjAzMjhUMTAzMDAwWiByb2hhbkB0cmFja215d2luZ3MuY29t&ctz=Asia/Kolkata"
+            },
+            {
+                        "summary": "Weekly Sync with Amol",
+                        "date": "2026-04-04",
+                        "time": "4:00 PM",
+                        "duration": "2hr",
+                        "link": "https://www.google.com/calendar/event?eid=NTNjYjN1M244aWNtbWFkMzFsZ3E1dGoza2tfMjAyNjA0MDRUMTAzMDAwWiByb2hhbkB0cmFja215d2luZ3MuY29t&ctz=Asia/Kolkata"
             }
 ];
 
@@ -2482,6 +2439,11 @@
                         {
                                     "date": "2026-03-22",
                                     "completed": 6,
+                                    "added": 0
+                        },
+                        {
+                                    "date": "2026-03-23",
+                                    "completed": 0,
                                     "added": 151
                         }
             ],
@@ -2494,7 +2456,12 @@
                         {
                                     "week": "2026-03-16",
                                     "completed": 143,
-                                    "added": 174
+                                    "added": 23
+                        },
+                        {
+                                    "week": "2026-03-23",
+                                    "completed": 0,
+                                    "added": 151
                         }
             ],
             "statusDistribution": [
@@ -2554,7 +2521,7 @@
                                     "owner": "Rohan",
                                     "active": 28,
                                     "high_priority": 13,
-                                    "overdue": 0
+                                    "overdue": 1
                         },
                         {
                                     "owner": "Ruchi",
@@ -2570,8 +2537,8 @@
                                     "wip": 2,
                                     "not_started": 4,
                                     "overdue": 0,
-                                    "stale": 2,
-                                    "avg_age_days": 5
+                                    "stale": 4,
+                                    "avg_age_days": 6
                         },
                         {
                                     "department": "Engineering",
@@ -2580,7 +2547,7 @@
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 1
+                                    "avg_age_days": 2
                         },
                         {
                                     "department": "Finance",
@@ -2589,16 +2556,16 @@
                                     "not_started": 4,
                                     "overdue": 0,
                                     "stale": 1,
-                                    "avg_age_days": 5
+                                    "avg_age_days": 6
                         },
                         {
                                     "department": "Legal",
                                     "active": 3,
                                     "wip": 2,
                                     "not_started": 0,
-                                    "overdue": 0,
+                                    "overdue": 1,
                                     "stale": 0,
-                                    "avg_age_days": 3
+                                    "avg_age_days": 4
                         },
                         {
                                     "department": "Marketing",
@@ -2606,8 +2573,8 @@
                                     "wip": 1,
                                     "not_started": 6,
                                     "overdue": 0,
-                                    "stale": 3,
-                                    "avg_age_days": 5
+                                    "stale": 4,
+                                    "avg_age_days": 6
                         },
                         {
                                     "department": "Operations",
@@ -2616,7 +2583,7 @@
                                     "not_started": 1,
                                     "overdue": 0,
                                     "stale": 1,
-                                    "avg_age_days": 9
+                                    "avg_age_days": 10
                         },
                         {
                                     "department": "Product",
@@ -2625,7 +2592,7 @@
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 3
+                                    "avg_age_days": 4
                         },
                         {
                                     "department": "Sales",
@@ -2634,7 +2601,7 @@
                                     "not_started": 1,
                                     "overdue": 0,
                                     "stale": 1,
-                                    "avg_age_days": 9
+                                    "avg_age_days": 10
                         },
                         {
                                     "department": "Strategy",
@@ -2643,7 +2610,7 @@
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 6
+                                    "avg_age_days": 7
                         }
             ],
             "staleTasks": [
@@ -2651,57 +2618,79 @@
                                     "id": "TMW-006",
                                     "task": "Build pre-launch email sequence for waitlist",
                                     "department": "Marketing",
-                                    "age_days": 9
+                                    "age_days": 10
                         },
                         {
                                     "id": "TMW-007",
                                     "task": "Populate Marketing/Content folder with launch content",
                                     "department": "Marketing",
-                                    "age_days": 9
+                                    "age_days": 10
                         },
                         {
                                     "id": "TMW-008",
                                     "task": "Populate Sales/Pipeline with CRM structure",
                                     "department": "Sales",
-                                    "age_days": 9
+                                    "age_days": 10
                         },
                         {
                                     "id": "TMW-012",
                                     "task": "Re-upload updated system files to Claude Project weekly",
                                     "department": "Operations",
-                                    "age_days": 9
+                                    "age_days": 10
                         },
                         {
                                     "id": "TMW-014",
                                     "task": "Share UX_DESIGN_DIRECTION.md with Ruchi, start Figma design system",
                                     "department": "Design",
-                                    "age_days": 7
+                                    "age_days": 8
                         },
                         {
                                     "id": "TMW-017",
                                     "task": "Share UI/UX Screen Specs + Design Handoff with Ruchi for Figma implementation",
                                     "department": "Design",
-                                    "age_days": 7
+                                    "age_days": 8
                         },
                         {
                                     "id": "TMW-020",
                                     "task": "Enter actual March 2026 expenses into Expenses sheet once CA is finalized",
                                     "department": "Finance",
-                                    "age_days": 6
+                                    "age_days": 7
                         },
                         {
                                     "id": "TMW-023",
                                     "task": "Analyze survey responses once 20+ collected \u2014 use Results Tracker",
                                     "department": "Marketing",
+                                    "age_days": 7
+                        },
+                        {
+                                    "id": "TMW-032",
+                                    "task": "Check insta saved reels and figure out useful todo",
+                                    "department": "Marketing",
+                                    "age_days": 6
+                        },
+                        {
+                                    "id": "TMW-038",
+                                    "task": "Update Website to new guidelines",
+                                    "department": "Design",
+                                    "age_days": 6
+                        },
+                        {
+                                    "id": "TMW-039",
+                                    "task": "Finalize UI + UX add on members",
+                                    "department": "Design",
                                     "age_days": 6
                         }
             ],
             "deadlineStats": {
-                        "overdue": 0,
-                        "due_3days": 9,
+                        "overdue": 1,
+                        "due_3days": 8,
                         "deadline_hit_rate": "0%"
             },
             "burndownData": [
+                        {
+                                    "date": "2026-03-23",
+                                    "remaining": 31
+                        },
                         {
                                     "date": "2026-03-22",
                                     "remaining": 31
@@ -2744,10 +2733,10 @@
                         }
             ],
             "velocity": {
-                        "today": 6,
-                        "this_week": 143,
-                        "overdue": 0,
-                        "stale": 8
+                        "today": 0,
+                        "this_week": 0,
+                        "overdue": 1,
+                        "stale": 11
             }
 };
 

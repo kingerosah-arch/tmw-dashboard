@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackMyWings - Folder Map</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0e132f 0%, #1a1f3d 100%);
+            color: #ffefc2;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* ===== LOGIN SCREEN ===== */
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0e132f 0%, #1a1f3d 100%);
+        }
+
+        .login-container {
+            background: rgba(26, 31, 61, 0.95);
+            border: 1px solid rgba(160, 110, 155, 0.2);
+            border-radius: 16px;
+            padding: 48px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .login-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .login-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f2b95f 0%, #ceabca 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            font-size: 14px;
+            color: #978cb5;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-field label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #ceabca;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .password-field input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(14, 19, 47, 0.7);
+            border: 1px solid rgba(160, 110, 155, 0.3);
+            border-radius: 8px;
+            color: #ffefc2;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .password-field input:focus {
+            outline: none;
+            border-color: #a06e9b;
+            background: rgba(14, 19, 47, 0.9);
+            box-shadow: 0 0 0 3px rgba(160, 110, 155, 0.1);
+        }
+
+        .login-btn {
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #f2b95f 0%, #ceabca 100%);
+            border: none;
+            border-radius: 8px;
+            color: #0e132f;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(242, 185, 95, 0.3);
+        }
+
+        .login-error {
+            color: #ff6b6b;
+            font-size: 12px;
+            text-align: center;
+            display: none;
+        }
+
+        .login-error.show {
+            display: block;
+        }
+
+        /* ===== FOLDER MAP SCREEN ===== */
+        .folder-map-screen {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(26, 31, 61, 0.8);
+            border: 1px solid rgba(160, 110, 155, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .header-branding {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-icon {
+            font-size: 32px;
+        }
+
+        .header-branding h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #f2b95f 0%, #ceabca 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-branding p {
+            font-size: 12px;
+            color: #978cb5;
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            background: rgba(160, 110, 155, 0.2);
+            border: 1px solid rgba(160, 110, 155, 0.3);
+            border-radius: 6px;
+            color: #ffefc2;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            background: rgba(160, 110, 155, 0.4);
+            border-color: rgba(160, 110, 155, 0.5);
+        }
+
+        .btn.refresh-btn {
+            padding: 6px 12px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 10px 14px;
+            background: rgba(14, 19, 47, 0.7);
+            border: 1px solid rgba(160, 110, 155, 0.3);
+            border-radius: 8px;
+            color: #ffefc2;
+            font-size: 13px;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #a06e9b;
+            background: rgba(14, 19, 47, 0.9);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(160, 110, 155, 0.1);
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #978cb5;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffefc2;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .folder-tree {
+            background: rgba(26, 31, 61, 0.8);
+            border: 1px solid rgba(160, 110, 155, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            max-height: 75vh;
+            overflow-y: auto;
+        }
+
+        .tree-node {
+            margin-left: 0;
+        }
+
+        .tree-node.nested {
+            margin-left: 20px;
+        }
+
+        .tree-item {
+            padding: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .tree-item:hover {
+            background: rgba(160, 110, 155, 0.1);
+        }
+
+        .tree-toggle {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            color: #ceabca;
+        }
+
+        .tree-toggle.hidden {
+            visibility: hidden;
+        }
+
+        .tree-icon {
+            width: 20px;
+            font-size: 16px;
+        }
+
+        .tree-name {
+            font-size: 13px;
+            color: #ffefc2;
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .tree-name.folder {
+            font-weight: 600;
+        }
+
+        .tree-children {
+            display: none;
+        }
+
+        .tree-children.visible {
+            display: block;
+        }
+
+        .dept-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .dept-ops { background: rgba(100, 150, 200, 0.3); color: #64b3ff; }
+        .dept-product { background: rgba(100, 200, 150, 0.3); color: #64ffb3; }
+        .dept-engineering { background: rgba(255, 150, 80, 0.3); color: #ffb380; }
+        .dept-design { background: rgba(160, 110, 155, 0.3); color: #ceabca; }
+        .dept-finance { background: rgba(242, 185, 95, 0.3); color: #ffd580; }
+        .dept-legal { background: rgba(255, 107, 107, 0.3); color: #ff6b6b; }
+        .dept-marketing { background: rgba(100, 200, 200, 0.3); color: #64ffff; }
+        .dept-sales { background: rgba(255, 150, 200, 0.3); color: #ffb3d9; }
+        .dept-strategy { background: rgba(150, 120, 200, 0.3); color: #d4b3ff; }
+
+        .sidebar {
+            background: rgba(26, 31, 61, 0.8);
+            border: 1px solid rgba(160, 110, 155, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            max-height: 75vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #f2b95f;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px;
+        }
+
+        .sidebar-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .dept-color {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            font-size: 12px;
+        }
+
+        .dept-color-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        .file-types {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .file-type {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 0;
+            font-size: 12px;
+        }
+
+        .file-type-icon {
+            width: 20px;
+            font-size: 14px;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+
+            .header-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .folder-tree,
+            .sidebar {
+                max-height: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+
+            .header {
+                padding: 16px;
+            }
+
+            .header-branding h1 {
+                font-size: 18px;
+            }
+
+            .folder-tree,
+            .sidebar {
+                padding: 16px;
+            }
+
+            .stats-bar {
+                gap: 12px;
+            }
+
+            .stat-value {
+                font-size: 16px;
+            }
+        }
+
+        /* Scrollbar styling */
+        .folder-tree::-webkit-scrollbar,
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .folder-tree::-webkit-scrollbar-track,
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(160, 110, 155, 0.1);
+            border-radius: 3px;
+        }
+
+        .folder-tree::-webkit-scrollbar-thumb,
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(160, 110, 155, 0.3);
+            border-radius: 3px;
+        }
+
+        .folder-tree::-webkit-scrollbar-thumb:hover,
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(160, 110, 155, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="login-icon">📂</div>
+                <h1>TrackMyWings</h1>
+                <p>Folder Map</p>
+            </div>
+            <form class="login-form" id="loginForm">
+                <div class="password-field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter password" autofocus>
+                </div>
+                <button type="submit" class="login-btn">Enter</button>
+                <div class="login-error" id="loginError">Incorrect password</div>
+            </form>
+        </div>
+    </div>
+
+    <!-- FOLDER MAP SCREEN -->
+    <div class="folder-map-screen" id="folderMapScreen">
+        <div class="header">
+            <div class="header-top">
+                <div class="header-branding">
+                    <div class="header-icon">📂</div>
+                    <div>
+                        <h1>Folder Map</h1>
+                        <p>Interactive explorer for TrackMyWings structure</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn refresh-btn" onclick="location.reload(true)" title="Hard refresh">🔄</button>
+                    <button class="btn" onclick="goToDashboard()">📊 Dashboard</button>
+                    <button class="btn" id="logoutBtn" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+            <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search files and folders..." onkeyup="filterTree()">
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-label">Total Folders</span>
+                    <span class="stat-value" id="statFolders">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total Files</span>
+                    <span class="stat-value" id="statFiles">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Markdown</span>
+                    <span class="stat-value" id="statMd">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Excel</span>
+                    <span class="stat-value" id="statXlsx">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Docs</span>
+                    <span class="stat-value" id="statDocx">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">PDF</span>
+                    <span class="stat-value" id="statPdf">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="folder-tree" id="folderTree"></div>
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <h2>Department Colors</h2>
+                    <div class="dept-color">
+                        <div class="dept-color-box" style="background: rgba(100, 150, 200, 0.5);"></div>
+                        <span>Operations</span>
+                    </div>
+                    <div class="dept-color">
+                        <div class="dept-color-box" style="background: rgba(100, 200, 150, 0.5);"></div>
+                        <span>Product</span>
+                    </div>
+                    <div class="dept-color">
+                        <div class="dept-color-box" style="background: rgba(255, 150, 80, 0.5);"></div>
+                        <span>Engineering</span>
+                    </div>
+                    <div class="dept-color">
+                        <div class="dept-color-box" style="background: rgba(160, 110, 155, 0.5);"></div>
+                        <span>Design</span>
+                    </div>
+                    <div class="dept-color">
+                        <div class="dept-color-box" style="background: rgba(242, 185, 95, 0.5);"></div>
+                        <span>Finance</span>
+                    </div>
+                    <div class="dept-color">
+                        <div class="dept-color-box" style="background: rgba(255, 107, 107, 0.5);"></div>
+                        <span>Legal</span>
+                    </div>
+                    <div class="dept-color">
+                        <div class="dept-color-box" style="background: rgba(100, 200, 200, 0.5);"></div>
+                        <span>Marketing</span>
+                    </div>
+                    <div class="dept-color">
+                        <div class="dept-color-box" style="background: rgba(255, 150, 200, 0.5);"></div>
+                        <span>Sales</span>
+                    </div>
+                    <div class="dept-color">
+                        <div class="dept-color-box" style="background: rgba(150, 120, 200, 0.5);"></div>
+                        <span>Strategy</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h2>File Types</h2>
+                    <div class="file-types">
+                        <div class="file-type">
+                            <div class="file-type-icon">📄</div>
+                            <span>Markdown (.md)</span>
+                        </div>
+                        <div class="file-type">
+                            <div class="file-type-icon">📊</div>
+                            <span>Excel (.xlsx)</span>
+                        </div>
+                        <div class="file-type">
+                            <div class="file-type-icon">📝</div>
+                            <span>Word (.docx)</span>
+                        </div>
+                        <div class="file-type">
+                            <div class="file-type-icon">📋</div>
+                            <span>PDF</span>
+                        </div>
+                        <div class="file-type">
+                            <div class="file-type-icon">🌐</div>
+                            <span>HTML</span>
+                        </div>
+                        <div class="file-type">
+                            <div class="file-type-icon">📦</div>
+                            <span>ZIP</span>
+                        </div>
+                        <div class="file-type">
+                            <div class="file-type-icon">🖼️</div>
+                            <span>Images</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password hash for "tmw2026"
+        async function hashPassword(password) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const correctHash = await hashPassword('tmw2026');
+            window.correctHash = correctHash;
+
+            checkAuthStatus();
+            setupEventListeners();
+            buildAndRenderTree();
+            updateStats();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+        }
+
+        function checkAuthStatus() {
+            const isAuthenticated = sessionStorage.getItem('tmw_authenticated');
+            if (isAuthenticated === 'true') {
+                showFolderMap();
+            } else {
+                showLogin();
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const hash = await hashPassword(password);
+
+            if (hash === window.correctHash) {
+                sessionStorage.setItem('tmw_authenticated', 'true');
+                document.getElementById('password').value = '';
+                document.getElementById('loginError').classList.remove('show');
+                showFolderMap();
+            } else {
+                document.getElementById('loginError').classList.add('show');
+                document.getElementById('password').value = '';
+            }
+        }
+
+        function handleLogout() {
+            sessionStorage.removeItem('tmw_authenticated');
+            showLogin();
+            document.getElementById('password').focus();
+        }
+
+        function showLogin() {
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('folderMapScreen').style.display = 'none';
+        }
+
+        function showFolderMap() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('folderMapScreen').style.display = 'block';
+        }
+
+        function goToDashboard() {
+            window.location.href = 'task-dashboard.html';
+        }
+
+        // Folder structure data
+        const folderStructure = {
+            name: 'TrackMyWings',
+            type: 'folder',
+            dept: 'root',
+            children: [
+                {
+                    name: 'Operations',
+                    type: 'folder',
+                    dept: 'Operations',
+                    children: [
+                        {
+                            name: 'AI System',
+                            type: 'folder',
+                            dept: 'Operations',
+                            children: [
+                                { name: 'OPERATING_PARTNER_PROMPT.md', type: 'file', dept: 'Operations' },
+                                { name: 'CONTEXT.md', type: 'file', dept: 'Operations' },
+                                { name: 'COWORK_PROJECT_INSTRUCTIONS.md', type: 'file', dept: 'Operations' },
+                                { name: 'SESSION_LOG.md', type: 'file', dept: 'Operations' },
+                                { name: 'DECISION_LOG.md', type: 'file', dept: 'Operations' },
+                                { name: 'SESSION_RESUME_PROMPT.md', type: 'file', dept: 'Operations' },
+                                { name: 'SESSION_LOG_ARCHIVE.md', type: 'file', dept: 'Operations' },
+                                {
+                                    name: 'Session Saves',
+                                    type: 'folder',
+                                    dept: 'Operations',
+                                    children: []
+                                },
+                                {
+                                    name: 'Claude Project',
+                                    type: 'folder',
+                                    dept: 'Operations',
+                                    children: [
+                                        { name: 'CLAUDE_PROJECT_INSTRUCTIONS.md', type: 'file', dept: 'Operations' },
+                                        { name: 'CLAUDE_PROJECT_SETUP_GUIDE.md', type: 'file', dept: 'Operations' }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Task Management',
+                            type: 'folder',
+                            dept: 'Operations',
+                            children: [
+                                { name: 'TASKS.md', type: 'file', dept: 'Operations' },
+                                {
+                                    name: 'System',
+                                    type: 'folder',
+                                    dept: 'Operations',
+                                    children: [
+                                        {
+                                            name: 'Dashboard',
+                                            type: 'folder',
+                                            dept: 'Operations',
+                                            children: [
+                                                { name: 'task-dashboard.html', type: 'file', dept: 'Operations' },
+                                                { name: 'folder-map.html', type: 'file', dept: 'Operations' },
+                                                { name: 'rebuild_dashboard.py', type: 'file', dept: 'Operations' }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Knowledge Base',
+                            type: 'folder',
+                            dept: 'Operations',
+                            children: [
+                                { name: 'KNOWLEDGE_BASE.md', type: 'file', dept: 'Operations' }
+                            ]
+                        },
+                        {
+                            name: 'Dashboards',
+                            type: 'folder',
+                            dept: 'Operations',
+                            children: [
+                                { name: 'FOUNDER_CONTROL_PANEL.md', type: 'file', dept: 'Operations' }
+                            ]
+                        },
+                        {
+                            name: 'Skills for Claude',
+                            type: 'folder',
+                            dept: 'Operations',
+                            children: [
+                                { name: 'marketingskills-main.zip', type: 'file', dept: 'Operations' },
+                                { name: 'SKILL_REFERENCE_GUIDE.md', type: 'file', dept: 'Operations' }
+                            ]
+                        },
+                        {
+                            name: 'Meeting Notes',
+                            type: 'folder',
+                            dept: 'Operations',
+                            children: []
+                        },
+                        {
+                            name: 'SOPs',
+                            type: 'folder',
+                            dept: 'Operations',
+                            children: []
+                        },
+                        { name: 'FOLDER_MAP.md', type: 'file', dept: 'Operations' }
+                    ]
+                },
+                {
+                    name: 'Product',
+                    type: 'folder',
+                    dept: 'Product',
+                    children: [
+                        {
+                            name: 'PRDs',
+                            type: 'folder',
+                            dept: 'Product',
+                            children: [
+                                { name: 'PRODUCT_VISION.md', type: 'file', dept: 'Product' },
+                                { name: 'TARGET_USERS.md', type: 'file', dept: 'Product' },
+                                { name: 'MVP_FEATURE_LIST.md', type: 'file', dept: 'Product' },
+                                { name: 'PHASE_0_SCOPE.md', type: 'file', dept: 'Product' },
+                                { name: 'AD_STRATEGY.md', type: 'file', dept: 'Product' },
+                                { name: 'FEATURE_GATING.md', type: 'file', dept: 'Product' },
+                                { name: 'TMW_Feature_Gating_MVP.xlsx', type: 'file', dept: 'Product' },
+                                { name: 'Business_Requirements_2026-03-15.md', type: 'file', dept: 'Product' },
+                                { name: 'Product_Requirements_2026-03-15.md', type: 'file', dept: 'Product' },
+                                { name: 'Product_Discovery_Questionnaire_2026-03-15.docx', type: 'file', dept: 'Product' }
+                            ]
+                        },
+                        {
+                            name: 'Roadmap',
+                            type: 'folder',
+                            dept: 'Product',
+                            children: [
+                                { name: 'PRODUCT_ROADMAP.md', type: 'file', dept: 'Product' },
+                                { name: 'TrackMyWings_Product_Feature_Blueprint_2026-03-15.xlsx', type: 'file', dept: 'Product' },
+                                { name: 'TrackMyWings_Product_Roadmap_Prioritization_2026-03-15.xlsx', type: 'file', dept: 'Product' },
+                                { name: 'Consumer_Feature_Matrix_2026-03-15.xlsx', type: 'file', dept: 'Product' }
+                            ]
+                        },
+                        {
+                            name: 'User Research',
+                            type: 'folder',
+                            dept: 'Product',
+                            children: [
+                                { name: 'Trackmywings_Product_Backlog_Reddit_Scrape_2026-03-15.xlsx', type: 'file', dept: 'Product' }
+                            ]
+                        },
+                        {
+                            name: 'Market Research',
+                            type: 'folder',
+                            dept: 'Product',
+                            children: [
+                                { name: 'Market_Research_Dashboard_2026-03-21.html', type: 'file', dept: 'Product' },
+                                { name: 'Market_Research_Master_2026-03-21.xlsx', type: 'file', dept: 'Product' }
+                            ]
+                        },
+                        {
+                            name: 'Feature Specs',
+                            type: 'folder',
+                            dept: 'Product',
+                            children: [
+                                { name: 'UX_DESIGN_DIRECTION.md', type: 'file', dept: 'Product' },
+                                { name: 'PHASE_0_ENGINEERING_SPEC.md', type: 'file', dept: 'Product' },
+                                { name: 'TrackMyWings_Master_Feature_Breakdown_2026-03-15.xlsx', type: 'file', dept: 'Product' },
+                                { name: 'TrackMyWings_UI_UX_Screens_2026-03-15.xlsx', type: 'file', dept: 'Product' },
+                                { name: 'TrackMyWings_UI_UX_Design_Handoff_2026-03-15.docx', type: 'file', dept: 'Product' },
+                                { name: 'Track_1_Foundation_Spec.md', type: 'file', dept: 'Product' },
+                                { name: 'Track_2_Core_Tracking_Spec.md', type: 'file', dept: 'Product' }
+                            ]
+                        },
+                        {
+                            name: 'Release Notes',
+                            type: 'folder',
+                            dept: 'Product',
+                            children: []
+                        },
+                        {
+                            name: 'Backlog',
+                            type: 'folder',
+                            dept: 'Product',
+                            children: [
+                                { name: 'TrackMyWings_Phase0_Feature_Filter_2026-03-21.xlsx', type: 'file', dept: 'Product' },
+                                { name: 'TrackMyWings_Phase0_Feature_Review_Basu_2026-03-21.xlsx', type: 'file', dept: 'Product' },
+                                {
+                                    name: 'Basu Notes',
+                                    type: 'folder',
+                                    dept: 'Product',
+                                    children: [
+                                        { name: 'Basu_Feedback_Response_WhatsApp.md', type: 'file', dept: 'Product' }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Engineering',
+                    type: 'folder',
+                    dept: 'Engineering',
+                    children: [
+                        {
+                            name: 'Architecture',
+                            type: 'folder',
+                            dept: 'Engineering',
+                            children: []
+                        },
+                        {
+                            name: 'Codebase',
+                            type: 'folder',
+                            dept: 'Engineering',
+                            children: [
+                                { name: 'V0_TrackMyWings', type: 'folder', dept: 'Engineering', children: [] },
+                                {
+                                    name: 'Website_v0',
+                                    type: 'folder',
+                                    dept: 'Engineering',
+                                    children: [
+                                        { name: 'V1_Claude', type: 'folder', dept: 'Engineering', children: [] },
+                                        { name: 'V2', type: 'folder', dept: 'Engineering', children: [] },
+                                        { name: 'V3', type: 'folder', dept: 'Engineering', children: [] },
+                                        { name: 'static_web', type: 'folder', dept: 'Engineering', children: [] }
+                                    ]
+                                },
+                                { name: 'Website_Lovable_Experiment', type: 'folder', dept: 'Engineering', children: [] }
+                            ]
+                        },
+                        {
+                            name: 'API Docs',
+                            type: 'folder',
+                            dept: 'Engineering',
+                            children: []
+                        },
+                        {
+                            name: 'Database',
+                            type: 'folder',
+                            dept: 'Engineering',
+                            children: []
+                        },
+                        {
+                            name: 'Guides',
+                            type: 'folder',
+                            dept: 'Engineering',
+                            children: []
+                        },
+                        {
+                            name: 'Testing',
+                            type: 'folder',
+                            dept: 'Engineering',
+                            children: []
+                        },
+                        {
+                            name: 'DevOps',
+                            type: 'folder',
+                            dept: 'Engineering',
+                            children: []
+                        },
+                        {
+                            name: 'Tech Debt',
+                            type: 'folder',
+                            dept: 'Engineering',
+                            children: []
+                        },
+                        {
+                            name: 'IT Operations',
+                            type: 'folder',
+                            dept: 'Engineering',
+                            children: [
+                                {
+                                    name: 'Credentials',
+                                    type: 'folder',
+                                    dept: 'Engineering',
+                                    children: [
+                                        { name: 'AWS', type: 'folder', dept: 'Engineering', children: [] },
+                                        { name: 'Firebase', type: 'folder', dept: 'Engineering', children: [] },
+                                        { name: 'Archive', type: 'folder', dept: 'Engineering', children: [] }
+                                    ]
+                                },
+                                {
+                                    name: 'Processes',
+                                    type: 'folder',
+                                    dept: 'Engineering',
+                                    children: []
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Design',
+                    type: 'folder',
+                    dept: 'Design',
+                    children: [
+                        {
+                            name: 'Brand',
+                            type: 'folder',
+                            dept: 'Design',
+                            children: [
+                                { name: 'Guidelines', type: 'folder', dept: 'Design', children: [] },
+                                {
+                                    name: 'Logos',
+                                    type: 'folder',
+                                    dept: 'Design',
+                                    children: [
+                                        { name: 'Logo_Design_Brief_for_Ruchi.docx', type: 'file', dept: 'Design' },
+                                        { name: 'Drafts', type: 'folder', dept: 'Design', children: [] }
+                                    ]
+                                },
+                                {
+                                    name: 'Color Palette',
+                                    type: 'folder',
+                                    dept: 'Design',
+                                    children: [
+                                        { name: 'TrackMyWings_Color_Palette.html', type: 'file', dept: 'Design' },
+                                        { name: 'TMW_COLORS.md', type: 'file', dept: 'Design' },
+                                        { name: 'TrackMyWings_Color_Guide.md', type: 'file', dept: 'Design' }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'OG Images',
+                            type: 'folder',
+                            dept: 'Design',
+                            children: [
+                                { name: 'TMW_OG_Image_1200x630.png', type: 'file', dept: 'Design' },
+                                { name: 'TMW_Square_240x240.png', type: 'file', dept: 'Design' }
+                            ]
+                        },
+                        {
+                            name: 'Stitch',
+                            type: 'folder',
+                            dept: 'Design',
+                            children: [
+                                { name: 'STITCH_MASTER_CONTEXT.md', type: 'file', dept: 'Design' },
+                                { name: 'STITCH_SCREEN_PROMPTS.md', type: 'file', dept: 'Design' },
+                                { name: 'PASTE_READY_PROMPTS.md', type: 'file', dept: 'Design' },
+                                { name: 'TMW_Stitch_Prompt_Library_FINAL.md', type: 'file', dept: 'Design' },
+                                { name: 'Exploration Experiment', type: 'folder', dept: 'Design', children: [] }
+                            ]
+                        },
+                        {
+                            name: 'UI UX',
+                            type: 'folder',
+                            dept: 'Design',
+                            children: []
+                        },
+                        {
+                            name: 'Icons',
+                            type: 'folder',
+                            dept: 'Design',
+                            children: []
+                        },
+                        {
+                            name: 'Assets',
+                            type: 'folder',
+                            dept: 'Design',
+                            children: []
+                        },
+                        {
+                            name: 'Marketing Creatives',
+                            type: 'folder',
+                            dept: 'Design',
+                            children: []
+                        },
+                        {
+                            name: 'Screenshots',
+                            type: 'folder',
+                            dept: 'Design',
+                            children: []
+                        }
+                    ]
+                },
+                {
+                    name: 'Finance',
+                    type: 'folder',
+                    dept: 'Finance',
+                    children: [
+                        {
+                            name: 'Models',
+                            type: 'folder',
+                            dept: 'Finance',
+                            children: [
+                                {
+                                    name: 'Plan',
+                                    type: 'folder',
+                                    dept: 'Finance',
+                                    children: [
+                                        { name: '60_Month_Operating_Plan.xlsx', type: 'file', dept: 'Finance' },
+                                        { name: 'Operating_Plan_Review_2026-03-19.md', type: 'file', dept: 'Finance' }
+                                    ]
+                                },
+                                { name: 'Payment_Revenue_Analysis.md', type: 'file', dept: 'Finance' },
+                                { name: 'TMW_Geo_Pricing_Model.xlsx', type: 'file', dept: 'Finance' },
+                                { name: 'TMW_Pricing_Simulation.xlsx', type: 'file', dept: 'Finance' }
+                            ]
+                        },
+                        {
+                            name: 'MIS',
+                            type: 'folder',
+                            dept: 'Finance',
+                            children: [
+                                { name: 'TrackMyWings_MIS_FY2026-27.xlsx', type: 'file', dept: 'Finance' },
+                                {
+                                    name: 'Drafts',
+                                    type: 'folder',
+                                    dept: 'Finance',
+                                    children: [
+                                        { name: 'Business_MIS.xlsx', type: 'file', dept: 'Finance' }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Bills',
+                            type: 'folder',
+                            dept: 'Finance',
+                            children: [
+                                { name: '2026-03', type: 'folder', dept: 'Finance', children: [] }
+                            ]
+                        },
+                        {
+                            name: 'Invoices',
+                            type: 'folder',
+                            dept: 'Finance',
+                            children: []
+                        },
+                        {
+                            name: 'Budgets',
+                            type: 'folder',
+                            dept: 'Finance',
+                            children: []
+                        },
+                        {
+                            name: 'Runway',
+                            type: 'folder',
+                            dept: 'Finance',
+                            children: []
+                        },
+                        {
+                            name: 'Unit Economics',
+                            type: 'folder',
+                            dept: 'Finance',
+                            children: []
+                        },
+                        {
+                            name: 'Tax',
+                            type: 'folder',
+                            dept: 'Finance',
+                            children: []
+                        }
+                    ]
+                },
+                {
+                    name: 'Legal',
+                    type: 'folder',
+                    dept: 'Legal',
+                    children: [
+                        {
+                            name: 'Incorporation',
+                            type: 'folder',
+                            dept: 'Legal',
+                            children: [
+                                { name: 'Amol Docs', type: 'folder', dept: 'Legal', children: [] },
+                                {
+                                    name: 'Drafts',
+                                    type: 'folder',
+                                    dept: 'Legal',
+                                    children: [
+                                        { name: 'Claude Generated', type: 'folder', dept: 'Legal', children: [] },
+                                        { name: 'Shareholders Agreement', type: 'folder', dept: 'Legal', children: [] },
+                                        { name: 'Term Sheet', type: 'folder', dept: 'Legal', children: [] },
+                                        { name: 'MoU', type: 'folder', dept: 'Legal', children: [] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Policies',
+                            type: 'folder',
+                            dept: 'Legal',
+                            children: [
+                                { name: 'V0 Flight Community', type: 'folder', dept: 'Legal', children: [] },
+                                { name: 'V0 Wing Watch', type: 'folder', dept: 'Legal', children: [] },
+                                {
+                                    name: 'V0 TrackMyWings',
+                                    type: 'folder',
+                                    dept: 'Legal',
+                                    children: [
+                                        { name: 'AI gen Drafts', type: 'folder', dept: 'Legal', children: [] }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Contracts',
+                            type: 'folder',
+                            dept: 'Legal',
+                            children: [
+                                { name: 'TMW_Freelance_Agreement_Diya_Mantri.docx', type: 'file', dept: 'Legal' }
+                            ]
+                        },
+                        {
+                            name: 'IP',
+                            type: 'folder',
+                            dept: 'Legal',
+                            children: []
+                        },
+                        {
+                            name: 'Compliance',
+                            type: 'folder',
+                            dept: 'Legal',
+                            children: [
+                                { name: 'Startup_Insurance_Guide.md', type: 'file', dept: 'Legal' }
+                            ]
+                        },
+                        {
+                            name: 'Advisor Briefs',
+                            type: 'folder',
+                            dept: 'Legal',
+                            children: []
+                        },
+                        {
+                            name: 'Competitor Benchmarks',
+                            type: 'folder',
+                            dept: 'Legal',
+                            children: [
+                                { name: 'Competitive Intel', type: 'folder', dept: 'Legal', children: [] }
+                            ]
+                        },
+                        {
+                            name: 'Handwritten Notes',
+                            type: 'folder',
+                            dept: 'Legal',
+                            children: [
+                                { name: 'Founder MoU', type: 'folder', dept: 'Legal', children: [] }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'Marketing',
+                    type: 'folder',
+                    dept: 'Marketing',
+                    children: [
+                        {
+                            name: 'Content',
+                            type: 'folder',
+                            dept: 'Marketing',
+                            children: [
+                                {
+                                    name: 'Customer Personas',
+                                    type: 'folder',
+                                    dept: 'Marketing',
+                                    children: [
+                                        { name: 'Customer_Personas_v1.md', type: 'file', dept: 'Marketing' },
+                                        { name: 'Customer_Segments_v2.md', type: 'file', dept: 'Marketing' },
+                                        { name: 'TARGET_USERS.md', type: 'file', dept: 'Marketing' },
+                                        { name: 'Customer_Foundation_v3.md', type: 'file', dept: 'Marketing' },
+                                        { name: 'Customer_Foundation_v3.xlsx', type: 'file', dept: 'Marketing' },
+                                        { name: 'From Adhi', type: 'folder', dept: 'Marketing', children: [] }
+                                    ]
+                                },
+                                { name: 'Blog', type: 'folder', dept: 'Marketing', children: [] },
+                                {
+                                    name: 'Social Media',
+                                    type: 'folder',
+                                    dept: 'Marketing',
+                                    children: [
+                                        { name: 'TrackMyWings_Content_Calendar.xlsx', type: 'file', dept: 'Marketing' },
+                                        { name: 'TrackMyWings_Launch_Campaign_Plan.docx', type: 'file', dept: 'Marketing' },
+                                        { name: 'TMW_Content_Calendar_Master.md', type: 'file', dept: 'Marketing' },
+                                        { name: 'TMW_Content_Calendar_Master.xlsx', type: 'file', dept: 'Marketing' }
+                                    ]
+                                },
+                                {
+                                    name: 'Email Sequences',
+                                    type: 'folder',
+                                    dept: 'Marketing',
+                                    children: [
+                                        { name: 'Waitlist_Nurture_Sequence.md', type: 'file', dept: 'Marketing' }
+                                    ]
+                                },
+                                {
+                                    name: 'Press',
+                                    type: 'folder',
+                                    dept: 'Marketing',
+                                    children: []
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Strategy',
+                            type: 'folder',
+                            dept: 'Marketing',
+                            children: [
+                                { name: 'TMW_Marketing_Strategy_2026.md', type: 'file', dept: 'Marketing' },
+                                { name: 'TMW_Marketing_Execution_Plan.xlsx', type: 'file', dept: 'Marketing' }
+                            ]
+                        },
+                        {
+                            name: 'Campaigns',
+                            type: 'folder',
+                            dept: 'Marketing',
+                            children: [
+                                {
+                                    name: 'Launch',
+                                    type: 'folder',
+                                    dept: 'Marketing',
+                                    children: [
+                                        { name: 'Marketing_Sprint_Review_2026-03-23.md', type: 'file', dept: 'Marketing' }
+                                    ]
+                                },
+                                {
+                                    name: 'Growth',
+                                    type: 'folder',
+                                    dept: 'Marketing',
+                                    children: []
+                                }
+                            ]
+                        },
+                        {
+                            name: 'SEO',
+                            type: 'folder',
+                            dept: 'Marketing',
+                            children: [
+                                {
+                                    name: 'Audits',
+                                    type: 'folder',
+                                    dept: 'Marketing',
+                                    children: [
+                                        { name: 'TrackMyWings_SEO_AEO_GEO_Audit_2026-03-18.html', type: 'file', dept: 'Marketing' },
+                                        { name: 'SEO-AUDIT-REPORT.md', type: 'file', dept: 'Marketing' }
+                                    ]
+                                },
+                                {
+                                    name: 'Backlinks',
+                                    type: 'folder',
+                                    dept: 'Marketing',
+                                    children: [
+                                        { name: 'Directory_Submission_Guide.md', type: 'file', dept: 'Marketing' },
+                                        { name: 'TMW_Directory_Submission_Kit.md', type: 'file', dept: 'Marketing' }
+                                    ]
+                                },
+                                {
+                                    name: 'Keywords',
+                                    type: 'folder',
+                                    dept: 'Marketing',
+                                    children: []
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Ads',
+                            type: 'folder',
+                            dept: 'Marketing',
+                            children: []
+                        },
+                        {
+                            name: 'Analytics',
+                            type: 'folder',
+                            dept: 'Marketing',
+                            children: []
+                        },
+                        {
+                            name: 'Brand Voice',
+                            type: 'folder',
+                            dept: 'Marketing',
+                            children: []
+                        }
+                    ]
+                },
+                {
+                    name: 'Sales',
+                    type: 'folder',
+                    dept: 'Sales',
+                    children: [
+                        { name: 'Pipeline', type: 'folder', dept: 'Sales', children: [] },
+                        { name: 'Outreach', type: 'folder', dept: 'Sales', children: [] },
+                        { name: 'Assets', type: 'folder', dept: 'Sales', children: [] },
+                        { name: 'Partnerships', type: 'folder', dept: 'Sales', children: [] },
+                        { name: 'Customer Segments', type: 'folder', dept: 'Sales', children: [] }
+                    ]
+                },
+                {
+                    name: 'Strategy',
+                    type: 'folder',
+                    dept: 'Strategy',
+                    children: [
+                        {
+                            name: 'Plans',
+                            type: 'folder',
+                            dept: 'Strategy',
+                            children: [
+                                { name: 'Active', type: 'folder', dept: 'Strategy', children: [] },
+                                { name: 'V0 Brain Storming', type: 'folder', dept: 'Strategy', children: [] }
+                            ]
+                        },
+                        {
+                            name: 'Competitive Intel',
+                            type: 'folder',
+                            dept: 'Strategy',
+                            children: [
+                                { name: 'Competitor_API_Analysis.xlsx', type: 'file', dept: 'Strategy' },
+                                { name: 'Consumer_Feature_Matrix.xlsx', type: 'file', dept: 'Strategy' },
+                                { name: 'Flight Tracking Competitive Intelligence.docx', type: 'file', dept: 'Strategy' },
+                                { name: 'Flight_Data_API_Sources.xlsx', type: 'file', dept: 'Strategy' },
+                                { name: 'Global_Competitor_Analysis.xlsx', type: 'file', dept: 'Strategy' },
+                                { name: 'TrackMyWings_Competitive_Data.xlsx', type: 'file', dept: 'Strategy' },
+                                { name: 'TrackMyWings_Competitive_Intelligence_Report.html', type: 'file', dept: 'Strategy' },
+                                { name: 'Competitor_Research_Data.md', type: 'file', dept: 'Strategy' },
+                                { name: 'Legal Benchmarks', type: 'folder', dept: 'Strategy', children: [] }
+                            ]
+                        },
+                        {
+                            name: 'Product',
+                            type: 'folder',
+                            dept: 'Strategy',
+                            children: [
+                                { name: 'Market_Research_Master_2026-03-21.xlsx', type: 'file', dept: 'Strategy' },
+                                { name: 'Market_Research_Dashboard_2026-03-21.html', type: 'file', dept: 'Strategy' },
+                                { name: 'TMW_Phone_Wireframe_Templates.pdf', type: 'file', dept: 'Strategy' },
+                                { name: 'Competitor_Screenshots', type: 'folder', dept: 'Strategy', children: [] },
+                                {
+                                    name: 'To be Printed',
+                                    type: 'folder',
+                                    dept: 'Strategy',
+                                    children: [
+                                        {
+                                            name: 'Excel Version',
+                                            type: 'folder',
+                                            dept: 'Strategy',
+                                            children: [
+                                                { name: 'TMW_Full_Feature_List_2026-03-21.xlsx', type: 'file', dept: 'Strategy' },
+                                                { name: 'Competitor_Features_2026-03-21.xlsx', type: 'file', dept: 'Strategy' },
+                                                { name: 'TMW_Personas_Problems_2026-03-21.xlsx', type: 'file', dept: 'Strategy' },
+                                                { name: 'TMW_Vision_Strategy_2026-03-21.xlsx', type: 'file', dept: 'Strategy' },
+                                                { name: 'TMW_Planned_Features_2026-03-21.xlsx', type: 'file', dept: 'Strategy' }
+                                            ]
+                                        },
+                                        {
+                                            name: 'Word Version',
+                                            type: 'folder',
+                                            dept: 'Strategy',
+                                            children: [
+                                                { name: 'TMW_Full_Feature_List_2026-03-21.docx', type: 'file', dept: 'Strategy' },
+                                                { name: 'Competitor_Features_2026-03-21.docx', type: 'file', dept: 'Strategy' },
+                                                { name: 'TMW_Personas_Problems_2026-03-21.docx', type: 'file', dept: 'Strategy' },
+                                                { name: 'TMW_Vision_Strategy_2026-03-21.docx', type: 'file', dept: 'Strategy' }
+                                            ]
+                                        },
+                                        {
+                                            name: 'PDF Version',
+                                            type: 'folder',
+                                            dept: 'Strategy',
+                                            children: [
+                                                { name: 'TMW_Phone_Wireframe_Templates.pdf', type: 'file', dept: 'Strategy' }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            name: 'Research',
+                            type: 'folder',
+                            dept: 'Strategy',
+                            children: []
+                        },
+                        {
+                            name: 'Handwritten notes',
+                            type: 'folder',
+                            dept: 'Strategy',
+                            children: [
+                                { name: 'Product feature list.pdf', type: 'file', dept: 'Strategy' },
+                                { name: 'My thoughts.pdf', type: 'file', dept: 'Strategy' },
+                                { name: 'My Monetisation plan.pdf', type: 'file', dept: 'Strategy' },
+                                { name: 'Markdown', type: 'folder', dept: 'Strategy', children: [] },
+                                { name: 'Word', type: 'folder', dept: 'Strategy', children: [] },
+                                {
+                                    name: 'Excel',
+                                    type: 'folder',
+                                    dept: 'Strategy',
+                                    children: [
+                                        { name: 'Rohans_Thoughts_Digitized.xlsx', type: 'file', dept: 'Strategy' },
+                                        { name: 'TMW_Monetization_Strategy.xlsx', type: 'file', dept: 'Strategy' },
+                                        { name: 'TMW_Master_Feature_List_v2.xlsx', type: 'file', dept: 'Strategy' },
+                                        { name: 'TMW_Design_Spec.xlsx', type: 'file', dept: 'Strategy' },
+                                        { name: 'TMW_Tech_Spec.xlsx', type: 'file', dept: 'Strategy' }
+                                    ]
+                                },
+                                { name: 'Wireframe Templates', type: 'folder', dept: 'Strategy', children: [] }
+                            ]
+                        },
+                        {
+                            name: 'Partnerships',
+                            type: 'folder',
+                            dept: 'Strategy',
+                            children: []
+                        },
+                        {
+                            name: 'Fundraising',
+                            type: 'folder',
+                            dept: 'Strategy',
+                            children: []
+                        }
+                    ]
+                },
+                {
+                    name: 'People',
+                    type: 'folder',
+                    dept: 'Operations',
+                    children: []
+                },
+                {
+                    name: 'Customer Success',
+                    type: 'folder',
+                    dept: 'Operations',
+                    children: []
+                },
+                {
+                    name: 'Archive',
+                    type: 'folder',
+                    dept: 'Operations',
+                    children: [
+                        { name: 'Old App', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Old Prompts', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Misplaced Files', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Lock_Files', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Extracted_Zips', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'S031_Old_Strategy_Product', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'S031_Old_Product_Backlog', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Old_Financial_Models', type: 'folder', dept: 'Operations', children: [] }
+                    ]
+                }
+            ]
+        };
+
+        function getFileIcon(fileName) {
+            const name = fileName.toLowerCase();
+            if (name.endsWith('.md')) return '📄';
+            if (name.endsWith('.xlsx') || name.endsWith('.xls')) return '📊';
+            if (name.endsWith('.docx') || name.endsWith('.doc')) return '📝';
+            if (name.endsWith('.pdf')) return '📋';
+            if (name.endsWith('.html')) return '🌐';
+            if (name.endsWith('.zip')) return '📦';
+            if (name.match(/\.(png|jpg|jpeg|gif|svg|webp)$/)) return '🖼️';
+            return '📎';
+        }
+
+        function getDeptClass(dept) {
+            const classMap = {
+                'Operations': 'dept-ops',
+                'Product': 'dept-product',
+                'Engineering': 'dept-engineering',
+                'Design': 'dept-design',
+                'Finance': 'dept-finance',
+                'Legal': 'dept-legal',
+                'Marketing': 'dept-marketing',
+                'Sales': 'dept-sales',
+                'Strategy': 'dept-strategy'
+            };
+            return classMap[dept] || 'dept-ops';
+        }
+
+        function sortTree(node) {
+            if (node.children && node.children.length > 0) {
+                node.children.sort((a, b) => {
+                    // Folders first, then files
+                    if (a.type === 'folder' && b.type !== 'folder') return -1;
+                    if (a.type !== 'folder' && b.type === 'folder') return 1;
+                    // Alphabetical within each group (case-insensitive)
+                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+                });
+                node.children.forEach(child => sortTree(child));
+            }
+            return node;
+        }
+
+        function buildAndRenderTree() {
+            sortTree(folderStructure);
+            const container = document.getElementById('folderTree');
+            container.innerHTML = renderNode(folderStructure, 0, '');
+        }
+
+        function renderNode(node, depth, path) {
+            const isRoot = node.name === 'TrackMyWings';
+            const currentPath = isRoot ? node.name : path + '/' + node.name;
+            let html = '';
+
+            if (isRoot) {
+                html += '<div class="tree-children visible">';
+                node.children.forEach(child => {
+                    html += renderNode(child, depth + 1, currentPath);
+                });
+                html += '</div>';
+            } else {
+                const id = 'node-' + Math.random().toString(36).substr(2, 9);
+                const hasChildren = node.children && node.children.length > 0;
+
+                html += `<div class="tree-node ${depth > 0 ? 'nested' : ''}">
+                    <div class="tree-item">
+                        <div class="tree-toggle ${!hasChildren ? 'hidden' : ''}" onclick="toggleNode('${id}')">
+                            <span id="toggle-${id}">▶</span>
+                        </div>
+                        <div class="tree-icon">
+                            ${node.type === 'folder' ? '📁' : getFileIcon(node.name)}
+                        </div>
+                        <div class="tree-name ${node.type === 'folder' ? 'folder' : ''}">
+                            ${node.name}
+                        </div>
+                        ${node.dept && node.dept !== 'root' ? `<span class="dept-badge ${getDeptClass(node.dept)}">${node.dept}</span>` : ''}
+                    </div>
+                    ${hasChildren ? `<div class="tree-children" id="${id}">
+                        ${node.children.map(child => renderNode(child, depth + 1, currentPath)).join('')}
+                    </div>` : ''}
+                </div>`;
+            }
+
+            return html;
+        }
+
+        function toggleNode(nodeId) {
+            const element = document.getElementById(nodeId);
+            const toggle = document.getElementById('toggle-' + nodeId);
+
+            if (element.classList.contains('visible')) {
+                element.classList.remove('visible');
+                toggle.textContent = '▶';
+            } else {
+                element.classList.add('visible');
+                toggle.textContent = '▼';
+            }
+        }
+
+        function filterTree() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            const nodes = document.querySelectorAll('.tree-node');
+
+            nodes.forEach(node => {
+                const name = node.querySelector('.tree-name').textContent.toLowerCase();
+                if (query === '' || name.includes(query)) {
+                    node.style.display = '';
+                } else {
+                    node.style.display = 'none';
+                }
+            });
+        }
+
+        function countItems(node) {
+            let folders = node.type === 'folder' ? 1 : 0;
+            let files = node.type === 'file' ? 1 : 0;
+            let md = 0, xlsx = 0, docx = 0, pdf = 0;
+
+            if (node.type === 'file') {
+                const name = node.name.toLowerCase();
+                if (name.endsWith('.md')) md = 1;
+                if (name.endsWith('.xlsx') || name.endsWith('.xls')) xlsx = 1;
+                if (name.endsWith('.docx') || name.endsWith('.doc')) docx = 1;
+                if (name.endsWith('.pdf')) pdf = 1;
+            }
+
+            if (node.children) {
+                node.children.forEach(child => {
+                    const counts = countItems(child);
+                    folders += counts.folders;
+                    files += counts.files;
+                    md += counts.md;
+                    xlsx += counts.xlsx;
+                    docx += counts.docx;
+                    pdf += counts.pdf;
+                });
+            }
+
+            return { folders, files, md, xlsx, docx, pdf };
+        }
+
+        function updateStats() {
+            const counts = countItems(folderStructure);
+            document.getElementById('statFolders').textContent = counts.folders - 1; // Exclude root
+            document.getElementById('statFiles').textContent = counts.files;
+            document.getElementById('statMd').textContent = counts.md;
+            document.getElementById('statXlsx').textContent = counts.xlsx;
+            document.getElementById('statDocx').textContent = counts.docx;
+            document.getElementById('statPdf').textContent = counts.pdf;
+        }
+    </script>
+</body>
+</html>

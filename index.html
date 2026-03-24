@@ -1996,6 +1996,34 @@
         // Activity Feed Data - populated by rebuild script
         const activityFeed = [
             {
+                        "date": "2026-03-24",
+                        "task_id": "TMW-094",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "**Dashboard: Interactive Folder Map p..."
+            },
+            {
+                        "date": "2026-03-24",
+                        "task_id": "TMW-095",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "**Dashboard: Hard refresh button** \u2014 ..."
+            },
+            {
+                        "date": "2026-03-24",
+                        "task_id": "TMW-094",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "**Dashboard: Interactive Folder Map p..."
+            },
+            {
+                        "date": "2026-03-24",
+                        "task_id": "TMW-095",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "**Dashboard: Hard refresh button** \u2014 ..."
+            },
+            {
                         "date": "2026-03-23",
                         "task_id": "TMW-059",
                         "event": "completed",
@@ -2106,34 +2134,6 @@
                         "event": "completed",
                         "department": "Product",
                         "task_name": "**PRODUCT RESET: Rebuild master featu..."
-            },
-            {
-                        "date": "2026-03-21",
-                        "task_id": "TMW-078",
-                        "event": "completed",
-                        "department": "Product",
-                        "task_name": "**PRODUCT RESET: Re-scope phases** \u2014 ..."
-            },
-            {
-                        "date": "2026-03-21",
-                        "task_id": "TMW-079",
-                        "event": "completed",
-                        "department": "Engineering",
-                        "task_name": "**PRODUCT RESET: Design + Tech expans..."
-            },
-            {
-                        "date": "2026-03-20",
-                        "task_id": "TMW-061",
-                        "event": "completed",
-                        "department": "Marketing",
-                        "task_name": "Index all remaining URLs in GSC \u2014 12 ..."
-            },
-            {
-                        "date": "2026-03-20",
-                        "task_id": "TMW-062",
-                        "event": "completed",
-                        "department": "Operations",
-                        "task_name": "Clean inbox \u2014 triaged 26 emails, 5 ac..."
             }
 ];
 
@@ -2184,7 +2184,13 @@
 ];
 
         // Task Dependencies - populated by rebuild script
-        const taskDependencies = [];
+        const taskDependencies = [
+            {
+                        "from": "TMW-097",
+                        "to": "TMW-096",
+                        "reason": "waiting on TMW-096"
+            }
+];
 
         // Milestones - populated by rebuild script
         const milestones = [
@@ -2257,10 +2263,14 @@
             { id: 'TMW-090', task: '**Add og:image meta tag to website** — OG image created (Design/Brand/OG Images/). Need to add meta tags to all website pages.', owner: 'Rohan + Amol', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: '2026-03-27', created: '2026-03-23' },
             { id: 'TMW-091', task: 'Send Adhi MIS entry sheet', owner: 'Rohan', department: 'Finance', priority: 'High', status: 'Not Started', deadline: '2026-03-24', created: '2026-03-24' },
             { id: 'TMW-092', task: 'Send Adhi invoices of the month', owner: 'Rohan', department: 'Finance', priority: 'High', status: 'Not Started', deadline: '2026-03-24', created: '2026-03-24' },
-            { id: 'TMW-093', task: 'Send Adhi live link of folder', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-24' }
+            { id: 'TMW-093', task: 'Send Adhi live link of folder', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-24' },
+            { id: 'TMW-096', task: '**Diya Mantri contract: Legal review pending** — Freelance agreement (TMW-FLA-001) sent to Anshul Bansal. Awaiting review feedback. Rohan to fill stipend (Section 3.1) + effective date (March 25) + 1-month initial term.', owner: 'Rohan', department: 'Legal', priority: 'High', status: 'WIP', deadline: '2026-03-27', created: '2026-03-24' },
+            { id: 'TMW-097', task: '**Diya Mantri: Send contract + onboard** — After Anshul review + stipend finalized, send to Diya for signature and begin onboarding.', owner: 'Rohan', department: 'Design', priority: 'High', status: 'Blocked — waiting on TMW-096', deadline: '—', created: '2026-03-24' }
         ];
 
         const completedTasks = [
+            { id: 'TMW-094', task: 'Dashboard: Interactive Folder Map page + auto-generator + scheduled task', owner: 'Claude', department: 'Operations', completed: '2026-03-24' },
+            { id: 'TMW-095', task: 'Dashboard: Hard refresh button on all pages', owner: 'Claude', department: 'Operations', completed: '2026-03-24' },
             { id: 'TMW-059', task: 'Share PP+ToS drafts with legal team (Anshul Bansal + Anshul Attri)', owner: 'Rohan', department: 'Legal', completed: '2026-03-23' },
             { id: 'TMW-014', task: 'Share UX_DESIGN_DIRECTION.md with Ruchi, start Figma design system', owner: 'Rohan', department: 'Design', completed: '2026-03-23' },
             { id: 'TMW-080', task: 'Share Design Spec + Tech Spec with Amol and Ruchi', owner: 'Rohan', department: 'Product + Engineering', completed: '2026-03-22' },
@@ -2419,7 +2429,9 @@
             { id: 'TMW-071', task: 'Save Leonardo AI logo output as TrackMyWings_Logo_Leonardo_v1.png to Design/Brand/Logos/Drafts/', owner: 'Rohan', department: 'Design', completed: '2026-03-21' },
             { id: 'TMW-083', task: '**MARKETING: Customer Foundation v3** — Consolidated 3 prior docs into 1 master (5 user groups, 6 ICPs, 8 subscriber profiles). MD + Excel delivered. Supersedes Customer_Personas_v1, Customer_Segments_v2, TARGET_USERS.', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-23' },
             { id: 'TMW-084', task: '**MARKETING: Strategy & Execution Plan** — Full strategy (positioning, per-group channels, 4-phase roadmap, RACI, KPIs, risk register). MD + 47-task Excel plan. Decisions MKT-001→MKT-006 logged.', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-23' },
-            { id: 'TMW-085', task: '**MARKETING: Content Calendar Master** — 949 posting slots across 84 days, 7 platform playbooks (algorithm-backed timing), 6 content pillars, ad boost strategy. MD + 5-sheet Excel. Decisions MKT-007→MKT-012 logged.', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-23' }
+            { id: 'TMW-085', task: '**MARKETING: Content Calendar Master** — 949 posting slots across 84 days, 7 platform playbooks (algorithm-backed timing), 6 content pillars, ad boost strategy. MD + 5-sheet Excel. Decisions MKT-007→MKT-012 logged.', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-23' },
+            { id: 'TMW-094', task: '**Dashboard: Interactive Folder Map page** — folder-map.html built, deployed to GitHub Pages. Search, expand/collapse, alphabetical sort, department badges, dark theme, back-to-dashboard link. Auto-generator script (rebuild_folder_map.py) + scheduled task (tmw-folder-map-generator, cron 56 * * * *).', owner: 'Claude', department: 'Operations', completed: '2026-03-24' },
+            { id: 'TMW-095', task: '**Dashboard: Hard refresh button** — Added 🔄 button on task dashboard + folder map page.', owner: 'Claude', department: 'Operations', completed: '2026-03-24' }
         ];
 
         const backlogTasks = [
@@ -2491,8 +2503,8 @@
                         },
                         {
                                     "date": "2026-03-24",
-                                    "completed": 0,
-                                    "added": 162
+                                    "completed": 4,
+                                    "added": 168
                         }
             ],
             "weeklyVelocity": [
@@ -2508,8 +2520,8 @@
                         },
                         {
                                     "week": "2026-03-23",
-                                    "completed": 5,
-                                    "added": 167
+                                    "completed": 9,
+                                    "added": 173
                         }
             ],
             "statusDistribution": [
@@ -2519,7 +2531,7 @@
                         },
                         {
                                     "status": "WIP",
-                                    "count": 11
+                                    "count": 12
                         },
                         {
                                     "status": "Parked",
@@ -2544,6 +2556,10 @@
                         {
                                     "status": "**Rolled into TMW-081**",
                                     "count": 1
+                        },
+                        {
+                                    "status": "Blocked \u2014 waiting on TMW-096",
+                                    "count": 1
                         }
             ],
             "ownerWorkload": [
@@ -2567,8 +2583,8 @@
                         },
                         {
                                     "owner": "Rohan",
-                                    "active": 33,
-                                    "high_priority": 16,
+                                    "active": 35,
+                                    "high_priority": 18,
                                     "overdue": 1
                         },
                         {
@@ -2581,12 +2597,12 @@
             "departmentHealth": [
                         {
                                     "department": "Design",
-                                    "active": 6,
+                                    "active": 7,
                                     "wip": 3,
                                     "not_started": 2,
                                     "overdue": 2,
                                     "stale": 2,
-                                    "avg_age_days": 6
+                                    "avg_age_days": 5
                         },
                         {
                                     "department": "Engineering",
@@ -2608,12 +2624,12 @@
                         },
                         {
                                     "department": "Legal",
-                                    "active": 2,
-                                    "wip": 1,
+                                    "active": 3,
+                                    "wip": 2,
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 6
+                                    "avg_age_days": 4
                         },
                         {
                                     "department": "Marketing",
@@ -2725,13 +2741,13 @@
             ],
             "deadlineStats": {
                         "overdue": 2,
-                        "due_3days": 13,
+                        "due_3days": 14,
                         "deadline_hit_rate": "0%"
             },
             "burndownData": [
                         {
                                     "date": "2026-03-24",
-                                    "remaining": 36
+                                    "remaining": 38
                         },
                         {
                                     "date": "2026-03-23",
@@ -2779,8 +2795,8 @@
                         }
             ],
             "velocity": {
-                        "today": 0,
-                        "this_week": 5,
+                        "today": 4,
+                        "this_week": 9,
                         "overdue": 2,
                         "stale": 10
             }

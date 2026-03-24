@@ -1597,7 +1597,7 @@
                         <button class="view-btn active" onclick="toggleView('table')">📊 Table</button>
                         <button class="view-btn" onclick="toggleView('kanban')">📋 Kanban</button>
                     </div>
-                    <div class="last-updated">Last updated: 2026-03-23</span></div>
+                    <div class="last-updated">Last updated: 2026-03-24</span></div>
                     <button class="logout-btn" id="logoutBtn">Logout</button>
                 </div>
             </div>
@@ -2482,7 +2482,12 @@
                         {
                                     "date": "2026-03-23",
                                     "completed": 5,
-                                    "added": 164
+                                    "added": 5
+                        },
+                        {
+                                    "date": "2026-03-24",
+                                    "completed": 0,
+                                    "added": 159
                         }
             ],
             "weeklyVelocity": [
@@ -2559,13 +2564,13 @@
                                     "owner": "Rohan",
                                     "active": 30,
                                     "high_priority": 14,
-                                    "overdue": 0
+                                    "overdue": 1
                         },
                         {
                                     "owner": "Ruchi",
                                     "active": 5,
                                     "high_priority": 4,
-                                    "overdue": 0
+                                    "overdue": 2
                         }
             ],
             "departmentHealth": [
@@ -2574,9 +2579,9 @@
                                     "active": 6,
                                     "wip": 2,
                                     "not_started": 3,
-                                    "overdue": 0,
+                                    "overdue": 2,
                                     "stale": 3,
-                                    "avg_age_days": 5
+                                    "avg_age_days": 6
                         },
                         {
                                     "department": "Engineering",
@@ -2585,7 +2590,7 @@
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 2
+                                    "avg_age_days": 3
                         },
                         {
                                     "department": "Finance",
@@ -2593,8 +2598,8 @@
                                     "wip": 2,
                                     "not_started": 4,
                                     "overdue": 0,
-                                    "stale": 1,
-                                    "avg_age_days": 6
+                                    "stale": 4,
+                                    "avg_age_days": 7
                         },
                         {
                                     "department": "Legal",
@@ -2603,7 +2608,7 @@
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 5
+                                    "avg_age_days": 6
                         },
                         {
                                     "department": "Marketing",
@@ -2612,7 +2617,7 @@
                                     "not_started": 7,
                                     "overdue": 0,
                                     "stale": 2,
-                                    "avg_age_days": 3
+                                    "avg_age_days": 4
                         },
                         {
                                     "department": "Operations",
@@ -2621,7 +2626,7 @@
                                     "not_started": 1,
                                     "overdue": 0,
                                     "stale": 1,
-                                    "avg_age_days": 10
+                                    "avg_age_days": 11
                         },
                         {
                                     "department": "Product",
@@ -2630,7 +2635,7 @@
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 4
+                                    "avg_age_days": 5
                         },
                         {
                                     "department": "Sales",
@@ -2639,7 +2644,7 @@
                                     "not_started": 1,
                                     "overdue": 0,
                                     "stale": 1,
-                                    "avg_age_days": 10
+                                    "avg_age_days": 11
                         },
                         {
                                     "department": "Strategy",
@@ -2648,7 +2653,7 @@
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 7
+                                    "avg_age_days": 8
                         }
             ],
             "staleTasks": [
@@ -2656,57 +2661,79 @@
                                     "id": "TMW-008",
                                     "task": "Populate Sales/Pipeline with CRM structure",
                                     "department": "Sales",
-                                    "age_days": 10
+                                    "age_days": 11
                         },
                         {
                                     "id": "TMW-012",
                                     "task": "Re-upload updated system files to Claude Project weekly",
                                     "department": "Operations",
-                                    "age_days": 10
+                                    "age_days": 11
                         },
                         {
                                     "id": "TMW-017",
                                     "task": "Share UI/UX Screen Specs + Design Handoff with Ruchi for Figma implementation",
                                     "department": "Design",
-                                    "age_days": 8
+                                    "age_days": 9
                         },
                         {
                                     "id": "TMW-020",
                                     "task": "Enter actual March 2026 expenses into Expenses sheet once CA is finalized",
                                     "department": "Finance",
-                                    "age_days": 7
+                                    "age_days": 8
                         },
                         {
                                     "id": "TMW-023",
                                     "task": "Analyze survey responses once 20+ collected \u2014 use Results Tracker",
                                     "department": "Marketing",
-                                    "age_days": 7
+                                    "age_days": 8
                         },
                         {
                                     "id": "TMW-032",
                                     "task": "Check insta saved reels and figure out useful todo",
                                     "department": "Marketing",
-                                    "age_days": 6
+                                    "age_days": 7
                         },
                         {
                                     "id": "TMW-038",
                                     "task": "Update Website to new guidelines",
                                     "department": "Design",
-                                    "age_days": 6
+                                    "age_days": 7
                         },
                         {
                                     "id": "TMW-039",
                                     "task": "Finalize UI + UX add on members",
                                     "department": "Design",
+                                    "age_days": 7
+                        },
+                        {
+                                    "id": "TMW-053",
+                                    "task": "Set up Razorpay \u2014 signup, KYC, enable Subscriptions, create plans, integrate Flutter SDK",
+                                    "department": "Finance",
+                                    "age_days": 6
+                        },
+                        {
+                                    "id": "TMW-054",
+                                    "task": "Complete Stripe account activation + set up Stripe Billing for international web payments",
+                                    "department": "Finance",
+                                    "age_days": 6
+                        },
+                        {
+                                    "id": "TMW-055",
+                                    "task": "Set up App Store billing \u2014 Google Play Billing + Apple IAP + Google alt billing (Razorpay)",
+                                    "department": "Finance",
                                     "age_days": 6
                         }
             ],
             "deadlineStats": {
-                        "overdue": 0,
-                        "due_3days": 8,
+                        "overdue": 2,
+                        "due_3days": 11,
                         "deadline_hit_rate": "0%"
             },
             "burndownData": [
+                        {
+                                    "date": "2026-03-24",
+                                    "remaining": 33
+                        },
                         {
                                     "date": "2026-03-23",
                                     "remaining": 33
@@ -2753,10 +2780,10 @@
                         }
             ],
             "velocity": {
-                        "today": 5,
+                        "today": 0,
                         "this_week": 5,
-                        "overdue": 0,
-                        "stale": 8
+                        "overdue": 2,
+                        "stale": 11
             }
 };
 

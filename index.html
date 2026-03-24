@@ -1596,6 +1596,8 @@
                     <div class="view-toggle">
                         <button class="view-btn active" onclick="toggleView('table')">📊 Table</button>
                         <button class="view-btn" onclick="toggleView('kanban')">📋 Kanban</button>
+                        <button class="view-btn" onclick="location.reload(true)" title="Hard refresh">🔄</button>
+                        <button class="view-btn" onclick="window.location.href='folder-map.html'">📂 Folder Map</button>
                     </div>
                     <div class="last-updated">Last updated: 2026-03-24</span></div>
                     <button class="logout-btn" id="logoutBtn">Logout</button>
@@ -2240,7 +2242,7 @@
             { id: 'TMW-036', task: 'Finalize Font / Typeface', owner: 'Rohan + Ruchi', department: 'Design', priority: 'High', status: 'WIP', deadline: '2026-03-23', created: '2026-03-17' },
             { id: 'TMW-037', task: 'Brand Book', owner: 'Ruchi', department: 'Design', priority: 'High', status: 'WIP', deadline: '2026-03-23', created: '2026-03-17' },
             { id: 'TMW-038', task: 'Update Website to new guidelines', owner: 'Rohan + Ruchi', department: 'Design', priority: 'High', status: 'Not Started', deadline: '2026-03-27', created: '2026-03-17' },
-            { id: 'TMW-039', task: 'Finalize UI + UX add on members', owner: 'Rohan + Ruchi + Adhi', department: 'Design', priority: 'High', status: 'Not Started', deadline: '2026-03-25', created: '2026-03-17' },
+            { id: 'TMW-039', task: 'Finalize UI + UX add on members — Diya Mantri selected (Srishti Manipal, B.Des 4th year). Freelance agreement drafted (TMW-FLA-001), sent to Anshul Bansal for legal review. Stipend TBD.', owner: 'Rohan', department: 'Design', priority: 'High', status: 'WIP', deadline: '2026-03-25', created: '2026-03-17' },
             { id: 'TMW-048', task: 'Submit TrackMyWings to startup directories (AlternativeTo, BetaList, SaaSHub, Capterra)', owner: 'Rohan', department: 'Marketing', priority: 'High', status: 'WIP', deadline: '2026-03-25', created: '2026-03-18' },
             { id: 'TMW-049', task: 'Create branded OG image (1200x630px) and add og:image to all V2 pages', owner: 'Rohan + Claude', department: 'Marketing', priority: 'Medium', status: 'WIP', deadline: '2026-03-25', created: '2026-03-18' },
             { id: 'TMW-051', task: 'Write first 5 blog posts for SEO content depth', owner: 'Adhi + Claude', department: 'Marketing', priority: 'High', status: 'WIP', deadline: '2026-04-01', created: '2026-03-18' },
@@ -2510,11 +2512,11 @@
             "statusDistribution": [
                         {
                                     "status": "Not Started",
-                                    "count": 16
+                                    "count": 15
                         },
                         {
                                     "status": "WIP",
-                                    "count": 10
+                                    "count": 11
                         },
                         {
                                     "status": "Parked",
@@ -2544,8 +2546,8 @@
             "ownerWorkload": [
                         {
                                     "owner": "Adhi",
-                                    "active": 6,
-                                    "high_priority": 4,
+                                    "active": 5,
+                                    "high_priority": 3,
                                     "overdue": 0
                         },
                         {
@@ -2568,8 +2570,8 @@
                         },
                         {
                                     "owner": "Ruchi",
-                                    "active": 5,
-                                    "high_priority": 4,
+                                    "active": 4,
+                                    "high_priority": 3,
                                     "overdue": 2
                         }
             ],
@@ -2577,10 +2579,10 @@
                         {
                                     "department": "Design",
                                     "active": 6,
-                                    "wip": 2,
-                                    "not_started": 3,
+                                    "wip": 3,
+                                    "not_started": 2,
                                     "overdue": 2,
-                                    "stale": 3,
+                                    "stale": 2,
                                     "avg_age_days": 6
                         },
                         {
@@ -2700,12 +2702,6 @@
                                     "age_days": 7
                         },
                         {
-                                    "id": "TMW-039",
-                                    "task": "Finalize UI + UX add on members",
-                                    "department": "Design",
-                                    "age_days": 7
-                        },
-                        {
                                     "id": "TMW-053",
                                     "task": "Set up Razorpay \u2014 signup, KYC, enable Subscriptions, create plans, integrate Flutter SDK",
                                     "department": "Finance",
@@ -2783,7 +2779,7 @@
                         "today": 0,
                         "this_week": 5,
                         "overdue": 2,
-                        "stale": 11
+                        "stale": 10
             }
 };
 

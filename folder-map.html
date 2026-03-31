@@ -225,15 +225,15 @@
         </div>
 
         <div class="fm-stats">
-            <div class="fm-stat"><strong>175</strong> Folders</div>
-            <div class="fm-stat"><strong>136</strong> Files</div>
+            <div class="fm-stat"><strong>181</strong> Folders</div>
+            <div class="fm-stat"><strong>150</strong> Files</div>
             <div class="fm-stat"><strong>58</strong> Markdown</div>
             <div class="fm-stat"><strong>44</strong> Excel</div>
             <div class="fm-stat"><strong>10</strong> Word</div>
             <div class="fm-stat"><strong>11</strong> PDF</div>
             <div class="fm-stat"><strong>8</strong> HTML</div>
             <div class="fm-stat"><strong>2</strong> Images</div>
-            <div class="fm-auto-badge">Auto-updated: 2026-03-31 14:06</div>
+            <div class="fm-auto-badge">Auto-updated: 2026-03-31 22:05</div>
         </div>
 
         <input type="text" class="fm-search" id="searchInput" placeholder="🔍 Search files and folders..." oninput="filterTree(this.value)">
@@ -349,9 +349,36 @@
                     { name: 'UI UX', type: 'folder', dept: 'Design', children: [] }
                 ] },
                 { name: 'Engineering', type: 'folder', dept: 'Engineering', children: [
-                    { name: 'API Docs', type: 'folder', dept: 'Engineering', children: [] },
+                    { name: 'API Docs', type: 'folder', dept: 'Engineering', children: [
+                        { name: 'Sample Data', type: 'folder', dept: 'Engineering', children: [
+                            { name: 'AirLabs', type: 'folder', dept: 'Engineering', children: [
+                                { name: 'airlabs_airports.json', type: 'file', dept: 'Engineering' },
+                                { name: 'airlabs_routes.json', type: 'file', dept: 'Engineering' },
+                                { name: 'airlabs_schedules.json', type: 'file', dept: 'Engineering' }
+                            ] },
+                            { name: 'Airplanes_Live', type: 'folder', dept: 'Engineering', children: [
+                                { name: 'airplanes_live_events.json', type: 'file', dept: 'Engineering' },
+                                { name: 'airplanes_live_positions.json', type: 'file', dept: 'Engineering' }
+                            ] },
+                            { name: 'AviationStack', type: 'folder', dept: 'Engineering', children: [
+                                { name: 'aviationstack_airlines.json', type: 'file', dept: 'Engineering' },
+                                { name: 'aviationstack_airplanes.json', type: 'file', dept: 'Engineering' },
+                                { name: 'aviationstack_airports.json', type: 'file', dept: 'Engineering' }
+                            ] },
+                            { name: 'OpenSky', type: 'folder', dept: 'Engineering', children: [
+                                { name: 'opensky_all_states.json', type: 'file', dept: 'Engineering' },
+                                { name: 'opensky_events.json', type: 'file', dept: 'Engineering' },
+                                { name: 'opensky_live_positions.json', type: 'file', dept: 'Engineering' }
+                            ] },
+                            { name: 'Reference', type: 'folder', dept: 'Engineering', children: [
+                                { name: 'airports_ourairports.csv', type: 'file', dept: 'Engineering' }
+                            ] }
+                        ] }
+                    ] },
                     { name: 'Architecture', type: 'folder', dept: 'Engineering', children: [
-                        { name: 'Archive', type: 'folder', dept: 'Engineering', children: [] }
+                        { name: 'Archive', type: 'folder', dept: 'Engineering', children: [] },
+                        { name: 'TMW_AWS_Infrastructure_2026-03-27.svg', type: 'file', dept: 'Engineering' },
+                        { name: 'TMW_Backend_Architecture_2026-03-27.svg', type: 'file', dept: 'Engineering' }
                     ] },
                     { name: 'Codebase', type: 'folder', dept: 'Engineering', children: [
                         { name: 'V0_TrackMyWings', type: 'folder', dept: 'Engineering', children: [] },

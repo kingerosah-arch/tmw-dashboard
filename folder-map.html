@@ -225,15 +225,15 @@
         </div>
 
         <div class="fm-stats">
-            <div class="fm-stat"><strong>176</strong> Folders</div>
-            <div class="fm-stat"><strong>157</strong> Files</div>
-            <div class="fm-stat"><strong>64</strong> Markdown</div>
-            <div class="fm-stat"><strong>44</strong> Excel</div>
-            <div class="fm-stat"><strong>10</strong> Word</div>
-            <div class="fm-stat"><strong>11</strong> PDF</div>
+            <div class="fm-stat"><strong>220</strong> Folders</div>
+            <div class="fm-stat"><strong>189</strong> Files</div>
+            <div class="fm-stat"><strong>88</strong> Markdown</div>
+            <div class="fm-stat"><strong>51</strong> Excel</div>
+            <div class="fm-stat"><strong>11</strong> Word</div>
+            <div class="fm-stat"><strong>10</strong> PDF</div>
             <div class="fm-stat"><strong>8</strong> HTML</div>
             <div class="fm-stat"><strong>2</strong> Images</div>
-            <div class="fm-auto-badge">Auto-updated: 2026-04-02 16:06</div>
+            <div class="fm-auto-badge">Auto-updated: 2026-04-06 12:06</div>
         </div>
 
         <input type="text" class="fm-search" id="searchInput" placeholder="🔍 Search files and folders..." oninput="filterTree(this.value)">
@@ -293,11 +293,21 @@
                     { name: 'Old App', type: 'folder', dept: 'Archive', children: [] },
                     { name: 'Old Prompts', type: 'folder', dept: 'Archive', children: [] },
                     { name: 'Old_Financial_Models', type: 'folder', dept: 'Archive', children: [
+                        { name: 'Brainstorming models (moved to Finance/Models/Brainstorming/)', type: 'folder', dept: 'Archive', children: [] },
                         { name: 'Flight_Community_Financial_Model.xlsx', type: 'file', dept: 'Archive' },
-                        { name: 'Flight_Community_Financial_Summary.pdf', type: 'file', dept: 'Archive' },
                         { name: 'LLP_Financial_Model_Template.xlsx', type: 'file', dept: 'Archive' },
-                        { name: 'Wing_Watch_Financial_Model.xlsx', type: 'file', dept: 'Archive' },
-                        { name: 'Wing_Watch_Financial_Summary.pdf', type: 'file', dept: 'Archive' }
+                        { name: 'Wing_Watch_Financial_Model.xlsx', type: 'file', dept: 'Archive' }
+                    ] },
+                    { name: 'Pre-Reorg Originals', type: 'folder', dept: 'Archive', children: [
+                        { name: 'AI System', type: 'file', dept: 'Archive' },
+                        { name: 'Marketing Launch', type: 'file', dept: 'Archive' },
+                        { name: 'Operations Root', type: 'file', dept: 'Archive' },
+                        { name: 'Task Management System', type: 'file', dept: 'Archive' }
+                    ] },
+                    { name: 'S014 Audit Cleanup', type: 'folder', dept: 'Archive', children: [
+                        { name: 'LibreOffice Locks', type: 'file', dept: 'Archive' },
+                        { name: 'Python Cache', type: 'file', dept: 'Archive' },
+                        { name: 'Task Management System', type: 'file', dept: 'Archive' }
                     ] },
                     { name: 'S031_Old_Product_Backlog', type: 'folder', dept: 'Archive', children: [
                         { name: 'TrackMyWings_Complete_Feature_List.xlsx', type: 'file', dept: 'Archive' },
@@ -310,9 +320,15 @@
                         { name: 'Discovery', type: 'folder', dept: 'Archive', children: [] },
                         { name: 'Features', type: 'folder', dept: 'Archive', children: [] },
                         { name: 'Social_Media', type: 'folder', dept: 'Archive', children: [] }
-                    ] }
+                    ] },
+                    { name: 'tmw-reply-reader-failure-2026-03-26.md', type: 'file', dept: 'Archive' }
                 ] },
-                { name: 'Customer Success', type: 'folder', dept: 'Customer Success', children: [] },
+                { name: 'Customer Success', type: 'folder', dept: 'Customer Success', children: [
+                    { name: 'FAQs', type: 'folder', dept: 'Customer Success', children: [] },
+                    { name: 'Feedback', type: 'folder', dept: 'Customer Success', children: [] },
+                    { name: 'Knowledge Base', type: 'folder', dept: 'Customer Success', children: [] },
+                    { name: 'Support', type: 'folder', dept: 'Customer Success', children: [] }
+                ] },
                 { name: 'Design', type: 'folder', dept: 'Design', children: [
                     { name: 'Assets', type: 'folder', dept: 'Design', children: [] },
                     { name: 'Brand', type: 'folder', dept: 'Design', children: [
@@ -324,7 +340,7 @@
                         { name: 'Guidelines', type: 'folder', dept: 'Design', children: [] },
                         { name: 'Logos', type: 'folder', dept: 'Design', children: [
                             { name: 'Drafts', type: 'folder', dept: 'Design', children: [] },
-                            { name: 'Logo_Design_Brief_for_Ruchi.docx', type: 'file', dept: 'Design' }
+                            { name: 'TMW_Logo_Design_Brief_for_Ruchi.docx', type: 'file', dept: 'Design' }
                         ] }
                     ] },
                     { name: 'Icons', type: 'folder', dept: 'Design', children: [] },
@@ -335,6 +351,9 @@
                     ] },
                     { name: 'Screenshots', type: 'folder', dept: 'Design', children: [] },
                     { name: 'Stitch', type: 'folder', dept: 'Design', children: [
+                        { name: 'Archive', type: 'folder', dept: 'Design', children: [
+                            { name: 'TMW_Stitch_Prompt_Library_v2.md', type: 'file', dept: 'Design' }
+                        ] },
                         { name: 'Exploration Experiment', type: 'folder', dept: 'Design', children: [] },
                         { name: 'Outputs', type: 'folder', dept: 'Design', children: [
                             { name: 'stitch_trackmywings_foundation', type: 'folder', dept: 'Design', children: [] }
@@ -343,8 +362,6 @@
                         { name: 'STITCH_MASTER_CONTEXT.md', type: 'file', dept: 'Design' },
                         { name: 'STITCH_SCREEN_PROMPTS.md', type: 'file', dept: 'Design' },
                         { name: 'TMW_Stitch_Prompt_Library_FINAL.md', type: 'file', dept: 'Design' },
-                        { name: 'TMW_Stitch_Prompt_Library_v2.md', type: 'file', dept: 'Design' },
-                        { name: 'TMW_Stitch_Prompt_Library_v3_UPGRADE.md', type: 'file', dept: 'Design' },
                         { name: 'TMW_Stitch_Prompts_ALL.json', type: 'file', dept: 'Design' }
                     ] },
                     { name: 'UI UX', type: 'folder', dept: 'Design', children: [] }
@@ -352,46 +369,40 @@
                 { name: 'Engineering', type: 'folder', dept: 'Engineering', children: [
                     { name: 'API Docs', type: 'folder', dept: 'Engineering', children: [
                         { name: 'Sample Data', type: 'folder', dept: 'Engineering', children: [
-                            { name: 'AirLabs', type: 'folder', dept: 'Engineering', children: [
-                                { name: 'airlabs_airports.json', type: 'file', dept: 'Engineering' },
-                                { name: 'airlabs_routes.json', type: 'file', dept: 'Engineering' },
-                                { name: 'airlabs_schedules.json', type: 'file', dept: 'Engineering' }
-                            ] },
-                            { name: 'Airplanes_Live', type: 'folder', dept: 'Engineering', children: [
-                                { name: 'airplanes_live_events.json', type: 'file', dept: 'Engineering' },
-                                { name: 'airplanes_live_positions.json', type: 'file', dept: 'Engineering' }
-                            ] },
-                            { name: 'AviationStack', type: 'folder', dept: 'Engineering', children: [
-                                { name: 'aviationstack_airlines.json', type: 'file', dept: 'Engineering' },
-                                { name: 'aviationstack_airplanes.json', type: 'file', dept: 'Engineering' },
-                                { name: 'aviationstack_airports.json', type: 'file', dept: 'Engineering' }
-                            ] },
-                            { name: 'OpenSky', type: 'folder', dept: 'Engineering', children: [
-                                { name: 'opensky_all_states.json', type: 'file', dept: 'Engineering' },
-                                { name: 'opensky_events.json', type: 'file', dept: 'Engineering' },
-                                { name: 'opensky_live_positions.json', type: 'file', dept: 'Engineering' }
-                            ] },
-                            { name: 'Reference', type: 'folder', dept: 'Engineering', children: [
-                                { name: 'airports_ourairports.csv', type: 'file', dept: 'Engineering' }
-                            ] }
+                            { name: 'AirLabs', type: 'folder', dept: 'Engineering', children: [] },
+                            { name: 'Airplanes_Live', type: 'folder', dept: 'Engineering', children: [] },
+                            { name: 'AviationStack', type: 'folder', dept: 'Engineering', children: [] },
+                            { name: 'OpenSky', type: 'folder', dept: 'Engineering', children: [] },
+                            { name: 'Reference', type: 'folder', dept: 'Engineering', children: [] }
                         ] }
                     ] },
                     { name: 'Architecture', type: 'folder', dept: 'Engineering', children: [
-                        { name: 'Archive', type: 'folder', dept: 'Engineering', children: [] },
+                        { name: 'Archive', type: 'folder', dept: 'Engineering', children: [
+                            { name: 'API Terms and Legal Guide.md', type: 'file', dept: 'Engineering' },
+                            { name: 'Technical Architecture.md', type: 'file', dept: 'Engineering' }
+                        ] },
                         { name: 'ARCHITECTURE_OVERVIEW.md', type: 'file', dept: 'Engineering' },
                         { name: 'TMW_AWS_Infrastructure_2026-03-27.svg', type: 'file', dept: 'Engineering' },
                         { name: 'TMW_Backend_Architecture_2026-03-27.svg', type: 'file', dept: 'Engineering' }
                     ] },
+                    { name: 'Archive', type: 'folder', dept: 'Engineering', children: [
+                        { name: 'PHASE_0_ENGINEERING_SPEC_DUPLICATE.md', type: 'file', dept: 'Engineering' }
+                    ] },
                     { name: 'Codebase', type: 'folder', dept: 'Engineering', children: [
                         { name: 'V0_TrackMyWings', type: 'folder', dept: 'Engineering', children: [] },
-                        { name: 'Website_Lovable_Experiment', type: 'folder', dept: 'Engineering', children: [] },
+                        { name: 'Website_Lovable_Experiment', type: 'folder', dept: 'Engineering', children: [
+                            { name: 'Lovable_Follow_Up_Prompt.md', type: 'file', dept: 'Engineering' },
+                            { name: 'Lovable_Website_Prompt.md', type: 'file', dept: 'Engineering' },
+                            { name: 'wing-scroll-verse-main.zip', type: 'file', dept: 'Engineering' }
+                        ] },
                         { name: 'Website_v0', type: 'folder', dept: 'Engineering', children: [
-                            { name: 'coming-soon', type: 'folder', dept: 'Engineering', children: [] },
-                            { name: 'static_web', type: 'folder', dept: 'Engineering', children: [] },
-                            { name: 'V1_Claude', type: 'folder', dept: 'Engineering', children: [] },
-                            { name: 'V2', type: 'folder', dept: 'Engineering', children: [] },
-                            { name: 'V3', type: 'folder', dept: 'Engineering', children: [] }
+                            { name: 'coming-soon.zip', type: 'file', dept: 'Engineering' },
+                            { name: 'V2.zip', type: 'file', dept: 'Engineering' },
+                            { name: 'V3.zip', type: 'file', dept: 'Engineering' }
                         ] }
+                    ] },
+                    { name: 'Data Sources', type: 'folder', dept: 'Engineering', children: [
+                        { name: 'TMW_Data_Provider_Matrix.xlsx', type: 'file', dept: 'Engineering' }
                     ] },
                     { name: 'Database', type: 'folder', dept: 'Engineering', children: [] },
                     { name: 'DevOps', type: 'folder', dept: 'Engineering', children: [] },
@@ -406,12 +417,15 @@
                         ] },
                         { name: 'Processes', type: 'folder', dept: 'Engineering', children: [] }
                     ] },
+                    { name: 'Product', type: 'folder', dept: 'Engineering', children: [] },
                     { name: 'Tech Debt', type: 'folder', dept: 'Engineering', children: [] },
                     { name: 'Testing', type: 'folder', dept: 'Engineering', children: [] }
                 ] },
                 { name: 'Finance', type: 'folder', dept: 'Finance', children: [
                     { name: 'Bills', type: 'folder', dept: 'Finance', children: [
-                        { name: '2026-03', type: 'folder', dept: 'Finance', children: [] }
+                        { name: '2026-02', type: 'folder', dept: 'Finance', children: [] },
+                        { name: '2026-03', type: 'folder', dept: 'Finance', children: [] },
+                        { name: '2026-04', type: 'folder', dept: 'Finance', children: [] }
                     ] },
                     { name: 'Budgets', type: 'folder', dept: 'Finance', children: [] },
                     { name: 'Invoices', type: 'folder', dept: 'Finance', children: [] },
@@ -419,13 +433,19 @@
                         { name: 'Drafts', type: 'folder', dept: 'Finance', children: [
                             { name: 'Business_MIS.xlsx', type: 'file', dept: 'Finance' }
                         ] },
+                        { name: 'MIS_Formula_Review_2026-04-06.md', type: 'file', dept: 'Finance' },
                         { name: 'TMW_Expense_Entry.xlsx', type: 'file', dept: 'Finance' },
                         { name: 'TrackMyWings_MIS_FY2026-27.xlsx', type: 'file', dept: 'Finance' }
                     ] },
                     { name: 'Models', type: 'folder', dept: 'Finance', children: [
+                        { name: 'Brainstorming', type: 'folder', dept: 'Finance', children: [
+                            { name: 'Flight_Community_Financial_Model.xlsx', type: 'file', dept: 'Finance' },
+                            { name: 'LLP_Financial_Model_Template.xlsx', type: 'file', dept: 'Finance' },
+                            { name: 'Wing_Watch_Financial_Model.xlsx', type: 'file', dept: 'Finance' }
+                        ] },
                         { name: 'Plan', type: 'folder', dept: 'Finance', children: [
-                            { name: '60_Month_Operating_Plan.xlsx', type: 'file', dept: 'Finance' },
-                            { name: 'Operating_Plan_Review_2026-03-19.md', type: 'file', dept: 'Finance' }
+                            { name: 'Operating_Plan_Review_2026-03-19.md', type: 'file', dept: 'Finance' },
+                            { name: 'TMW_60_Month_Operating_Plan.xlsx', type: 'file', dept: 'Finance' }
                         ] },
                         { name: 'Payment_Revenue_Analysis.md', type: 'file', dept: 'Finance' },
                         { name: 'TMW_Geo_Pricing_Model.xlsx', type: 'file', dept: 'Finance' },
@@ -437,39 +457,41 @@
                 ] },
                 { name: 'Legal', type: 'folder', dept: 'Legal', children: [
                     { name: 'Advisor Briefs', type: 'folder', dept: 'Legal', children: [] },
-                    { name: 'Competitor Benchmarks', type: 'folder', dept: 'Legal', children: [
-                        { name: 'Competitive Intel', type: 'folder', dept: 'Legal', children: [] }
-                    ] },
+                    { name: 'Competitor Benchmarks', type: 'folder', dept: 'Legal', children: [] },
                     { name: 'Compliance', type: 'folder', dept: 'Legal', children: [
                         { name: 'Startup_Insurance_Guide.md', type: 'file', dept: 'Legal' }
                     ] },
                     { name: 'Contracts', type: 'folder', dept: 'Legal', children: [
-                        { name: 'TMW_Freelance_Agreement_Diya_Mantri.docx', type: 'file', dept: 'Legal' }
+                        { name: 'Diya Mantri', type: 'folder', dept: 'Legal', children: [
+                            { name: 'TMW_Freelance_Agreement_Diya_Mantri.docx', type: 'file', dept: 'Legal' },
+                            { name: 'TMW_Freelance_Agreement_Diya_Mantri.pdf', type: 'file', dept: 'Legal' }
+                        ] }
                     ] },
                     { name: 'Handwritten Notes', type: 'folder', dept: 'Legal', children: [
                         { name: 'Founder MoU', type: 'folder', dept: 'Legal', children: [] }
                     ] },
                     { name: 'Incorporation', type: 'folder', dept: 'Legal', children: [
                         { name: 'Amol Docs', type: 'folder', dept: 'Legal', children: [] },
-                        { name: 'Drafts', type: 'folder', dept: 'Legal', children: [
-                            { name: 'Claude Generated', type: 'folder', dept: 'Legal', children: [] },
-                            { name: 'MoU', type: 'folder', dept: 'Legal', children: [] },
-                            { name: 'Shareholders Agreement', type: 'folder', dept: 'Legal', children: [] },
-                            { name: 'Term Sheet', type: 'folder', dept: 'Legal', children: [] }
+                        { name: 'Drafts', type: 'folder', dept: 'Legal', children: [] },
+                        { name: 'MoU', type: 'folder', dept: 'Legal', children: [
+                            { name: 'TMW MoU Signed.pdf', type: 'file', dept: 'Legal' }
                         ] }
                     ] },
                     { name: 'IP', type: 'folder', dept: 'Legal', children: [] },
                     { name: 'Policies', type: 'folder', dept: 'Legal', children: [
                         { name: 'V0 Flight Community', type: 'folder', dept: 'Legal', children: [] },
-                        { name: 'V0 TrackMyWings', type: 'folder', dept: 'Legal', children: [
-                            { name: 'AI gen Drafts', type: 'folder', dept: 'Legal', children: [] }
-                        ] },
+                        { name: 'V0 TrackMyWings', type: 'folder', dept: 'Legal', children: [] },
                         { name: 'V0 Wing Watch', type: 'folder', dept: 'Legal', children: [] }
                     ] }
                 ] },
                 { name: 'Marketing', type: 'folder', dept: 'Marketing', children: [
-                    { name: 'Ads', type: 'folder', dept: 'Marketing', children: [] },
-                    { name: 'Analytics', type: 'folder', dept: 'Marketing', children: [] },
+                    { name: 'Ads', type: 'folder', dept: 'Marketing', children: [
+                        { name: 'Copy', type: 'folder', dept: 'Marketing', children: [] },
+                        { name: 'Creatives', type: 'folder', dept: 'Marketing', children: [] }
+                    ] },
+                    { name: 'Analytics', type: 'folder', dept: 'Marketing', children: [
+                        { name: 'Reports', type: 'folder', dept: 'Marketing', children: [] }
+                    ] },
                     { name: 'Brand Voice', type: 'folder', dept: 'Marketing', children: [] },
                     { name: 'Campaigns', type: 'folder', dept: 'Marketing', children: [
                         { name: 'Growth', type: 'folder', dept: 'Marketing', children: [] },
@@ -478,9 +500,15 @@
                         ] }
                     ] },
                     { name: 'Content', type: 'folder', dept: 'Marketing', children: [
-                        { name: 'Blog', type: 'folder', dept: 'Marketing', children: [] },
+                        { name: 'Blog', type: 'folder', dept: 'Marketing', children: [
+                            { name: '01_track_indigo_flights_2026.md', type: 'file', dept: 'Marketing' },
+                            { name: '02_best_free_flight_tracker_apps_2026.md', type: 'file', dept: 'Marketing' },
+                            { name: '03_how_ai_predicts_flight_delays.md', type: 'file', dept: 'Marketing' },
+                            { name: '04_group_trip_shared_flight_tracker.md', type: 'file', dept: 'Marketing' },
+                            { name: '05_gate_change_alerts_faster.md', type: 'file', dept: 'Marketing' },
+                            { name: 'BLOG_REVIEW_S047.md', type: 'file', dept: 'Marketing' }
+                        ] },
                         { name: 'Customer Personas', type: 'folder', dept: 'Marketing', children: [
-                            { name: 'From Adhi', type: 'folder', dept: 'Marketing', children: [] },
                             { name: 'Customer_Foundation_v3.md', type: 'file', dept: 'Marketing' },
                             { name: 'Customer_Foundation_v3.xlsx', type: 'file', dept: 'Marketing' },
                             { name: 'Customer_Personas_v1.md', type: 'file', dept: 'Marketing' },
@@ -493,14 +521,16 @@
                         { name: 'Press', type: 'folder', dept: 'Marketing', children: [] },
                         { name: 'Social Media', type: 'folder', dept: 'Marketing', children: [
                             { name: 'TMW_Content_Calendar_Master.md', type: 'file', dept: 'Marketing' },
+                            { name: 'TMW_Content_Calendar_Master.xlsx', type: 'file', dept: 'Marketing' },
+                            { name: 'TMW_Content_Plan_105_Days.xlsx', type: 'file', dept: 'Marketing' },
                             { name: 'TrackMyWings_Content_Calendar.xlsx', type: 'file', dept: 'Marketing' },
                             { name: 'TrackMyWings_Launch_Campaign_Plan.docx', type: 'file', dept: 'Marketing' }
-                        ] },
-                        { name: 'TMW_Content_Calendar_Master.xlsx', type: 'file', dept: 'Marketing' },
-                        { name: 'TMW_Content_Plan_105_Days.xlsx', type: 'file', dept: 'Marketing' }
+                        ] }
                     ] },
                     { name: 'Pre-Launch', type: 'folder', dept: 'Marketing', children: [
-                        { name: 'Content_Calendar_Topics_100.md', type: 'file', dept: 'Marketing' },
+                        { name: 'Archive', type: 'folder', dept: 'Marketing', children: [
+                            { name: 'Content_Calendar_Topics_100_SUPERSEDED.md', type: 'file', dept: 'Marketing' }
+                        ] },
                         { name: 'Content_Calendar_Topics_160.md', type: 'file', dept: 'Marketing' },
                         { name: 'TMW_Launch_Playbook.md', type: 'file', dept: 'Marketing' },
                         { name: 'Twitter_Threads_Ready_to_Post.md', type: 'file', dept: 'Marketing' }
@@ -519,17 +549,25 @@
                     { name: 'Strategy', type: 'folder', dept: 'Marketing', children: [
                         { name: 'TMW_Marketing_Execution_Plan.xlsx', type: 'file', dept: 'Marketing' },
                         { name: 'TMW_Marketing_Strategy_2026.md', type: 'file', dept: 'Marketing' }
-                    ] },
-                    { name: 'Website', type: 'folder', dept: 'Marketing', children: [] }
+                    ] }
                 ] },
                 { name: 'Operations', type: 'folder', dept: 'Operations', children: [
                     { name: 'AI System', type: 'folder', dept: 'Operations', children: [
+                        { name: 'Archive', type: 'folder', dept: 'Operations', children: [
+                            { name: 'FOLDER_CLEANUP_S044.md', type: 'file', dept: 'Operations' },
+                            { name: 'gmail_filters.xml', type: 'file', dept: 'Operations' },
+                            { name: 'WEEKLY_FOLDER_AUDIT_2026-03-31.md', type: 'file', dept: 'Operations' }
+                        ] },
                         { name: 'Claude Project', type: 'folder', dept: 'Operations', children: [
                             { name: 'CLAUDE_PROJECT_INSTRUCTIONS.md', type: 'file', dept: 'Operations' },
                             { name: 'CLAUDE_PROJECT_SETUP_GUIDE.md', type: 'file', dept: 'Operations' }
                         ] },
+                        { name: 'Reports', type: 'folder', dept: 'Operations', children: [
+                            { name: 'TMW_System_Audit_S047.md', type: 'file', dept: 'Operations' },
+                            { name: 'TMW_System_Improvement_Plan_S047.md', type: 'file', dept: 'Operations' }
+                        ] },
                         { name: 'Session Saves', type: 'folder', dept: 'Operations', children: [
-                            { name: 'SESSION_SAVE_S008.md through SESSION_SAVE_S022.md', type: 'file', dept: 'Operations' }
+                            { name: 'SESSION_SAVE_S008.md through SESSION_SAVE_S023.md', type: 'file', dept: 'Operations' }
                         ] },
                         { name: 'CONTEXT.md', type: 'file', dept: 'Operations' },
                         { name: 'COWORK_PROJECT_INSTRUCTIONS.md', type: 'file', dept: 'Operations' },
@@ -555,11 +593,19 @@
                         ] }
                     ] },
                     { name: 'Skills for Claude', type: 'folder', dept: 'Operations', children: [
-                        { name: 'marketingskills-main.zip', type: 'file', dept: 'Operations' },
+                        { name: 'Archive', type: 'folder', dept: 'Operations', children: [
+                            { name: 'marketingskills-main.zip', type: 'file', dept: 'Operations' },
+                            { name: 'ui-ux-pro-max-skill-main.zip', type: 'file', dept: 'Operations' }
+                        ] },
+                        { name: 'marketingskills-main', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'ui-ux-pro-max-skill-main', type: 'folder', dept: 'Operations', children: [] },
                         { name: 'SKILL_REFERENCE_GUIDE.md', type: 'file', dept: 'Operations' }
                     ] },
                     { name: 'SOPs', type: 'folder', dept: 'Operations', children: [] },
                     { name: 'Task Management', type: 'folder', dept: 'Operations', children: [
+                        { name: 'Archive', type: 'folder', dept: 'Operations', children: [
+                            { name: 'Morning_Briefing_2026-03-26_DUPLICATE.md', type: 'file', dept: 'Operations' }
+                        ] },
                         { name: 'System', type: 'folder', dept: 'Operations', children: [
                             { name: 'Dashboard', type: 'folder', dept: 'Operations', children: [
                                 { name: 'folder-map.html', type: 'file', dept: 'Operations' },
@@ -570,9 +616,19 @@
                         ] },
                         { name: 'TASKS.md', type: 'file', dept: 'Operations' }
                     ] },
+                    { name: 'Tool Ecosystem', type: 'folder', dept: 'Operations', children: [] },
+                    { name: 'TrackMyWings_Obsidian', type: 'folder', dept: 'Operations', children: [
+                        { name: '.obsidian', type: 'folder', dept: 'Operations', children: [] }
+                    ] },
                     { name: 'FOLDER_MAP.md', type: 'file', dept: 'Operations' }
                 ] },
-                { name: 'People', type: 'folder', dept: 'People', children: [] },
+                { name: 'People', type: 'folder', dept: 'People', children: [
+                    { name: 'Culture', type: 'folder', dept: 'People', children: [] },
+                    { name: 'Hiring', type: 'folder', dept: 'People', children: [] },
+                    { name: 'Onboarding', type: 'folder', dept: 'People', children: [] },
+                    { name: 'Policies', type: 'folder', dept: 'People', children: [] },
+                    { name: 'Team', type: 'folder', dept: 'People', children: [] }
+                ] },
                 { name: 'Product', type: 'folder', dept: 'Product', children: [
                     { name: 'Backlog', type: 'folder', dept: 'Product', children: [
                         { name: 'Basu Notes', type: 'folder', dept: 'Product', children: [
@@ -624,19 +680,37 @@
                     { name: 'Partnerships', type: 'folder', dept: 'Sales', children: [] },
                     { name: 'Pipeline/ (CRM/, Deals/)', type: 'folder', dept: 'Sales', children: [] }
                 ] },
+                { name: 'Sales', type: 'folder', dept: 'Sales', children: [
+                    { name: 'Assets', type: 'folder', dept: 'Sales', children: [
+                        { name: 'Case Studies', type: 'folder', dept: 'Sales', children: [] },
+                        { name: 'One Pagers', type: 'folder', dept: 'Sales', children: [] },
+                        { name: 'Pitch Decks', type: 'folder', dept: 'Sales', children: [] }
+                    ] },
+                    { name: 'Customer Segments', type: 'folder', dept: 'Sales', children: [] },
+                    { name: 'Outreach', type: 'folder', dept: 'Sales', children: [
+                        { name: 'Sequences', type: 'folder', dept: 'Sales', children: [] },
+                        { name: 'Templates', type: 'folder', dept: 'Sales', children: [] }
+                    ] },
+                    { name: 'Partnerships', type: 'folder', dept: 'Sales', children: [] },
+                    { name: 'Pipeline', type: 'folder', dept: 'Sales', children: [
+                        { name: 'CRM', type: 'folder', dept: 'Sales', children: [] },
+                        { name: 'Deals', type: 'folder', dept: 'Sales', children: [] }
+                    ] }
+                ] },
                 { name: 'Strategy', type: 'folder', dept: 'Strategy', children: [
                     { name: 'Competitive Intel', type: 'folder', dept: 'Strategy', children: [
                         { name: 'Legal Benchmarks', type: 'folder', dept: 'Strategy', children: [
                             { name: 'ByAir', type: 'folder', dept: 'Strategy', children: [] },
                             { name: 'Flightradar24', type: 'folder', dept: 'Strategy', children: [] },
-                            { name: 'Flighty', type: 'folder', dept: 'Strategy', children: [] }
+                            { name: 'Flighty', type: 'folder', dept: 'Strategy', children: [] },
+                            { name: 'Per-Competitor Benchmarks', type: 'folder', dept: 'Strategy', children: [] }
                         ] },
-                        { name: 'Competitor_API_Analysis.xlsx', type: 'file', dept: 'Strategy' },
-                        { name: 'Competitor_Research_Data.md', type: 'file', dept: 'Strategy' },
-                        { name: 'Consumer_Feature_Matrix.xlsx', type: 'file', dept: 'Strategy' },
-                        { name: 'Flight Tracking Competitive Intelligence.docx', type: 'file', dept: 'Strategy' },
-                        { name: 'Flight_Data_API_Sources.xlsx', type: 'file', dept: 'Strategy' },
-                        { name: 'Global_Competitor_Analysis.xlsx', type: 'file', dept: 'Strategy' },
+                        { name: 'TMW_Competitor_API_Analysis.xlsx', type: 'file', dept: 'Strategy' },
+                        { name: 'TMW_Competitor_Research_Data.md', type: 'file', dept: 'Strategy' },
+                        { name: 'TMW_Consumer_Feature_Matrix.xlsx', type: 'file', dept: 'Strategy' },
+                        { name: 'TMW_Flight_Data_API_Sources.xlsx', type: 'file', dept: 'Strategy' },
+                        { name: 'TMW_Flight_Tracking_Competitive_Intelligence.docx', type: 'file', dept: 'Strategy' },
+                        { name: 'TMW_Global_Competitor_Analysis.xlsx', type: 'file', dept: 'Strategy' },
                         { name: 'TrackMyWings_Competitive_Data.xlsx', type: 'file', dept: 'Strategy' },
                         { name: 'TrackMyWings_Competitive_Intelligence_Report.html', type: 'file', dept: 'Strategy' }
                     ] },
@@ -658,43 +732,60 @@
                             { name: 'TMW_Master_Feature_List_v2.md', type: 'file', dept: 'Strategy' },
                             { name: 'TMW_Monetization_Strategy.md', type: 'file', dept: 'Strategy' }
                         ] },
+                        { name: 'Scans', type: 'folder', dept: 'Strategy', children: [
+                            { name: 'My Monetisation plan.pdf', type: 'file', dept: 'Strategy' },
+                            { name: 'My thoughts.pdf', type: 'file', dept: 'Strategy' },
+                            { name: 'Product feature list.pdf', type: 'file', dept: 'Strategy' }
+                        ] },
                         { name: 'Wireframe Templates', type: 'folder', dept: 'Strategy', children: [
                             { name: 'Google_Pixel_10_Pro_XL_Wireframe.pdf', type: 'file', dept: 'Strategy' },
                             { name: 'iPhone_17_Pro_Max_Wireframe.pdf', type: 'file', dept: 'Strategy' },
                             { name: 'Samsung_Fold_7_Wireframe.pdf', type: 'file', dept: 'Strategy' },
                             { name: 'Samsung_Galaxy_S26_Ultra_Wireframe.pdf', type: 'file', dept: 'Strategy' }
                         ] },
-                        { name: 'Word', type: 'folder', dept: 'Strategy', children: [] },
-                        { name: 'My Monetisation plan.pdf', type: 'file', dept: 'Strategy' },
-                        { name: 'My thoughts.pdf', type: 'file', dept: 'Strategy' },
-                        { name: 'Product feature list.pdf', type: 'file', dept: 'Strategy' }
+                        { name: 'Word', type: 'folder', dept: 'Strategy', children: [
+                            { name: 'Rohans_Thoughts_Digitized.docx', type: 'file', dept: 'Strategy' },
+                            { name: 'TMW_Master_Feature_List_v2.docx', type: 'file', dept: 'Strategy' },
+                            { name: 'TMW_Monetization_Strategy.docx', type: 'file', dept: 'Strategy' }
+                        ] }
                     ] },
                     { name: 'Partnerships', type: 'folder', dept: 'Strategy', children: [] },
                     { name: 'Plans', type: 'folder', dept: 'Strategy', children: [
                         { name: 'Active', type: 'folder', dept: 'Strategy', children: [] },
-                        { name: 'V0 Brain Storming', type: 'folder', dept: 'Strategy', children: [] }
+                        { name: 'V0 Brain Storming', type: 'folder', dept: 'Strategy', children: [
+                            { name: '90-Day Execution Plan.md', type: 'file', dept: 'Strategy' },
+                            { name: 'Business Case.md', type: 'file', dept: 'Strategy' },
+                            { name: 'Cost Model.md', type: 'file', dept: 'Strategy' },
+                            { name: 'Risk Register.md', type: 'file', dept: 'Strategy' },
+                            { name: 'Scaling Strategy.md', type: 'file', dept: 'Strategy' }
+                        ] }
                     ] },
                     { name: 'Product', type: 'folder', dept: 'Strategy', children: [
+                        { name: 'AI generated', type: 'folder', dept: 'Strategy', children: [
+                            { name: 'Consumer_Feature_Matrix.xlsx', type: 'file', dept: 'Strategy' },
+                            { name: 'Trackmywings_Product_Backlog_Reddit_Scrape.xlsx', type: 'file', dept: 'Strategy' },
+                            { name: 'TrackMyWings_Product_Feature_Blueprint.xlsx', type: 'file', dept: 'Strategy' },
+                            { name: 'TrackMyWings_Product_Roadmap_Prioritization.xlsx', type: 'file', dept: 'Strategy' }
+                        ] },
                         { name: 'Competitor_Screenshots', type: 'folder', dept: 'Strategy', children: [
                             { name: 'Competitor_Research_Data.md', type: 'file', dept: 'Strategy' }
                         ] },
+                        { name: 'Discovery', type: 'folder', dept: 'Strategy', children: [
+                            { name: 'Business Requirements.md', type: 'file', dept: 'Strategy' },
+                            { name: 'Product Requirements.md', type: 'file', dept: 'Strategy' },
+                            { name: 'TMW_Product_Discovery_Questionnaire.docx', type: 'file', dept: 'Strategy' }
+                        ] },
+                        { name: 'Features', type: 'folder', dept: 'Strategy', children: [] },
+                        { name: 'Research', type: 'folder', dept: 'Strategy', children: [] },
                         { name: 'To be Printed', type: 'folder', dept: 'Strategy', children: [
                             { name: 'Excel Version', type: 'folder', dept: 'Strategy', children: [
                                 { name: 'Competitor_Features_2026-03-21.xlsx', type: 'file', dept: 'Strategy' },
                                 { name: 'TMW_Full_Feature_List_2026-03-21.xlsx', type: 'file', dept: 'Strategy' },
                                 { name: 'TMW_Personas_Problems_2026-03-21.xlsx', type: 'file', dept: 'Strategy' },
-                                { name: 'TMW_Planned_Features_2026-03-21.xlsx', type: 'file', dept: 'Strategy' },
                                 { name: 'TMW_Vision_Strategy_2026-03-21.xlsx', type: 'file', dept: 'Strategy' }
                             ] },
-                            { name: 'PDF Version', type: 'folder', dept: 'Strategy', children: [
-                                { name: 'TMW_Phone_Wireframe_Templates.pdf', type: 'file', dept: 'Strategy' }
-                            ] },
-                            { name: 'Word Version', type: 'folder', dept: 'Strategy', children: [
-                                { name: 'Competitor_Features_2026-03-21.docx', type: 'file', dept: 'Strategy' },
-                                { name: 'TMW_Full_Feature_List_2026-03-21.docx', type: 'file', dept: 'Strategy' },
-                                { name: 'TMW_Personas_Problems_2026-03-21.docx', type: 'file', dept: 'Strategy' },
-                                { name: 'TMW_Vision_Strategy_2026-03-21.docx', type: 'file', dept: 'Strategy' }
-                            ] }
+                            { name: 'PDF Version', type: 'folder', dept: 'Strategy', children: [] },
+                            { name: 'Word Version', type: 'folder', dept: 'Strategy', children: [] }
                         ] },
                         { name: 'Market_Research_Dashboard_2026-03-21.html', type: 'file', dept: 'Strategy' },
                         { name: 'Market_Research_Master_2026-03-21.xlsx', type: 'file', dept: 'Strategy' },
@@ -706,7 +797,14 @@
                         ] },
                         { name: 'Market', type: 'folder', dept: 'Strategy', children: [] },
                         { name: 'User', type: 'folder', dept: 'Strategy', children: [] }
-                    ] }
+                    ] },
+                    { name: 'Social Media', type: 'folder', dept: 'Strategy', children: [
+                        { name: 'AI Gen Drafts', type: 'folder', dept: 'Strategy', children: [] }
+                    ] },
+                    { name: 'TMW_Company_Summary_2026-04.docx', type: 'file', dept: 'Strategy' }
+                ] },
+                { name: 'System', type: 'folder', dept: 'Operations', children: [
+                    { name: 'State', type: 'folder', dept: 'Operations', children: [] }
                 ] }
             ] };
 

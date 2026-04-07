@@ -1996,6 +1996,20 @@
         // Activity Feed Data - populated by rebuild script
         const activityFeed = [
             {
+                        "date": "2026-04-08",
+                        "task_id": "TMW-111",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "Set up Claude + Obsidian integration"
+            },
+            {
+                        "date": "2026-04-08",
+                        "task_id": "TMW-131",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "Explore skills.sh for Claude skills \u2014..."
+            },
+            {
                         "date": "2026-04-06",
                         "task_id": "TMW-019",
                         "event": "completed",
@@ -2043,6 +2057,13 @@
                         "event": "completed",
                         "department": "Finance",
                         "task_name": "Add new MIS cost lines \u2014 Mapbox premi..."
+            },
+            {
+                        "date": "2026-04-06",
+                        "task_id": "TMW-131",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "Explore skills.sh for Claude skills \u2014..."
             },
             {
                         "date": "2026-04-02",
@@ -2113,27 +2134,6 @@
                         "event": "completed",
                         "department": "Design",
                         "task_name": "Diya Mantri onboarding \u2014 CANCELLED, D..."
-            },
-            {
-                        "date": "2026-03-30",
-                        "task_id": "TMW-017",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "Share UI/UX specs with Ruchi for Figm..."
-            },
-            {
-                        "date": "2026-03-30",
-                        "task_id": "TMW-122",
-                        "event": "completed",
-                        "department": "Legal",
-                        "task_name": "Follow up with CA Raman Bhatia on inc..."
-            },
-            {
-                        "date": "2026-03-30",
-                        "task_id": "TMW-108",
-                        "event": "completed",
-                        "department": "Engineering",
-                        "task_name": "Brief Amol on dynamic flight status p..."
             }
 ];
 
@@ -2222,7 +2222,6 @@
             { id: 'TMW-107', task: 'Build dynamic flight status page spec for Amol (DEC-060)', owner: 'Rohan + Claude', department: 'Product / Eng', priority: 'High', status: 'Blocked', deadline: 'Post data sources', created: '2026-03-30' },
             { id: 'TMW-109', task: 'Set up content creation pipeline — Claude + Eleven Labs + Gemini + Nano Banana 2 Pro + Google Flow + Capcut/PS (DEC-069). Stack locked at offsite.', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'High', status: 'WIP', deadline: '2026-04-15', created: '2026-03-30' },
             { id: 'TMW-110', task: 'Research tools: Drafty, 21st Dev, Mirofish AI, LTX-2, AI website cloning, GStack, Meta Tribe v2, Superpowers skill', owner: 'Claude', department: 'Strategy', priority: 'Medium', status: 'Not Started', deadline: '2026-04-07', created: '2026-03-30' },
-            { id: 'TMW-111', task: 'Set up Claude + Obsidian integration', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Not Started', deadline: '2026-04-10', created: '2026-03-30' },
             { id: 'TMW-112', task: 'Set up Claude + Figma workflow (MCP connected) — Figma confirmed as integration layer in UI pipeline (DEC-074)', owner: 'Rohan + Claude', department: 'Design', priority: 'Medium', status: 'Not Started', deadline: '2026-04-15', created: '2026-03-30' },
             { id: 'TMW-113', task: 'UI design sprint — Stitch + Nano Banana in parallel → Figma → prototype → Rohan test → Ruchi brand review → Amol dev (DEC-074)', owner: 'Rohan + Claude', department: 'Design', priority: 'High', status: 'WIP', deadline: '2026-04-15', created: '2026-03-30' },
             { id: 'TMW-132', task: 'Stitch batch generation — 142 screens × 3 variants via API (Gemini 3.1 Pro). Scheduled task auto-restarts if process dies.', owner: 'Claude', department: 'Design', priority: 'High', status: 'WIP', deadline: '2026-04-07', created: '2026-04-06' },
@@ -2236,7 +2235,9 @@
             { id: 'TMW-126', task: 'Build data provider comparison matrix — 16 providers × coverage, fields, freshness, cost, rate limits. Template created, awaiting Amol\'s data (Apr 12).', owner: 'Rohan + Claude', department: 'Engineering / Product', priority: 'High', status: 'WIP', deadline: '2026-04-15', created: '2026-04-06' },
             { id: 'TMW-128', task: 'Test content pipeline end-to-end — produce 1 real video through full Claude → Eleven Labs → Gemini → Nano Banana → Google Flow → Capcut flow (Path B)', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'High', status: 'Not Started', deadline: '2026-04-15', created: '2026-04-06' },
             { id: 'TMW-129', task: 'Set up accounts on content pipeline tools — Nano Banana 2 Pro, Google Flow, Eleven Labs paid tier', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: '2026-04-10', created: '2026-04-06' },
-            { id: 'TMW-131', task: 'Explore skills.sh for Claude skills — find and install new relevant skills for TMW workflows', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Not Started', deadline: '2026-04-10', created: '2026-04-06' }
+            { id: 'TMW-133', task: 'Install Obsidian — download from obsidian.md, open TrackMyWings as vault, configure daily notes + plugins (Dataview, Calendar, Advanced Tables)', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Not Started', deadline: '2026-04-12', created: '2026-04-08' },
+            { id: 'TMW-134', task: 'Connect remaining 9 MCP servers — Atlassian, Canva, Gamma, HubSpot, Klaviyo, Miro, Notion, Stripe, Vibe Prospecting', owner: 'Rohan', department: 'Operations', priority: 'Low', status: 'Not Started', deadline: '2026-04-15', created: '2026-04-08' },
+            { id: 'TMW-135', task: 'Verify Claude Code launchd scheduled tasks working — check logs after first full day, confirm iMessages received', owner: 'Rohan', department: 'Operations', priority: 'High', status: 'Not Started', deadline: '2026-04-09', created: '2026-04-08' }
         ];
 
         const completedTasks = [
@@ -2246,6 +2247,8 @@
             { id: 'TMW-108', task: 'Briefed Amol on dynamic flight status pages at offsite', owner: 'Rohan', department: 'Engineering', completed: '2026-04-05' },
             { id: 'TMW-125', task: 'ARCHITECTURE_OVERVIEW.md updated — client arch, entity model, sizing, 16 providers', owner: 'Claude + Rohan', department: 'Engineering', completed: '2026-04-06' },
             { id: 'TMW-127', task: '6 new MIS cost lines added (₹0 placeholders) + P&L formula fix', owner: 'Rohan + Claude', department: 'Finance', completed: '2026-04-06' },
+            { id: 'TMW-111', task: 'Claude + Obsidian integration — config files created, ready to install', owner: 'Rohan', department: 'Operations', completed: '2026-04-08' },
+            { id: 'TMW-131', task: '85 skills migrated from Cowork to .claude/skills/', owner: 'Rohan + Claude', department: 'Operations', completed: '2026-04-08' },
             { id: 'TMW-020', task: 'Enter actual expenses into TMW_Expense_Entry.xlsx + MIS — 10 invoices, all actuals, AWS credits', owner: 'Rohan + Claude', department: 'Finance', completed: '2026-04-02' },
             { id: 'TMW-122', task: 'Follow up with CA Raman Bhatia — ₹15K paid, incorporation ETA Apr 20', owner: 'Rohan', department: 'Legal', completed: '2026-04-02' },
             { id: 'TMW-124', task: 'Folder cleanup script run — duplicates, lock files, empty folders removed', owner: 'Rohan', department: 'Operations', completed: '2026-04-02' },
@@ -2263,10 +2266,12 @@
             { id: 'TMW-051', task: 'Write first 5 blog posts for SEO content depth (stockpile, don\'t publish)', owner: 'Adhi + Claude', department: 'Marketing', completed: '2026-03-18' },
             { id: 'TMW-106', task: 'Rewrite Launch Playbook — stealth-aware, launch anchored to legal clearance (DEC-067)', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-30' },
             { id: 'TMW-108', task: 'Brief Amol on dynamic flight status pages + priority', owner: 'Rohan', department: 'Engineering', completed: '2026-03-30' },
+            { id: 'TMW-111', task: 'Set up Claude + Obsidian integration', owner: 'Rohan', department: 'Operations', completed: '2026-03-30' },
             { id: 'TMW-122', task: 'Follow up with CA Raman Bhatia on incorporation + trademark timeline', owner: 'Rohan', department: 'Legal', completed: '2026-03-30' },
             { id: 'TMW-124', task: 'Run folder cleanup script on Mac (FOLDER_CLEANUP_S044.md) — delete duplicates, lock files, empty folders', owner: 'Rohan', department: 'Operations', completed: '2026-03-31' },
             { id: 'TMW-125', task: 'Update ARCHITECTURE_OVERVIEW.md — add 2-zone decision (DEC-071), sizing tiers (DEC-072), Firebase, Mapbox, SQLite, WebSocket/SSE (DEC-073)', owner: 'Claude + Rohan', department: 'Engineering', completed: '2026-04-06' },
-            { id: 'TMW-127', task: 'Add new MIS cost lines — Mapbox premium, Firebase, Nano Banana 2 Pro, Google Flow, Eleven Labs paid (DEC-069/073)', owner: 'Rohan + Claude', department: 'Finance', completed: '2026-04-06' }
+            { id: 'TMW-127', task: 'Add new MIS cost lines — Mapbox premium, Firebase, Nano Banana 2 Pro, Google Flow, Eleven Labs paid (DEC-069/073)', owner: 'Rohan + Claude', department: 'Finance', completed: '2026-04-06' },
+            { id: 'TMW-131', task: 'Explore skills.sh for Claude skills — find and install new relevant skills for TMW workflows', owner: 'Rohan', department: 'Operations', completed: '2026-04-06' }
         ];
 
         const backlogTasks = [
@@ -2294,8 +2299,8 @@
                         },
                         {
                                     "date": "2026-03-30",
-                                    "completed": 11,
-                                    "added": 13
+                                    "completed": 12,
+                                    "added": 12
                         },
                         {
                                     "date": "2026-03-31",
@@ -2314,13 +2319,13 @@
                         },
                         {
                                     "date": "2026-04-06",
-                                    "completed": 7,
-                                    "added": 5
+                                    "completed": 8,
+                                    "added": 4
                         },
                         {
                                     "date": "2026-04-08",
-                                    "completed": 0,
-                                    "added": 27
+                                    "completed": 2,
+                                    "added": 34
                         }
             ],
             "weeklyVelocity": [
@@ -2341,19 +2346,19 @@
                         },
                         {
                                     "week": "2026-03-30",
-                                    "completed": 17,
-                                    "added": 13
+                                    "completed": 18,
+                                    "added": 12
                         },
                         {
                                     "week": "2026-04-06",
-                                    "completed": 7,
-                                    "added": 32
+                                    "completed": 10,
+                                    "added": 38
                         }
             ],
             "statusDistribution": [
                         {
                                     "status": "Not Started",
-                                    "count": 20
+                                    "count": 21
                         },
                         {
                                     "status": "WIP",
@@ -2389,8 +2394,8 @@
                         },
                         {
                                     "owner": "Rohan",
-                                    "active": 32,
-                                    "high_priority": 12,
+                                    "active": 33,
+                                    "high_priority": 13,
                                     "overdue": 2
                         },
                         {
@@ -2457,12 +2462,12 @@
                         },
                         {
                                     "department": "Operations",
-                                    "active": 3,
+                                    "active": 4,
                                     "wip": 0,
-                                    "not_started": 3,
+                                    "not_started": 4,
                                     "overdue": 0,
-                                    "stale": 2,
-                                    "avg_age_days": 12
+                                    "stale": 1,
+                                    "avg_age_days": 6
                         },
                         {
                                     "department": "Product",
@@ -2557,12 +2562,6 @@
                                     "age_days": 9
                         },
                         {
-                                    "id": "TMW-111",
-                                    "task": "Set up Claude + Obsidian integration",
-                                    "department": "Operations",
-                                    "age_days": 9
-                        },
-                        {
                                     "id": "TMW-112",
                                     "task": "Set up Claude + Figma workflow (MCP connected) \u2014 Figma confirmed as integration layer in UI pipeline (DEC-074)",
                                     "department": "Design",
@@ -2607,49 +2606,49 @@
             ],
             "deadlineStats": {
                         "overdue": 5,
-                        "due_3days": 12,
+                        "due_3days": 11,
                         "deadline_hit_rate": "0%"
             },
             "burndownData": [
                         {
                                     "date": "2026-04-08",
-                                    "remaining": 36
+                                    "remaining": 37
                         },
                         {
                                     "date": "2026-04-07",
-                                    "remaining": 36
+                                    "remaining": 34
                         },
                         {
                                     "date": "2026-04-06",
-                                    "remaining": 36
+                                    "remaining": 34
                         },
                         {
                                     "date": "2026-04-05",
-                                    "remaining": 31
+                                    "remaining": 30
                         },
                         {
                                     "date": "2026-04-04",
-                                    "remaining": 31
+                                    "remaining": 30
                         },
                         {
                                     "date": "2026-04-03",
-                                    "remaining": 31
+                                    "remaining": 30
                         },
                         {
                                     "date": "2026-04-02",
-                                    "remaining": 31
+                                    "remaining": 30
                         },
                         {
                                     "date": "2026-04-01",
-                                    "remaining": 31
+                                    "remaining": 30
                         },
                         {
                                     "date": "2026-03-31",
-                                    "remaining": 31
+                                    "remaining": 30
                         },
                         {
                                     "date": "2026-03-30",
-                                    "remaining": 31
+                                    "remaining": 30
                         },
                         {
                                     "date": "2026-03-29",
@@ -2669,10 +2668,10 @@
                         }
             ],
             "velocity": {
-                        "today": 0,
-                        "this_week": 7,
+                        "today": 2,
+                        "this_week": 10,
                         "overdue": 5,
-                        "stale": 17
+                        "stale": 16
             }
 };
 

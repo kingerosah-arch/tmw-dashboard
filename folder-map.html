@@ -225,15 +225,15 @@
         </div>
 
         <div class="fm-stats">
-            <div class="fm-stat"><strong>224</strong> Folders</div>
-            <div class="fm-stat"><strong>192</strong> Files</div>
-            <div class="fm-stat"><strong>88</strong> Markdown</div>
+            <div class="fm-stat"><strong>232</strong> Folders</div>
+            <div class="fm-stat"><strong>204</strong> Files</div>
+            <div class="fm-stat"><strong>92</strong> Markdown</div>
             <div class="fm-stat"><strong>51</strong> Excel</div>
             <div class="fm-stat"><strong>11</strong> Word</div>
             <div class="fm-stat"><strong>10</strong> PDF</div>
             <div class="fm-stat"><strong>8</strong> HTML</div>
             <div class="fm-stat"><strong>2</strong> Images</div>
-            <div class="fm-auto-badge">Auto-updated: 2026-04-08 00:05</div>
+            <div class="fm-auto-badge">Auto-updated: 2026-04-08 01:06</div>
         </div>
 
         <input type="text" class="fm-search" id="searchInput" placeholder="🔍 Search files and folders..." oninput="filterTree(this.value)">
@@ -371,6 +371,7 @@
                         { name: 'STITCH_MASTER_CONTEXT.md', type: 'file', dept: 'Design' },
                         { name: 'STITCH_SCREEN_PROMPTS.md', type: 'file', dept: 'Design' },
                         { name: 'TMW_Stitch_Prompt_Library_FINAL.md', type: 'file', dept: 'Design' },
+                        { name: 'TMW_Stitch_Prompt_Library_v3_UPGRADE.md', type: 'file', dept: 'Design' },
                         { name: 'TMW_Stitch_Prompts_ALL.json', type: 'file', dept: 'Design' }
                     ] },
                     { name: 'UI UX', type: 'folder', dept: 'Design', children: [] }
@@ -571,6 +572,17 @@
                             { name: 'CLAUDE_PROJECT_INSTRUCTIONS.md', type: 'file', dept: 'Operations' },
                             { name: 'CLAUDE_PROJECT_SETUP_GUIDE.md', type: 'file', dept: 'Operations' }
                         ] },
+                        { name: 'Migration', type: 'folder', dept: 'Operations', children: [
+                            { name: 'claude-code-config', type: 'folder', dept: 'Operations', children: [] },
+                            { name: 'commands', type: 'folder', dept: 'Operations', children: [] },
+                            { name: 'obsidian-config', type: 'folder', dept: 'Operations', children: [] },
+                            { name: 'CLAUDE.md', type: 'file', dept: 'Operations' },
+                            { name: 'MASTER_SETUP_GUIDE.md', type: 'file', dept: 'Operations' },
+                            { name: 'mcp_config_template.json', type: 'file', dept: 'Operations' },
+                            { name: 'migrate_skills.sh', type: 'file', dept: 'Operations' },
+                            { name: 'MIGRATION_GUIDE.md', type: 'file', dept: 'Operations' },
+                            { name: 'setup_scheduled_tasks.sh', type: 'file', dept: 'Operations' }
+                        ] },
                         { name: 'Reports', type: 'folder', dept: 'Operations', children: [
                             { name: 'TMW_System_Audit_S047.md', type: 'file', dept: 'Operations' },
                             { name: 'TMW_System_Improvement_Plan_S047.md', type: 'file', dept: 'Operations' }
@@ -583,8 +595,7 @@
                         { name: 'DECISION_LOG.md', type: 'file', dept: 'Operations' },
                         { name: 'OPERATING_PARTNER_PROMPT.md', type: 'file', dept: 'Operations' },
                         { name: 'SESSION_LOG.md', type: 'file', dept: 'Operations' },
-                        { name: 'SESSION_LOG_ARCHIVE.md', type: 'file', dept: 'Operations' },
-                        { name: 'SESSION_RESUME_PROMPT.md', type: 'file', dept: 'Operations' }
+                        { name: 'SESSION_LOG_ARCHIVE.md', type: 'file', dept: 'Operations' }
                     ] },
                     { name: 'Dashboards', type: 'folder', dept: 'Operations', children: [
                         { name: 'FOUNDER_CONTROL_PANEL.md', type: 'file', dept: 'Operations' }
@@ -616,13 +627,24 @@
                             { name: 'Morning_Briefing_2026-03-26_DUPLICATE.md', type: 'file', dept: 'Operations' }
                         ] },
                         { name: 'System', type: 'folder', dept: 'Operations', children: [
+                            { name: 'Bridge', type: 'folder', dept: 'Operations', children: [
+                                { name: 'imessage_sender.py', type: 'file', dept: 'Operations' },
+                                { name: 'install.sh', type: 'file', dept: 'Operations' },
+                                { name: 'notes_reader.py', type: 'file', dept: 'Operations' },
+                                { name: 'notes_writer.py', type: 'file', dept: 'Operations' }
+                            ] },
                             { name: 'Dashboard', type: 'folder', dept: 'Operations', children: [
                                 { name: 'folder-map.html', type: 'file', dept: 'Operations' },
                                 { name: 'rebuild_dashboard.py', type: 'file', dept: 'Operations' },
                                 { name: 'rebuild_folder_map.py', type: 'file', dept: 'Operations' },
                                 { name: 'task-dashboard.html', type: 'file', dept: 'Operations' }
+                            ] },
+                            { name: 'Scheduled Tasks', type: 'folder', dept: 'Operations', children: [
+                                { name: 'tmw-file-watcher', type: 'folder', dept: 'Operations', children: [] },
+                                { name: 'tmw-reply-reader', type: 'folder', dept: 'Operations', children: [] }
                             ] }
                         ] },
+                        { name: 'TASK_ARCHIVE.md', type: 'file', dept: 'Operations' },
                         { name: 'TASKS.md', type: 'file', dept: 'Operations' }
                     ] },
                     { name: 'Tool Ecosystem', type: 'folder', dept: 'Operations', children: [] },
@@ -813,7 +835,9 @@
                     { name: 'TMW_Company_Summary_2026-04.docx', type: 'file', dept: 'Strategy' }
                 ] },
                 { name: 'System', type: 'folder', dept: 'Operations', children: [
-                    { name: 'State', type: 'folder', dept: 'Operations', children: [] }
+                    { name: 'State', type: 'folder', dept: 'Operations', children: [
+                        { name: 'calendar_events.json', type: 'file', dept: 'Operations' }
+                    ] }
                 ] }
             ] };
 

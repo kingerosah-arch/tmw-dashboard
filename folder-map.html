@@ -225,15 +225,15 @@
         </div>
 
         <div class="fm-stats">
-            <div class="fm-stat"><strong>232</strong> Folders</div>
-            <div class="fm-stat"><strong>204</strong> Files</div>
-            <div class="fm-stat"><strong>92</strong> Markdown</div>
+            <div class="fm-stat"><strong>239</strong> Folders</div>
+            <div class="fm-stat"><strong>213</strong> Files</div>
+            <div class="fm-stat"><strong>95</strong> Markdown</div>
             <div class="fm-stat"><strong>51</strong> Excel</div>
             <div class="fm-stat"><strong>11</strong> Word</div>
             <div class="fm-stat"><strong>10</strong> PDF</div>
             <div class="fm-stat"><strong>8</strong> HTML</div>
             <div class="fm-stat"><strong>2</strong> Images</div>
-            <div class="fm-auto-badge">Auto-updated: 2026-04-08 01:06</div>
+            <div class="fm-auto-badge">Auto-updated: 2026-04-08 01:55</div>
         </div>
 
         <input type="text" class="fm-search" id="searchInput" placeholder="🔍 Search files and folders..." oninput="filterTree(this.value)">
@@ -284,6 +284,22 @@
 
         // Folder structure data (auto-generated from FOLDER_MAP.md)
         const folderStructure =             { name: 'TrackMyWings', type: 'folder', dept: 'root', children: [
+                { name: '.claude', type: 'folder', dept: 'Operations', children: [
+                    { name: 'agents', type: 'folder', dept: 'Operations', children: [
+                        { name: 'research.md (Sonnet), writer.md (Opus), ops.md (Haiku)', type: 'file', dept: 'Operations' }
+                    ] },
+                    { name: 'commands', type: 'folder', dept: 'Operations', children: [
+                        { name: 'start.md, close.md, checkpoint.md, quick-save.md, continue.md, quick-question.md', type: 'file', dept: 'Operations' }
+                    ] },
+                    { name: 'hooks', type: 'folder', dept: 'Operations', children: [
+                        { name: 'protect-files.sh (PreToolUse), post-compact-reinject.sh (PostCompact)', type: 'file', dept: 'Operations' }
+                    ] },
+                    { name: 'rules', type: 'folder', dept: 'Operations', children: [
+                        { name: 'session-protocol.md, decision-support.md, output-style.md', type: 'file', dept: 'Operations' }
+                    ] },
+                    { name: 'skills', type: 'folder', dept: 'Operations', children: [] },
+                    { name: 'settings.json', type: 'file', dept: 'Operations' }
+                ] },
                 { name: 'Archive', type: 'folder', dept: 'Archive', children: [
                     { name: 'Extracted_Zips', type: 'folder', dept: 'Archive', children: [
                         { name: 'marketingskills-main', type: 'folder', dept: 'Archive', children: [] }
@@ -838,7 +854,13 @@
                     { name: 'State', type: 'folder', dept: 'Operations', children: [
                         { name: 'calendar_events.json', type: 'file', dept: 'Operations' }
                     ] }
-                ] }
+                ] },
+                { name: '~/.claude', type: 'folder', dept: 'Operations', children: [
+                    { name: 'settings.json', type: 'file', dept: 'Operations' },
+                    { name: 'statusline.py', type: 'file', dept: 'Operations' }
+                ] },
+                { name: 'CLAUDE.md', type: 'file', dept: 'Operations' },
+                { name: '~/tmw-rebuild.sh', type: 'file', dept: 'Operations' }
             ] };
 
         // File icon mapping

@@ -2138,7 +2138,26 @@
 ];
 
         // Calendar Events - populated by rebuild script
-        const calendarEvents = [];
+        const calendarEvents = [
+            {
+                        "id": "tjnnrdpo9bhm3vn7a6kke1sjsk",
+                        "summary": "TMW Calendar Sync Test",
+                        "description": "Test event to verify calendar-sync agent is working correctly.",
+                        "start": "2026-04-08T16:00:00+05:30",
+                        "end": "2026-04-08T16:30:00+05:30",
+                        "all_day": false,
+                        "status": "confirmed",
+                        "creator": "rohan@trackmywings.com",
+                        "task_connections": [
+                                    {
+                                                "task_id": "TMW-135",
+                                                "task": "Verified Claude Code launchd scheduled tasks \u2014 all 10 agents firing, iMessages confirmed",
+                                                "status": "COMPLETED",
+                                                "connection": "Test event validates the calendar-sync scheduled agent infrastructure confirmed complete on 2026-04-08"
+                                    }
+                        ]
+            }
+];
 
         // Milestones - populated by rebuild script
         const taskDependencies = [];

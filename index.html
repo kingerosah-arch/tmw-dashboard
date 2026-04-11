@@ -1599,7 +1599,7 @@
                         <button class="view-btn" onclick="location.reload(true)" title="Hard refresh">🔄</button>
                         <button class="view-btn" onclick="window.location.href='folder-map.html'">📂 Folder Map</button>
                     </div>
-                    <div class="last-updated">Last updated: 2026-04-10</span></div>
+                    <div class="last-updated">Last updated: 2026-04-12</span></div>
                     <button class="logout-btn" id="logoutBtn">Logout</button>
                 </div>
             </div>
@@ -1996,6 +1996,20 @@
         // Activity Feed Data - populated by rebuild script
         const activityFeed = [
             {
+                        "date": "2026-04-11",
+                        "task_id": "TMW-144",
+                        "event": "completed",
+                        "department": "Operations / Design",
+                        "task_name": "Environment setup + PLAN.md \u00a773.2/\u00a717..."
+            },
+            {
+                        "date": "2026-04-11",
+                        "task_id": "TMW-142",
+                        "event": "completed",
+                        "department": "Design / Product",
+                        "task_name": "**Rohan formally APPROVED** sprint pl..."
+            },
+            {
                         "date": "2026-04-10",
                         "task_id": "TMW-132",
                         "event": "completed",
@@ -2120,20 +2134,6 @@
                         "event": "completed",
                         "department": "Marketing",
                         "task_name": "5 SEO blog posts reviewed + improved ..."
-            },
-            {
-                        "date": "2026-04-06",
-                        "task_id": "TMW-106",
-                        "event": "completed",
-                        "department": "Marketing",
-                        "task_name": "Launch Playbook v3 \u2014 stealth-aware, r..."
-            },
-            {
-                        "date": "2026-04-06",
-                        "task_id": "TMW-125",
-                        "event": "completed",
-                        "department": "Engineering",
-                        "task_name": "ARCHITECTURE_OVERVIEW.md updated \u2014 cl..."
             }
 ];
 
@@ -2200,8 +2200,6 @@
             { id: 'TMW-008', task: 'Populate Sales/Pipeline with CRM structure', owner: 'Rohan', department: 'Sales', priority: 'Low', status: 'Not Started', deadline: '—', created: '2026-03-13' },
             { id: 'TMW-010', task: 'Review and update 60-Month Operating Plan', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'WIP', deadline: '—', created: '2026-03-13' },
             { id: 'TMW-012', task: 'Re-upload updated system files to Claude Project weekly', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-13' },
-            { id: 'TMW-036', task: 'Finalize Font / Typeface', owner: 'Rohan + Ruchi', department: 'Design', priority: 'High', status: 'OVERDUE', deadline: '2026-03-31', created: '2026-03-17' },
-            { id: 'TMW-037', task: 'Brand Book', owner: 'Ruchi', department: 'Design', priority: 'High', status: 'OVERDUE', deadline: '2026-03-31', created: '2026-03-17' },
             { id: 'TMW-038', task: 'Update website to new brand guidelines (staging site)', owner: 'Rohan + Ruchi', department: 'Design', priority: 'Medium', status: 'Blocked', deadline: 'Post-inc', created: '2026-03-17' },
             { id: 'TMW-048', task: 'Submit TrackMyWings to startup directories (18 directories, kit ready)', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Blocked', deadline: 'Post-inc', created: '2026-03-18' },
             { id: 'TMW-049', task: 'Add branded OG image to all website pages (staging)', owner: 'Rohan + Claude', department: 'Marketing', priority: 'Medium', status: 'WIP', deadline: '2026-04-15', created: '2026-03-18' },
@@ -2216,8 +2214,12 @@
             { id: 'TMW-107', task: 'Build dynamic flight status page spec for Amol (DEC-060)', owner: 'Rohan + Claude', department: 'Product / Eng', priority: 'High', status: 'Blocked', deadline: 'Post data sources', created: '2026-03-30' },
             { id: 'TMW-109', task: 'Set up content creation pipeline — Claude + Eleven Labs + Gemini + Nano Banana 2 Pro + Google Flow + Capcut/PS (DEC-069). Stack locked at offsite.', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'High', status: 'WIP', deadline: '2026-04-15', created: '2026-03-30' },
             { id: 'TMW-113', task: 'UI design sprint — Stitch + Nano Banana in parallel → Figma → prototype → Rohan test → Ruchi brand review → Amol dev (DEC-074)', owner: 'Rohan + Claude', department: 'Design', priority: 'High', status: 'WIP', deadline: '2026-04-15', created: '2026-03-30' },
-            { id: 'TMW-142', task: 'Rohan review TMW_App_Screens_V1 sprint plan v11 (PLAN.md, PROMPTS.md, AGENT_VISUALIZATION.md + 12 support files). Plan rated 96.5/100. Approve or revise.', owner: 'Rohan', department: 'Design / Product', priority: 'Critical', status: 'WIP', deadline: '—', created: '2026-04-10' },
-            { id: 'TMW-143', task: 'Execute TMW_App_Screens_V1 sprint — build 3 Figma files (low/mid/high-fi) for 142 app screens on iPhone 17 PM + Samsung S26 Ultra, with prototype + tester kit + press kit + Amol handoff.', owner: 'Rohan + Claude', department: 'Design', priority: 'Critical', status: 'Blocked', deadline: 'Post-approval', created: '2026-04-10' },
+            { id: 'TMW-142', task: 'Rohan final approval — TMW_App_Screens_V1 sprint plan. **APPROVED 2026-04-11 (S065). ✓** DEC-089 path locked: tiered multi-model within Max 20x subscription. Zero cash. Quality target 93-95/100. Apr 30 Figma delivery. §21 Bootstrap fires **Apr 14 (Mon)**. Phase 0 dispatches within 60s of Bootstrap. Gate 0a (Brand Soul) iMessage to Rohan within ~2 hrs.', owner: 'Rohan', department: 'Design / Product', priority: 'Critical', status: '**APPROVED**', deadline: '2026-04-13', created: '2026-04-10' },
+            { id: 'TMW-143', task: 'Execute TMW_App_Screens_V1 sprint — build 3 Figma files (low/mid/high-fi) for 142 app screens on iPhone 17 PM + Samsung S26 Ultra, with prototype + tester kit + press kit + Amol handoff. **Apr 30 delivery deadline per DEC-089.**', owner: 'Rohan + Claude', department: 'Design', priority: 'Critical', status: '**Phase 1 EFFECTIVELY COMPLETE · PG-2 CLEARED 21/21 (S067 Apr 11).** 12/14 sub-steps done: Steps 1/2/4/5/7/7a/8/9/10/11/12/13 ✓. Step 6 partial (106/142 — rate limits). Step 3 + Step 14 deferred. Step 2: 142/142 screens scored. Step 7: 14 chunks, 1,459 microcopy strings. 4 Hero Moment flags patched, 3 Opus sample schemas normalized. Phase 2 Conductor Brief written. S068: create Figma file + dispatch Batch Conductor #1.', deadline: '2026-04-30', created: '2026-04-10' },
+            { id: 'TMW-145', task: 'Daily Opus burn monitoring during sprint. Thresholds: <60% weekly cap Wed = Green, 60-80% = Yellow, 80-95% = Red + escalation, >95% = Hard pause. **S067 end: Opus 813K / 20M = 4.07% sprint (UNCHANGED from S066 — DEC-090 pivot kept Step 2 on Sonnet). Sonnet ~9.57M / 70M = 13.7% weekly. GREEN on both.** Active Apr 11 - Apr 30.', owner: 'Claude + Rohan', department: 'Operations', priority: 'Critical', status: 'Active (tracking, all GREEN)', deadline: '2026-04-30', created: '2026-04-10' },
+            { id: 'TMW-146', task: 'Post-sprint housekeeping — (1) **Rotate 4 API keys exposed in conversation S064: GEMINI_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY, MISTRAL_API_KEY** (all free tier, revoke + regenerate from respective consoles), (2) Remove obsolete com.tmw.stitch-resume.plist, (3) Resume 6 launchd agents via `Operations/AI System/resume_launchd_post_sprint.sh`, (4) Archive DRAFT_SECTION_73.md after §73 merged to PLAN.md, (5) Review + optionally remove the dead first Gemini key entry from .zshrc history, (6) Sprint retrospective → TMW_App_Screens_V1/RETROSPECTIVE_TEMPLATE.md, (7) Try pulling Gemma 4 E4B (9.6 GB) if disk allows — was deferred S064 due to 95% full disk, (8) Consider disk audit refresh (~26 GB free as of S064 close, aim for 40+ GB long-term), (9) Amend PLAN.md §73 to add Cerebras Qwen 3 235B + Mistral (small/codestral/ministral-8b) to §73.2 Model Roster — both verified working after §73 was drafted.', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Blocked', deadline: '2026-05-01', created: '2026-04-10' },
+            { id: 'TMW-036', task: 'Finalize Font / Typeface — **S064 update: Claude will work around for sprint.** Brand Soul Agent at Gate 0a will infer typography from existing materials (logo brief, 15-color palette, customer personas, founder beliefs). Ruchi finalization still needed post-sprint for long-term consistency but no longer blocks Apr 14 Bootstrap.', owner: 'Rohan + Ruchi', department: 'Design', priority: 'Medium', status: 'Deferred (worked around)', deadline: 'Post-sprint', created: '2026-03-17' },
+            { id: 'TMW-037', task: 'Brand Book — **S064 update: Claude will work around for sprint.** Brand Soul Agent at Gate 0a will synthesize brand from available materials (15-color palette at Design/Brand/Color Palette/, logo brief at Design/Brand/Logos/, Customer Foundation v3, founder core beliefs in CONTEXT.md, Rohan\'s handwritten thoughts digitized). Ruchi Brand Book still needed post-sprint for long-term consistency.', owner: 'Ruchi', department: 'Design', priority: 'Medium', status: 'Deferred (worked around)', deadline: 'Post-sprint', created: '2026-03-17' },
             { id: 'TMW-114', task: 'Build ManyChat DM automation via Claude', owner: 'Rohan + Claude', department: 'Marketing', priority: 'Low', status: 'Not Started', deadline: 'Post-inc', created: '2026-03-30' },
             { id: 'TMW-139', task: 'Amol: deploy Website V0 to ECS — Dockerfile, CI/CD, CloudFront. Codebase ready at Engineering/Codebase/Website_v0/V0_NextJS/. Spec at Engineering/Architecture/Website_V0/Website_V0_Spec_Amol.md', owner: 'Amol', department: 'Engineering', priority: 'High', status: 'Not Started', deadline: '2026-04-20', created: '2026-04-09' },
             { id: 'TMW-140', task: 'Ruchi: create PWA icons (192px, 512px, maskable) from TMW logo for Website V0', owner: 'Ruchi', department: 'Design', priority: 'Medium', status: 'Not Started', deadline: '2026-04-15', created: '2026-04-09' },
@@ -2228,10 +2230,13 @@
             { id: 'TMW-126', task: 'Build data provider comparison matrix — 16 providers × coverage, fields, freshness, cost, rate limits. Template created, awaiting Amol\'s data (Apr 12).', owner: 'Rohan + Claude', department: 'Engineering / Product', priority: 'High', status: 'WIP', deadline: '2026-04-15', created: '2026-04-06' },
             { id: 'TMW-128', task: 'Test content pipeline end-to-end — produce 1 real video through full Claude → Eleven Labs → Gemini → Nano Banana → Google Flow → Capcut flow (Path B)', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'High', status: 'Not Started', deadline: '2026-04-15', created: '2026-04-06' },
             { id: 'TMW-129', task: 'Set up accounts on content pipeline tools — Nano Banana 2 Pro, Google Flow, Eleven Labs paid tier', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Medium', status: 'WIP', deadline: '2026-04-10', created: '2026-04-06' },
-            { id: 'TMW-134', task: 'Connect remaining 9 MCP servers — skipping all for now. Re-evaluate post-stealth when B2B tools (HubSpot, Klaviyo) and design tools (Canva) become relevant.', owner: 'Rohan', department: 'Operations', priority: 'Low', status: 'Parked', deadline: '—', created: '2026-04-08' }
+            { id: 'TMW-134', task: 'Connect remaining 9 MCP servers — skipping all for now. Re-evaluate post-stealth when B2B tools (HubSpot, Klaviyo) and design tools (Canva) become relevant.', owner: 'Rohan', department: 'Operations', priority: 'Low', status: 'Parked', deadline: '—', created: '2026-04-08' },
+            { id: 'TMW-147', task: 'Drop nb2.png (Nano Banana Prompt 2 output) into `Design/TMW_App_Screens_V1/foundation/logo_variants/nano_banana_outputs/nb2.png`. Rohan ran the prompt in S065 and picked nb2 as preferred monochrome variant but file not yet dropped. Non-blocking for Phase 1 analysis; blocking for any Figma write agent that needs monochrome raster asset (mid-fi/high-fi phases).', owner: 'Rohan', department: 'Design', priority: 'Low', status: 'Not Started', deadline: 'Before Phase 3 mid-fi build', created: '2026-04-11' }
         ];
 
         const completedTasks = [
+            { id: 'TMW-144', task: 'Environment setup + PLAN.md §73.2/§17.5/§40.7 amendments for DEC-089 multi-model sprint — all 8 items closed in S065', owner: 'Rohan + Claude', department: 'Operations / Design', completed: '2026-04-11' },
+            { id: 'TMW-142', task: '**Rohan formally APPROVED** sprint plan v12.0.1. Unblocked TMW-143 Bootstrap.', owner: 'Rohan', department: 'Design / Product', completed: '2026-04-11' },
             { id: 'TMW-141', task: 'Website V0 codebase shared with Amol — zip + both spec docs delivered. Unblocks TMW-139 (Amol deploys).', owner: 'Rohan', department: 'Engineering', completed: '2026-04-10' },
             { id: 'TMW-132', task: 'Stitch batch generation — 142/142 screens × 3 variants complete. Manual retry triggered Apr 10, all 16 remaining screens finished successfully (7.2, 9.2-9.6, LM.1-3, T.1-2, WN.1, A.1-3, W.2).', owner: 'Claude', department: 'Design', completed: '2026-04-10' },
             { id: 'TMW-138', task: 'Website V0 implementation plan written — 24-task plan with ultra-detail, reviewed, all gaps fixed. Executed via subagent-driven development.', owner: 'Rohan + Claude', department: 'Engineering / Product', completed: '2026-04-09' },
@@ -2468,16 +2473,6 @@
         const analyticsData = {
             "dailyVelocity": [
                         {
-                                    "date": "2026-03-27",
-                                    "completed": 3,
-                                    "added": 1
-                        },
-                        {
-                                    "date": "2026-03-28",
-                                    "completed": 4,
-                                    "added": 0
-                        },
-                        {
                                     "date": "2026-03-30",
                                     "completed": 8,
                                     "added": 8
@@ -2515,6 +2510,16 @@
                         {
                                     "date": "2026-04-10",
                                     "completed": 2,
+                                    "added": 4
+                        },
+                        {
+                                    "date": "2026-04-11",
+                                    "completed": 2,
+                                    "added": 1
+                        },
+                        {
+                                    "date": "2026-04-12",
+                                    "completed": 0,
                                     "added": 217
                         }
             ],
@@ -2522,7 +2527,7 @@
                         {
                                     "week": "2026-03-09",
                                     "completed": 8,
-                                    "added": 4
+                                    "added": 0
                         },
                         {
                                     "week": "2026-03-16",
@@ -2541,26 +2546,38 @@
                         },
                         {
                                     "week": "2026-04-06",
-                                    "completed": 19,
-                                    "added": 224
+                                    "completed": 21,
+                                    "added": 229
                         }
             ],
             "statusDistribution": [
                         {
                                     "status": "Not Started",
-                                    "count": 14
+                                    "count": 15
                         },
                         {
                                     "status": "WIP",
-                                    "count": 9
+                                    "count": 8
                         },
                         {
                                     "status": "Blocked",
                                     "count": 7
                         },
                         {
-                                    "status": "OVERDUE",
+                                    "status": "Deferred (worked around)",
                                     "count": 2
+                        },
+                        {
+                                    "status": "**APPROVED**",
+                                    "count": 1
+                        },
+                        {
+                                    "status": "**Phase 1 EFFECTIVELY COMPLETE \u00b7 PG-2 CLEARED 21/21 (S067 Apr 11).** 12/14 sub-steps done: Steps 1/2/4/5/7/7a/8/9/10/11/12/13 \u2713. Step 6 partial (106/142 \u2014 rate limits). Step 3 + Step 14 deferred. Step 2: 142/142 screens scored. Step 7: 14 chunks, 1,459 microcopy strings. 4 Hero Moment flags patched, 3 Opus sample schemas normalized. Phase 2 Conductor Brief written. S068: create Figma file + dispatch Batch Conductor #1.",
+                                    "count": 1
+                        },
+                        {
+                                    "status": "Active (tracking, all GREEN)",
+                                    "count": 1
                         },
                         {
                                     "status": "Parked",
@@ -2572,7 +2589,7 @@
                                     "owner": "Adhi",
                                     "active": 8,
                                     "high_priority": 3,
-                                    "overdue": 0
+                                    "overdue": 1
                         },
                         {
                                     "owner": "Amol",
@@ -2582,41 +2599,41 @@
                         },
                         {
                                     "owner": "Claude",
-                                    "active": 8,
+                                    "active": 9,
                                     "high_priority": 4,
                                     "overdue": 0
                         },
                         {
                                     "owner": "Rohan",
-                                    "active": 29,
-                                    "high_priority": 10,
+                                    "active": 32,
+                                    "high_priority": 9,
                                     "overdue": 1
                         },
                         {
                                     "owner": "Ruchi",
                                     "active": 4,
-                                    "high_priority": 2,
-                                    "overdue": 2
+                                    "high_priority": 0,
+                                    "overdue": 0
                         }
             ],
             "departmentHealth": [
                         {
                                     "department": "Design",
-                                    "active": 6,
+                                    "active": 7,
                                     "wip": 1,
-                                    "not_started": 1,
-                                    "overdue": 2,
+                                    "not_started": 2,
+                                    "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 14
+                                    "avg_age_days": 13
                         },
                         {
                                     "department": "Design / Product",
                                     "active": 1,
-                                    "wip": 1,
+                                    "wip": 0,
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 0
+                                    "avg_age_days": 2
                         },
                         {
                                     "department": "Engineering",
@@ -2625,7 +2642,7 @@
                                     "not_started": 1,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 1
+                                    "avg_age_days": 3
                         },
                         {
                                     "department": "Engineering / Product",
@@ -2634,7 +2651,7 @@
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 4
+                                    "avg_age_days": 6
                         },
                         {
                                     "department": "Finance",
@@ -2643,7 +2660,7 @@
                                     "not_started": 3,
                                     "overdue": 0,
                                     "stale": 3,
-                                    "avg_age_days": 24
+                                    "avg_age_days": 26
                         },
                         {
                                     "department": "Legal",
@@ -2652,16 +2669,16 @@
                                     "not_started": 1,
                                     "overdue": 0,
                                     "stale": 1,
-                                    "avg_age_days": 16
+                                    "avg_age_days": 18
                         },
                         {
                                     "department": "Marketing",
                                     "active": 12,
                                     "wip": 4,
                                     "not_started": 5,
-                                    "overdue": 0,
-                                    "stale": 4,
-                                    "avg_age_days": 14
+                                    "overdue": 1,
+                                    "stale": 5,
+                                    "avg_age_days": 16
                         },
                         {
                                     "department": "Marketing / Eng",
@@ -2670,16 +2687,16 @@
                                     "not_started": 1,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 2
+                                    "avg_age_days": 4
                         },
                         {
                                     "department": "Operations",
-                                    "active": 2,
+                                    "active": 4,
                                     "wip": 0,
                                     "not_started": 1,
                                     "overdue": 0,
                                     "stale": 1,
-                                    "avg_age_days": 15
+                                    "avg_age_days": 9
                         },
                         {
                                     "department": "Product",
@@ -2688,7 +2705,7 @@
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 23
+                                    "avg_age_days": 25
                         },
                         {
                                     "department": "Product / Eng",
@@ -2697,7 +2714,7 @@
                                     "not_started": 0,
                                     "overdue": 0,
                                     "stale": 0,
-                                    "avg_age_days": 11
+                                    "avg_age_days": 13
                         },
                         {
                                     "department": "Sales",
@@ -2706,7 +2723,7 @@
                                     "not_started": 1,
                                     "overdue": 0,
                                     "stale": 1,
-                                    "avg_age_days": 28
+                                    "avg_age_days": 30
                         }
             ],
             "staleTasks": [
@@ -2714,72 +2731,86 @@
                                     "id": "TMW-008",
                                     "task": "Populate Sales/Pipeline with CRM structure",
                                     "department": "Sales",
-                                    "age_days": 28
+                                    "age_days": 30
                         },
                         {
                                     "id": "TMW-012",
                                     "task": "Re-upload updated system files to Claude Project weekly",
                                     "department": "Operations",
-                                    "age_days": 28
+                                    "age_days": 30
                         },
                         {
                                     "id": "TMW-053",
                                     "task": "Set up Razorpay \u2014 signup, KYC, Subscriptions, plans, Flutter SDK",
                                     "department": "Finance",
-                                    "age_days": 23
+                                    "age_days": 25
                         },
                         {
                                     "id": "TMW-054",
                                     "task": "Complete Stripe account activation + Stripe Billing for international web payments",
                                     "department": "Finance",
-                                    "age_days": 23
+                                    "age_days": 25
                         },
                         {
                                     "id": "TMW-055",
                                     "task": "Set up App Store billing \u2014 Google Play + Apple IAP + Google alt billing (Razorpay)",
                                     "department": "Finance",
-                                    "age_days": 23
+                                    "age_days": 25
                         },
                         {
                                     "id": "TMW-090",
                                     "task": "Add og:image meta tag to all website pages (staging)",
                                     "department": "Marketing",
-                                    "age_days": 18
+                                    "age_days": 20
                         },
                         {
                                     "id": "TMW-114",
                                     "task": "Build ManyChat DM automation via Claude",
                                     "department": "Marketing",
-                                    "age_days": 11
+                                    "age_days": 13
                         },
                         {
                                     "id": "TMW-117",
                                     "task": "A/B test framework for social content",
                                     "department": "Marketing",
-                                    "age_days": 11
+                                    "age_days": 13
                         },
                         {
                                     "id": "TMW-120",
                                     "task": "Create full T-15 to T+7 content backlog for all 12 platforms (stockpile)",
                                     "department": "Marketing",
-                                    "age_days": 11
+                                    "age_days": 13
                         },
                         {
                                     "id": "TMW-123",
                                     "task": "File trademark application for \"TrackMyWings\" (via legal team)",
                                     "department": "Legal",
-                                    "age_days": 11
+                                    "age_days": 13
+                        },
+                        {
+                                    "id": "TMW-128",
+                                    "task": "Test content pipeline end-to-end \u2014 produce 1 real video through full Claude \u2192 Eleven Labs \u2192 Gemini \u2192 Nano Banana \u2192 Google Flow \u2192 Capcut flow (Path B)",
+                                    "department": "Marketing",
+                                    "age_days": 6
                         }
             ],
             "deadlineStats": {
-                        "overdue": 2,
-                        "due_3days": 9,
+                        "overdue": 1,
+                        "due_3days": 22,
                         "deadline_hit_rate": "0%"
             },
             "burndownData": [
                         {
+                                    "date": "2026-04-12",
+                                    "remaining": 36
+                        },
+                        {
+                                    "date": "2026-04-11",
+                                    "remaining": 36
+                        },
+                        {
                                     "date": "2026-04-10",
-                                    "remaining": 33
+                                    "remaining": 35
                         },
                         {
                                     "date": "2026-04-09",
@@ -2824,21 +2855,13 @@
                         {
                                     "date": "2026-03-30",
                                     "remaining": 24
-                        },
-                        {
-                                    "date": "2026-03-29",
-                                    "remaining": 16
-                        },
-                        {
-                                    "date": "2026-03-28",
-                                    "remaining": 16
                         }
             ],
             "velocity": {
-                        "today": 2,
-                        "this_week": 19,
-                        "overdue": 2,
-                        "stale": 10
+                        "today": 0,
+                        "this_week": 21,
+                        "overdue": 1,
+                        "stale": 11
             }
 };
 

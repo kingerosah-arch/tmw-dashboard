@@ -225,15 +225,15 @@
         </div>
 
         <div class="fm-stats">
-            <div class="fm-stat"><strong>257</strong> Folders</div>
-            <div class="fm-stat"><strong>253</strong> Files</div>
+            <div class="fm-stat"><strong>265</strong> Folders</div>
+            <div class="fm-stat"><strong>256</strong> Files</div>
             <div class="fm-stat"><strong>116</strong> Markdown</div>
             <div class="fm-stat"><strong>51</strong> Excel</div>
             <div class="fm-stat"><strong>11</strong> Word</div>
             <div class="fm-stat"><strong>10</strong> PDF</div>
             <div class="fm-stat"><strong>8</strong> HTML</div>
             <div class="fm-stat"><strong>2</strong> Images</div>
-            <div class="fm-auto-badge">Auto-updated: 2026-04-11 13:55</div>
+            <div class="fm-auto-badge">Auto-updated: 2026-04-11 19:55</div>
         </div>
 
         <input type="text" class="fm-search" id="searchInput" placeholder="🔍 Search files and folders..." oninput="filterTree(this.value)">
@@ -392,10 +392,20 @@
                         { name: 'TMW_Stitch_Prompts_ALL.json', type: 'file', dept: 'Design' }
                     ] },
                     { name: 'TMW_App_Screens_V1', type: 'folder', dept: 'Design', children: [
-                        { name: 'analysis/ low_fi/ mid_fi/ high_fi/ evolution', type: 'folder', dept: 'Design', children: [] },
+                        { name: 'analysis', type: 'folder', dept: 'Design', children: [
+                            { name: 'data_fixtures/DATA_FIXTURES.md + fixtures.json  (7 users, 14 airlines, 52 flights)', type: 'folder', dept: 'Design', children: [] },
+                            { name: 'edge_cases/edge_cases_batch_{01-08}.json  (142 screens × 19 dims = 2698 cells)', type: 'folder', dept: 'Design', children: [] },
+                            { name: 'motion/MOTION_LANGUAGE.md  (12 motion tokens)', type: 'folder', dept: 'Design', children: [] },
+                            { name: 'selection_framework/SELECTION_FRAMEWORK.md  (v2, amended S066 per DEC-090)', type: 'folder', dept: 'Design', children: [] },
+                            { name: 'sound_haptic/SOUND_HAPTIC_SPEC.md  (5 sounds + 8 haptic patterns)', type: 'folder', dept: 'Design', children: [] },
+                            { name: 'variant_selections/*.json  (**38/142 scored S066**, resume wave 3c)', type: 'folder', dept: 'Design', children: [] },
+                            { name: 'screens/screen_list.json + variant_audit.json + step_10_batches.json', type: 'file', dept: 'Design' },
+                            { name: 'spring_physics/SPRING_PHYSICS.md + spring_physics.json', type: 'file', dept: 'Design' }
+                        ] },
                         { name: 'checkpoints', type: 'folder', dept: 'Design', children: [
                             { name: 'gate_0b_rejected_v1', type: 'folder', dept: 'Design', children: [] }
                         ] },
+                        { name: 'checkpoints/selection_framework_v1', type: 'folder', dept: 'Design', children: [] },
                         { name: 'foundation', type: 'folder', dept: 'Design', children: [
                             { name: 'brand_soul', type: 'folder', dept: 'Design', children: [
                                 { name: 'BRAND_SOUL.md', type: 'file', dept: 'Design' }
@@ -434,6 +444,7 @@
                             { name: 'dispatch.jsonl results.jsonl errors.jsonl healings.jsonl conflicts.jsonl reconciliation.jsonl overrides.jsonl rate_limits.jsonl retention.jsonl costs.jsonl invariant_violations.jsonl gaps_detected.jsonl gaps_resolved.jsonl propagations.jsonl audits.jsonl gate_events.jsonl', type: 'file', dept: 'Design' },
                             { name: 'log_query.py', type: 'file', dept: 'Design' }
                         ] },
+                        { name: 'low_fi/ mid_fi/ high_fi/ evolution', type: 'folder', dept: 'Design', children: [] },
                         { name: 'phase_0/ phase_1/ phase_2/ phase_3/ phase_4/ phase_5/ phase_6', type: 'folder', dept: 'Design', children: [] },
                         { name: 'registry', type: 'folder', dept: 'Design', children: [
                             { name: 'events.jsonl', type: 'file', dept: 'Design' },
@@ -447,7 +458,8 @@
                         { name: 'DESIGN_DNA.md / GAP_TO_9999.md / GLOSSARY.md / DRAFT_SECTION_73.md', type: 'file', dept: 'Design' },
                         { name: 'OPERATIONS.md triage_decisions.md rate_limiter.json', type: 'file', dept: 'Design' },
                         { name: 'PLAN.md', type: 'file', dept: 'Design' },
-                        { name: 'STATE.json', type: 'file', dept: 'Design' }
+                        { name: 'STATE.json', type: 'file', dept: 'Design' },
+                        { name: 'tools/tier3_dispatch.py', type: 'file', dept: 'Design' }
                     ] },
                     { name: 'UI UX', type: 'folder', dept: 'Design', children: [] }
                 ] },

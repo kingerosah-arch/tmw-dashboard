@@ -1996,6 +1996,13 @@
         // Activity Feed Data - populated by rebuild script
         const activityFeed = [
             {
+                        "date": "2026-04-20",
+                        "task_id": "TMW-036",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Font / Typeface finalized \u2014 Raleway (..."
+            },
+            {
                         "date": "2026-04-11",
                         "task_id": "TMW-144",
                         "event": "completed",
@@ -2127,13 +2134,6 @@
                         "event": "completed",
                         "department": "Finance",
                         "task_name": "MIS formula review \u2014 1,126 formulas c..."
-            },
-            {
-                        "date": "2026-04-06",
-                        "task_id": "TMW-051",
-                        "event": "completed",
-                        "department": "Marketing",
-                        "task_name": "5 SEO blog posts reviewed + improved ..."
             }
 ];
 
@@ -2216,9 +2216,8 @@
             { id: 'TMW-113', task: 'UI design sprint — Stitch + Nano Banana in parallel → Figma → prototype → Rohan test → Ruchi brand review → Amol dev (DEC-074)', owner: 'Rohan + Claude', department: 'Design', priority: 'High', status: 'WIP', deadline: '2026-04-15', created: '2026-03-30' },
             { id: 'TMW-142', task: 'Rohan final approval — TMW_App_Screens_V1 sprint plan. **APPROVED 2026-04-11 (S065). ✓** DEC-089 path locked: tiered multi-model within Max 20x subscription. Zero cash. Quality target 93-95/100. Apr 30 Figma delivery. §21 Bootstrap fires **Apr 14 (Mon)**. Phase 0 dispatches within 60s of Bootstrap. Gate 0a (Brand Soul) iMessage to Rohan within ~2 hrs.', owner: 'Rohan', department: 'Design / Product', priority: 'Critical', status: '**APPROVED**', deadline: '2026-04-13', created: '2026-04-10' },
             { id: 'TMW-143', task: 'Execute TMW_App_Screens_V1 sprint — build 3 Figma files (low/mid/high-fi) for 142 app screens on iPhone 17 PM + Samsung S26 Ultra, with prototype + tester kit + press kit + Amol handoff. **Apr 30 delivery deadline per DEC-089.**', owner: 'Rohan + Claude', department: 'Design', priority: 'Critical', status: '**Phase 2 IN-FLIGHT: 21/142 low-fi screens built (S068 Apr 20).** Batch 01 (10 screens avg 8.4) + Batch 02 (11 screens avg 8.27) complete. Figma file `3oeCW0etJhKWEytpHo6Vvy` scaffolded to 16 pages. 8 HM flags patched, ~18 microcopy audit fixes applied, events.jsonl hardened post-L-S068-01 wipe. 121 screens + 12 batches remaining. Reviewer passes deferred. On pace for Apr 30. Next S069: Batch 03.', deadline: '2026-04-30', created: '2026-04-10' },
-            { id: 'TMW-145', task: 'Daily Opus burn monitoring during sprint. Thresholds: <60% weekly cap Wed = Green, 60-80% = Yellow, 80-95% = Red + escalation, >95% = Hard pause. **S067 end: Opus 813K / 20M = 4.07% sprint (UNCHANGED from S066 — DEC-090 pivot kept Step 2 on Sonnet). Sonnet ~9.57M / 70M = 13.7% weekly. GREEN on both.** Active Apr 11 - Apr 30.', owner: 'Claude + Rohan', department: 'Operations', priority: 'Critical', status: 'Active (tracking, all GREEN)', deadline: '2026-04-30', created: '2026-04-10' },
-            { id: 'TMW-146', task: 'Post-sprint housekeeping — (1) **Rotate 4 API keys exposed in conversation S064: GEMINI_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY, MISTRAL_API_KEY** (all free tier, revoke + regenerate from respective consoles), (2) Remove obsolete com.tmw.stitch-resume.plist, (3) Resume 6 launchd agents via `Operations/AI System/resume_launchd_post_sprint.sh`, (4) Archive DRAFT_SECTION_73.md after §73 merged to PLAN.md, (5) Review + optionally remove the dead first Gemini key entry from .zshrc history, (6) Sprint retrospective → TMW_App_Screens_V1/RETROSPECTIVE_TEMPLATE.md, (7) Try pulling Gemma 4 E4B (9.6 GB) if disk allows — was deferred S064 due to 95% full disk, (8) Consider disk audit refresh (~26 GB free as of S064 close, aim for 40+ GB long-term), (9) Amend PLAN.md §73 to add Cerebras Qwen 3 235B + Mistral (small/codestral/ministral-8b) to §73.2 Model Roster — both verified working after §73 was drafted.', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Blocked', deadline: '2026-05-01', created: '2026-04-10' },
-            { id: 'TMW-036', task: 'Finalize Font / Typeface — **S064 update: Claude will work around for sprint.** Brand Soul Agent at Gate 0a will infer typography from existing materials (logo brief, 15-color palette, customer personas, founder beliefs). Ruchi finalization still needed post-sprint for long-term consistency but no longer blocks Apr 14 Bootstrap.', owner: 'Rohan + Ruchi', department: 'Design', priority: 'Medium', status: 'Deferred (worked around)', deadline: 'Post-sprint', created: '2026-03-17' },
+            { id: 'TMW-145', task: 'Daily Opus burn monitoring during sprint. **S068 end: Opus 813K / 20M = 4.07% sprint (unchanged — all S068 builders on Sonnet per DEC-090 tier architecture). Sonnet ~12M / 70M = ~17% weekly estimate (precise tracking lost with L-S068-01 events.jsonl wipe, reconstructed). GREEN on both.** Active Apr 11 - Apr 30.', owner: 'Claude + Rohan', department: 'Operations', priority: 'Critical', status: 'Active (tracking, all GREEN)', deadline: '2026-04-30', created: '2026-04-10' },
+            { id: 'TMW-146', task: 'Post-sprint housekeeping — (1) **Rotate 4 API keys exposed S064: GEMINI_API_KEY, GROQ_API_KEY, CEREBRAS_API_KEY, MISTRAL_API_KEY**, (2) ~~Remove obsolete com.tmw.stitch-resume.plist~~ ✓ **DONE S068**, (3) Resume 6 launchd agents via `resume_launchd_post_sprint.sh` (NOTE S068: most agents were never actually paused — verify before running), (4) Archive DRAFT_SECTION_73.md after §73 merged to PLAN.md, (5) Remove dead first Gemini key from .zshrc history, (6) Sprint retrospective, (7) Try pulling Gemma 4 E4B (9.6 GB) if disk allows, (8) Disk audit refresh, (9) Amend PLAN.md §73 to add Cerebras Qwen 3 235B + Mistral.', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Partial (1/9 done)', deadline: '2026-05-01', created: '2026-04-10' },
             { id: 'TMW-037', task: 'Brand Book — **S064 update: Claude will work around for sprint.** Brand Soul Agent at Gate 0a will synthesize brand from available materials (15-color palette at Design/Brand/Color Palette/, logo brief at Design/Brand/Logos/, Customer Foundation v3, founder core beliefs in CONTEXT.md, Rohan\'s handwritten thoughts digitized). Ruchi Brand Book still needed post-sprint for long-term consistency.', owner: 'Ruchi', department: 'Design', priority: 'Medium', status: 'Deferred (worked around)', deadline: 'Post-sprint', created: '2026-03-17' },
             { id: 'TMW-114', task: 'Build ManyChat DM automation via Claude', owner: 'Rohan + Claude', department: 'Marketing', priority: 'Low', status: 'Not Started', deadline: 'Post-inc', created: '2026-03-30' },
             { id: 'TMW-139', task: 'Amol: deploy Website V0 to ECS — Dockerfile, CI/CD, CloudFront. Codebase ready at Engineering/Codebase/Website_v0/V0_NextJS/. Spec at Engineering/Architecture/Website_V0/Website_V0_Spec_Amol.md', owner: 'Amol', department: 'Engineering', priority: 'High', status: 'Not Started', deadline: '2026-04-20', created: '2026-04-09' },
@@ -2231,10 +2230,12 @@
             { id: 'TMW-128', task: 'Test content pipeline end-to-end — produce 1 real video through full Claude → Eleven Labs → Gemini → Nano Banana → Google Flow → Capcut flow (Path B)', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'High', status: 'Not Started', deadline: '2026-04-15', created: '2026-04-06' },
             { id: 'TMW-129', task: 'Set up accounts on content pipeline tools — Nano Banana 2 Pro, Google Flow, Eleven Labs paid tier', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Medium', status: 'WIP', deadline: '2026-04-10', created: '2026-04-06' },
             { id: 'TMW-134', task: 'Connect remaining 9 MCP servers — skipping all for now. Re-evaluate post-stealth when B2B tools (HubSpot, Klaviyo) and design tools (Canva) become relevant.', owner: 'Rohan', department: 'Operations', priority: 'Low', status: 'Parked', deadline: '—', created: '2026-04-08' },
-            { id: 'TMW-147', task: 'Drop nb2.png (Nano Banana Prompt 2 output) into `Design/TMW_App_Screens_V1/foundation/logo_variants/nano_banana_outputs/nb2.png`. Rohan ran the prompt in S065 and picked nb2 as preferred monochrome variant but file not yet dropped. Non-blocking for Phase 1 analysis; blocking for any Figma write agent that needs monochrome raster asset (mid-fi/high-fi phases).', owner: 'Rohan', department: 'Design', priority: 'Low', status: 'Not Started', deadline: 'Before Phase 3 mid-fi build', created: '2026-04-11' }
+            { id: 'TMW-147', task: 'Drop nb2.png (Nano Banana Prompt 2 output) into `Design/TMW_App_Screens_V1/foundation/logo_variants/nano_banana_outputs/nb2.png`. Rohan ran the prompt in S065 and picked nb2 as preferred monochrome variant but file not yet dropped. Non-blocking for Phase 1 analysis; blocking for any Figma write agent that needs monochrome raster asset (mid-fi/high-fi phases).', owner: 'Rohan', department: 'Design', priority: 'Low', status: 'Not Started', deadline: 'Before Phase 3 mid-fi build', created: '2026-04-11' },
+            { id: 'TMW-148', task: 'Grant `/usr/bin/python3` Full Disk Access via macOS System Settings → Privacy & Security → Full Disk Access. Fixes folder-map-generator intermittent exit-code-2 failures caused by launchd-spawned python3 lacking TCC access to `~/Documents/` path. Also add `/Library/Developer/CommandLineTools/usr/bin/python3`. 2-min manual task.', owner: 'Rohan', department: 'Operations', priority: 'Low', status: 'Not Started', deadline: '2026-04-25', created: '2026-04-20' }
         ];
 
         const completedTasks = [
+            { id: 'TMW-036', task: 'Font / Typeface finalized — Raleway (headlines) + Merriweather (body) per DEC-091 (S068). Rohan direct confirmation closed the S064 inference workaround.', owner: 'Rohan', department: 'Design', completed: '2026-04-20' },
             { id: 'TMW-144', task: 'Environment setup + PLAN.md §73.2/§17.5/§40.7 amendments for DEC-089 multi-model sprint — all 8 items closed in S065', owner: 'Rohan + Claude', department: 'Operations / Design', completed: '2026-04-11' },
             { id: 'TMW-142', task: '**Rohan formally APPROVED** sprint plan v12.0.1. Unblocked TMW-143 Bootstrap.', owner: 'Rohan', department: 'Design / Product', completed: '2026-04-11' },
             { id: 'TMW-141', task: 'Website V0 codebase shared with Amol — zip + both spec docs delivered. Unblocks TMW-139 (Amol deploys).', owner: 'Rohan', department: 'Engineering', completed: '2026-04-10' },
@@ -2488,9 +2489,14 @@
                                     "added": 1
                         },
                         {
+                                    "date": "2026-04-20",
+                                    "completed": 1,
+                                    "added": 1
+                        },
+                        {
                                     "date": "2026-04-23",
                                     "completed": 0,
-                                    "added": 217
+                                    "added": 218
                         }
             ],
             "weeklyVelocity": [
@@ -2511,14 +2517,14 @@
                         },
                         {
                                     "week": "2026-04-20",
-                                    "completed": 0,
-                                    "added": 217
+                                    "completed": 1,
+                                    "added": 219
                         }
             ],
             "statusDistribution": [
                         {
                                     "status": "Not Started",
-                                    "count": 15
+                                    "count": 16
                         },
                         {
                                     "status": "WIP",
@@ -2526,11 +2532,7 @@
                         },
                         {
                                     "status": "Blocked",
-                                    "count": 7
-                        },
-                        {
-                                    "status": "Deferred (worked around)",
-                                    "count": 2
+                                    "count": 6
                         },
                         {
                                     "status": "**APPROVED**",
@@ -2542,6 +2544,14 @@
                         },
                         {
                                     "status": "Active (tracking, all GREEN)",
+                                    "count": 1
+                        },
+                        {
+                                    "status": "Partial (1/9 done)",
+                                    "count": 1
+                        },
+                        {
+                                    "status": "Deferred (worked around)",
                                     "count": 1
                         },
                         {
@@ -2576,7 +2586,7 @@
                         },
                         {
                                     "owner": "Ruchi",
-                                    "active": 4,
+                                    "active": 3,
                                     "high_priority": 0,
                                     "overdue": 1
                         }
@@ -2584,12 +2594,12 @@
             "departmentHealth": [
                         {
                                     "department": "Design",
-                                    "active": 7,
+                                    "active": 6,
                                     "wip": 1,
                                     "not_started": 2,
                                     "overdue": 2,
                                     "stale": 2,
-                                    "avg_age_days": 24
+                                    "avg_age_days": 22
                         },
                         {
                                     "department": "Design / Product",
@@ -2656,12 +2666,12 @@
                         },
                         {
                                     "department": "Operations",
-                                    "active": 4,
+                                    "active": 5,
                                     "wip": 0,
-                                    "not_started": 1,
+                                    "not_started": 2,
                                     "overdue": 0,
                                     "stale": 1,
-                                    "avg_age_days": 20
+                                    "avg_age_days": 17
                         },
                         {
                                     "department": "Product",
@@ -2807,48 +2817,48 @@
                         },
                         {
                                     "date": "2026-04-19",
-                                    "remaining": 36
+                                    "remaining": 35
                         },
                         {
                                     "date": "2026-04-18",
-                                    "remaining": 36
+                                    "remaining": 35
                         },
                         {
                                     "date": "2026-04-17",
-                                    "remaining": 36
+                                    "remaining": 35
                         },
                         {
                                     "date": "2026-04-16",
-                                    "remaining": 36
+                                    "remaining": 35
                         },
                         {
                                     "date": "2026-04-15",
-                                    "remaining": 36
+                                    "remaining": 35
                         },
                         {
                                     "date": "2026-04-14",
-                                    "remaining": 36
+                                    "remaining": 35
                         },
                         {
                                     "date": "2026-04-13",
-                                    "remaining": 36
+                                    "remaining": 35
                         },
                         {
                                     "date": "2026-04-12",
-                                    "remaining": 36
+                                    "remaining": 35
                         },
                         {
                                     "date": "2026-04-11",
-                                    "remaining": 36
+                                    "remaining": 35
                         },
                         {
                                     "date": "2026-04-10",
-                                    "remaining": 35
+                                    "remaining": 34
                         }
             ],
             "velocity": {
                         "today": 0,
-                        "this_week": 0,
+                        "this_week": 1,
                         "overdue": 17,
                         "stale": 15
             }

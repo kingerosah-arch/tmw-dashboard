@@ -225,15 +225,15 @@
         </div>
 
         <div class="fm-stats">
-            <div class="fm-stat"><strong>273</strong> Folders</div>
-            <div class="fm-stat"><strong>276</strong> Files</div>
-            <div class="fm-stat"><strong>130</strong> Markdown</div>
+            <div class="fm-stat"><strong>278</strong> Folders</div>
+            <div class="fm-stat"><strong>301</strong> Files</div>
+            <div class="fm-stat"><strong>154</strong> Markdown</div>
             <div class="fm-stat"><strong>51</strong> Excel</div>
             <div class="fm-stat"><strong>11</strong> Word</div>
             <div class="fm-stat"><strong>10</strong> PDF</div>
             <div class="fm-stat"><strong>8</strong> HTML</div>
             <div class="fm-stat"><strong>2</strong> Images</div>
-            <div class="fm-auto-badge">Auto-updated: 2026-04-26 23:55</div>
+            <div class="fm-auto-badge">Auto-updated: 2026-04-27 11:55</div>
         </div>
 
         <input type="text" class="fm-search" id="searchInput" placeholder="🔍 Search files and folders..." oninput="filterTree(this.value)">
@@ -431,7 +431,12 @@
                                 { name: 'LOW_FI_AUDIT_REPORT.md', type: 'file', dept: 'Design' },
                                 { name: 'LOW_FI_BUILD_MANIFEST.md + .json', type: 'file', dept: 'Design' },
                                 { name: 'LOW_FI_LIBRARY_SPEC.md', type: 'file', dept: 'Design' },
+                                { name: 'MID_FI_AUDIT_REPORT.md', type: 'file', dept: 'Design' },
                                 { name: 'MID_FI_LIBRARY_SKELETON.md', type: 'file', dept: 'Design' },
+                                { name: 'MID_FI_LIBRARY_SPEC.md', type: 'file', dept: 'Design' },
+                                { name: 'MID_FI_PATCH_REPORT_S074.md', type: 'file', dept: 'Design' },
+                                { name: 'MID_FI_PATCH_V2_REPORT_S074.md', type: 'file', dept: 'Design' },
+                                { name: 'MID_FI_PATCH_V3_REPORT_S075.md', type: 'file', dept: 'Design' },
                                 { name: 'RULE_REGISTRY_REPORT.md', type: 'file', dept: 'Design' }
                             ] },
                             { name: 'logo_variants', type: 'folder', dept: 'Design', children: [
@@ -440,6 +445,10 @@
                                 { name: 'LOGO_FOUNDATION.md', type: 'file', dept: 'Design' },
                                 { name: 'NANO_BANANA_PROMPTS.md', type: 'file', dept: 'Design' },
                                 { name: 'wing_mark_micro.svg', type: 'file', dept: 'Design' }
+                            ] },
+                            { name: 'typography', type: 'folder', dept: 'Design', children: [
+                                { name: 'TYPOGRAPHY_SCALE.md', type: 'file', dept: 'Design' },
+                                { name: 'VARIABLE_BINDING_SPEC.md', type: 'file', dept: 'Design' }
                             ] },
                             { name: 'brand_soul/BRAND_SOUL.md', type: 'file', dept: 'Design' },
                             { name: 'color_tokens/COLOR_TOKENS.md + color_tokens.json', type: 'file', dept: 'Design' },
@@ -454,7 +463,32 @@
                         ] },
                         { name: 'low_fi', type: 'folder', dept: 'Design', children: [] },
                         { name: 'mid_fi', type: 'folder', dept: 'Design', children: [] },
-                        { name: 'phase_0/ phase_1/ phase_2/ phase_3/ phase_4/ phase_5/ phase_6', type: 'folder', dept: 'Design', children: [] },
+                        { name: 'phase_0/ phase_1/ phase_2/ phase_4/ phase_5/ phase_6', type: 'folder', dept: 'Design', children: [] },
+                        { name: 'phase_3', type: 'folder', dept: 'Design', children: [
+                            { name: 'audits', type: 'folder', dept: 'Design', children: [
+                                { name: 'A4_sample_assets', type: 'folder', dept: 'Design', children: [] },
+                                { name: 'A1_SCREEN_TAXONOMY_AUDIT.md', type: 'file', dept: 'Design' },
+                                { name: 'A2_DENSITY_SCROLL_AUDIT.md', type: 'file', dept: 'Design' },
+                                { name: 'A3_UX_BOUNDARY_RECOMMENDATION.md', type: 'file', dept: 'Design' },
+                                { name: 'A4_GRAPHICS_GENERATION_AUDIT.md', type: 'file', dept: 'Design' },
+                                { name: 'A5_FRONTEND_DESIGN_QUALITY_BAR.md', type: 'file', dept: 'Design' },
+                                { name: 'PHASE_B_MIDFI_2_0_SPEC_LOCKED.md', type: 'file', dept: 'Design' }
+                            ] },
+                            { name: 'reviews', type: 'folder', dept: 'Design', children: [
+                                { name: '1.2_onboarding_screen_1_welcome_review.md', type: 'file', dept: 'Design' },
+                                { name: '1.2_onboarding_screen_1_welcome_review_S075_refire.md', type: 'file', dept: 'Design' },
+                                { name: '6.3_friends_list_review.md', type: 'file', dept: 'Design' },
+                                { name: '6.3_friends_list_review_S075_refire.md', type: 'file', dept: 'Design' },
+                                { name: '7.10_manual_flight_entry_review.md', type: 'file', dept: 'Design' },
+                                { name: '7.10_manual_flight_entry_review_S075_refire.md', type: 'file', dept: 'Design' },
+                                { name: '9.6_settings_screen_main_review.md', type: 'file', dept: 'Design' },
+                                { name: 'A.3_empty_state_review_S075_refire.md', type: 'file', dept: 'Design' },
+                                { name: 'A.3_empty_state_template_review.md', type: 'file', dept: 'Design' }
+                            ] },
+                            { name: 'control_inbox.jsonl + control_acks.jsonl + conductor_reports.jsonl + dispatch_queue.json', type: 'file', dept: 'Design' },
+                            { name: 'LOW_FI_LEARNINGS_SYNTHESIS.md', type: 'file', dept: 'Design' },
+                            { name: 'MODE_SWAP_VALIDATION_REPORT.md', type: 'file', dept: 'Design' }
+                        ] },
                         { name: 'prototype', type: 'folder', dept: 'Design', children: [] },
                         { name: 'registry', type: 'folder', dept: 'Design', children: [
                             { name: 'events.jsonl + events.seq', type: 'file', dept: 'Design' },

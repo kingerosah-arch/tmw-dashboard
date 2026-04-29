@@ -1,0 +1,119 @@
+/* ============================================================
+ * TrackMyWings Internal Dashboards — Design Tokens
+ * Source of truth: Operations/Internal Dashboards/Design System/DESIGN.md
+ * Edit this file to change tokens system-wide. All five dashboards
+ * link to this CSS, so changes propagate immediately on next deploy.
+ * ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+
+:root {
+  /* --- Surface neutrals (tinted toward brand axis, never pure black/white) --- */
+  --bg-base:        oklch(18% 0.04 280);
+  --bg-elev:        oklch(22% 0.05 285);
+  --bg-card:        oklch(20% 0.04 282);
+  --line:           oklch(35% 0.04 300 / 0.40);
+  --line-soft:      oklch(35% 0.04 300 / 0.18);
+
+  /* --- Ink (Lamp Cream / Twilight / Slate) --- */
+  --ink-hi:         oklch(94% 0.04 85);
+  --ink-mid:        oklch(72% 0.04 300);
+  --ink-low:        oklch(55% 0.04 295);
+
+  /* --- Signal Gold (PRIMARY accent, ≤10% of pixels per Signal Gold Rule) --- */
+  --gold:           oklch(78% 0.13 75);
+  --gold-tint:      oklch(78% 0.13 75 / 0.15);
+  --gold-tint-soft: oklch(78% 0.13 75 / 0.08);
+
+  /* --- Brand Plum (SECONDARY) and Rose (TERTIARY) --- */
+  --plum:           oklch(75% 0.06 320);
+  --plum-tint:      oklch(75% 0.06 320 / 0.18);
+  --rose:           oklch(70% 0.10 350);
+  --rose-tint:      oklch(70% 0.10 350 / 0.18);
+
+  /* --- Functional --- */
+  --warn:           oklch(70% 0.18 50);
+  --warn-tint:      oklch(70% 0.18 50 / 0.15);
+  --danger:         oklch(62% 0.22 25);
+  --danger-tint:    oklch(62% 0.22 25 / 0.12);
+
+  /* --- Modal scrim (the only allowed blur-adjacent effect) --- */
+  --scrim:          oklch(15% 0.04 280 / 0.78);
+
+  /* --- Spacing scale (vary for rhythm; never uniform) --- */
+  --sp-xs:    6px;
+  --sp-sm:   10px;
+  --sp-md:   14px;
+  --sp-lg:   22px;
+  --sp-xl:   28px;
+  --sp-xxl:  36px;
+  --sp-xxxl: 48px;
+
+  /* --- Radius --- */
+  --r-pill: 999px;
+  --r-xs:    4px;
+  --r-sm:    6px;
+  --r-md:    8px;
+  --r-lg:   12px;
+  --r-xl:   14px;
+
+  /* --- Motion (ease-out-quart, no bounce) --- */
+  --ease:   cubic-bezier(0.215, 0.61, 0.355, 1);
+  --t-fast: 150ms;
+  --t-mid:  200ms;
+  --t-slow: 400ms;
+}
+
+/* --- Reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--bg-base); }
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--ink-hi);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+  font-feature-settings: 'cv11', 'ss01';
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- Tabular numerics (Tabular-Numeric Rule, no exceptions) --- */
+.num, .ds-num, td.num, th.num,
+.ds-metric-val, .ds-metric-lead-val,
+.ds-stat-val, .ds-tool-count, .ds-tool-rank,
+code, .ds-mono, time {
+  font-variant-numeric: tabular-nums;
+}
+
+code, .ds-mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* --- Type scale utility classes --- */
+.ds-display     { font-size: 32px; font-weight: 700; line-height: 1.1;  letter-spacing: -0.02em; }
+.ds-headline    { font-size: 20px; font-weight: 600; line-height: 1.25; letter-spacing: -0.01em; }
+.ds-body-strong { font-size: 13px; font-weight: 500; line-height: 1.5; }
+.ds-body        { font-size: 13px; font-weight: 400; line-height: 1.5; }
+.ds-label       { font-size: 11px;  font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.3; }
+.ds-micro       { font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em;  text-transform: uppercase; line-height: 1.3; }
+
+/* --- Focus rings (WCAG AA, replaces outline:none antipattern) --- */
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+:focus:not(:focus-visible) { outline: none; }
+
+/* --- Reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- Selection --- */
+::selection { background: var(--gold-tint); color: var(--ink-hi); }

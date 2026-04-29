@@ -2922,7 +2922,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', async function() {
             // Set the correct hash
-            const correctHash = await hashPassword('tmw');
+            const correctHash = await hashPassword('Adhi');
             window.correctHash = correctHash;
 
             setupEventListeners();
@@ -3040,7 +3040,7 @@
         }
 
         function checkAuthStatus() {
-            const isAuthenticated = sessionStorage.getItem('tmw_authenticated');
+            const isAuthenticated = sessionStorage.getItem('tmw_auth');
             if (isAuthenticated === 'true') {
                 showDashboard();
             } else {
@@ -3054,7 +3054,7 @@
             const hash = await hashPassword(password);
 
             if (hash === window.correctHash) {
-                sessionStorage.setItem('tmw_authenticated', 'true');
+                sessionStorage.setItem('tmw_auth', 'true');
                 document.getElementById('password').value = '';
                 document.getElementById('loginError').classList.remove('show');
                 showDashboard();
@@ -3065,7 +3065,7 @@
         }
 
         function handleLogout() {
-            sessionStorage.removeItem('tmw_authenticated');
+            sessionStorage.removeItem('tmw_auth');
             showLogin();
             document.getElementById('password').focus();
         }

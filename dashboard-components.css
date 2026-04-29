@@ -1,7 +1,7 @@
 /* ============================================================
  * TrackMyWings Internal Dashboards — Component Library
  * Concatenated from 12 partials in /components/
- * Built: 2026-04-30T00:44:05
+ * Built: 2026-04-30T02:29:14
  * Edit individual partials, then re-run build_dashboard_assets.py.
  * ============================================================ */
 
@@ -83,6 +83,17 @@
 @media (max-width: 700px) {
   .ds-top { flex-direction: column; align-items: flex-start; }
   .ds-nav { width: 100%; }
+}
+
+/* --- Phone-tighter chrome --- */
+@media (max-width: 480px) {
+  .ds-wrap { padding: var(--sp-md) var(--sp-sm) var(--sp-xl); }
+  .ds-top { padding-bottom: var(--sp-md); margin-bottom: var(--sp-lg); gap: var(--sp-md); }
+  .ds-top-logo { width: 32px; height: 32px; }
+  .ds-top .ds-lede { font-size: 12px; }
+  .ds-nav { gap: 4px; }
+  .ds-nav a, .ds-nav button { padding: 6px 10px; font-size: 12px; }
+  .ds-meta { gap: var(--sp-md); font-size: 10.5px; }
 }
 
 /* === Component: Buttons =============================================
@@ -195,6 +206,20 @@
 .ds-metric.tone-danger .ds-metric-val { color: var(--danger); }
 .ds-metric.tone-gold .ds-metric-val { color: var(--gold); }
 
+/* --- Phone-only smaller metric values + tighter padding --- */
+@media (max-width: 700px) {
+  .ds-metric { padding: var(--sp-md) var(--sp-md); }
+  .ds-metric-val { font-size: 24px; margin-top: var(--sp-sm); }
+  .ds-metric-lead .ds-metric-val { font-size: 30px; }
+  .ds-metric-sub { font-size: 11px; }
+}
+@media (max-width: 480px) {
+  .ds-metric { padding: var(--sp-sm) var(--sp-md); }
+  .ds-metric-val { font-size: 22px; }
+  .ds-metric-lead .ds-metric-val { font-size: 26px; }
+  .ds-metrics { gap: var(--sp-sm); margin-bottom: var(--sp-xl); }
+}
+
 /* === Component: Section Head + Chart Frame =========================
  * Section heads sit directly on the page (no card wrapping).
  * Chart frames wrap content where containment helps readability.
@@ -249,6 +274,18 @@
 }
 
 canvas { max-height: 320px; }
+
+/* --- Phone-only tighter sections + smaller chart heights --- */
+@media (max-width: 700px) {
+  .ds-section { margin-bottom: var(--sp-xxl); }
+  .ds-frame { padding: var(--sp-md); }
+  canvas { max-height: 240px; }
+  .ds-section-head { gap: var(--sp-sm); flex-wrap: wrap; }
+}
+@media (max-width: 480px) {
+  .ds-section { margin-bottom: var(--sp-xl); }
+  canvas { max-height: 220px; }
+}
 
 /* === Component: Sortable Table =====================================
  * Dense data row. Body Strong text, tabular numerics, soft dividers.
@@ -324,6 +361,18 @@ canvas { max-height: 320px; }
   text-align: center;
   color: var(--ink-mid);
   font-size: 13px;
+}
+
+/* --- Phone: tighter cells, smaller text, scrollable parent (in tokens.css) --- */
+@media (max-width: 700px) {
+  .ds-table thead th { padding: 9px 10px; font-size: 9.5px; letter-spacing: 0.07em; }
+  .ds-table tbody td { padding: 9px 10px; font-size: 12px; }
+  .ds-table .num { font-size: 11.5px; }
+}
+@media (max-width: 480px) {
+  .ds-table thead th { padding: 8px 8px; }
+  .ds-table tbody td { padding: 8px 8px; font-size: 11.5px; }
+  .ds-table-empty { padding: 24px 10px; }
 }
 
 /* === Component: Badge ==============================================
@@ -427,6 +476,17 @@ select.ds-filter {
 }
 .ds-filter-clear:hover { color: var(--gold); border-color: var(--gold); }
 
+/* --- Phone: filters stack full-width, no min-width forcing overflow --- */
+@media (max-width: 700px) {
+  .ds-filters { gap: var(--sp-xs); }
+  .ds-filter { min-width: 0; flex: 1 1 calc(50% - var(--sp-xs)); padding: 8px 11px; font-size: 12.5px; }
+  .ds-filter-search { flex: 1 1 100%; }
+  .ds-filter-clear { padding: 8px 11px; font-size: 12px; }
+}
+@media (max-width: 480px) {
+  .ds-filter { flex: 1 1 100%; }
+}
+
 /* === Component: Modal ==============================================
  * Scrim, not lift. Modal sits on the page; backdrop is a flat tint.
  * No backdrop-filter, no box-shadow on the surface.
@@ -516,6 +576,15 @@ select.ds-filter {
   letter-spacing: -0.01em;
 }
 
+/* --- Phone: modal padding tighter, full-bleed feel --- */
+@media (max-width: 700px) {
+  .ds-scrim { padding: var(--sp-sm); }
+  .ds-modal { padding: var(--sp-lg); }
+  .ds-modal-title { font-size: 17px; }
+  .ds-modal-grid { gap: var(--sp-sm); }
+  .ds-modal-stat .val { font-size: 17px; }
+}
+
 /* === Component: Login Card =========================================
  * First surface every fresh session sees. Logo lockup centerpiece.
  * No glassmorphism, no drop shadow, no transform.
@@ -595,6 +664,14 @@ select.ds-filter {
 }
 .ds-login-err.show { display: block; }
 
+/* --- Phone: login lockup tightens --- */
+@media (max-width: 480px) {
+  .ds-login-card { padding: var(--sp-xl) var(--sp-lg); min-width: 280px; }
+  .ds-login-logo { width: 64px; height: 64px; margin-bottom: var(--sp-md); }
+  .ds-login-title { font-size: 19px; }
+  .ds-login-sub { font-size: 11.5px; }
+}
+
 /* === Component: Tool Row (Signature Primitive) =====================
  * Ranked list with proportional bar viz. Used for tool leaderboards,
  * top-projects in modals, dept-task counts. Per Signal Gold Rule, only
@@ -659,6 +736,14 @@ select.ds-filter {
   background: var(--gold);
   border-radius: 2px;
   transition: width var(--t-slow) var(--ease);
+}
+
+/* --- Phone: tighter tool rows --- */
+@media (max-width: 480px) {
+  .ds-tool-row { padding: 9px var(--sp-md); gap: var(--sp-sm); }
+  .ds-tool-rank { font-size: 11px; }
+  .ds-tool-name { font-size: 13px; }
+  .ds-tool-count { font-size: 12px; }
 }
 
 /* === Component: Milestone Strip (Hero) =============================
@@ -780,6 +865,18 @@ select.ds-filter {
 
 @media (max-width: 900px) {
   .ds-milestone-rail { grid-template-columns: repeat(5, 200px); }
+}
+
+/* --- Phone: milestone rail tightens. Already horizontal-scrolls; just shrink the cards. --- */
+@media (max-width: 700px) {
+  .ds-milestone-rail { grid-template-columns: repeat(5, 170px); }
+  .ds-milestone-title { font-size: 12px; }
+  .ds-milestone-note { font-size: 11px; }
+}
+@media (max-width: 480px) {
+  .ds-milestone-rail { grid-template-columns: repeat(5, 150px); }
+  .ds-milestone.keystone .ds-milestone-dot { width: 44px; height: 44px; margin-top: -14px; }
+  .ds-milestone-date { font-size: 9.5px; }
 }
 
 /* === Component: Stale-Data Banner ==================================

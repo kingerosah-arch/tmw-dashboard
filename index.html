@@ -1,2202 +1,478 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="1800">
-    <title>TrackMyWings - Task Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #0e132f 0%, #1a1f3d 100%);
-            color: #ffefc2;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        /* ===== LOGIN SCREEN ===== */
-        .login-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0e132f 0%, #1a1f3d 100%);
-        }
-
-        .login-container {
-            background: rgba(26, 31, 61, 0.95);
-            border: 1px solid rgba(160, 110, 155, 0.2);
-            border-radius: 16px;
-            padding: 48px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .login-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
-        }
-
-        .login-header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #f2b95f 0%, #ceabca 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
-        }
-
-        .login-header p {
-            font-size: 14px;
-            color: #978cb5;
-        }
-
-        .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .password-field {
-            position: relative;
-        }
-
-        .password-field label {
-            display: block;
-            font-size: 12px;
-            font-weight: 600;
-            color: #ceabca;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .password-field input {
-            width: 100%;
-            padding: 12px 16px;
-            background: rgba(14, 19, 47, 0.7);
-            border: 1px solid rgba(160, 110, 155, 0.3);
-            border-radius: 8px;
-            color: #ffefc2;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .password-field input:focus {
-            outline: none;
-            border-color: #a06e9b;
-            background: rgba(14, 19, 47, 0.9);
-            box-shadow: 0 0 0 3px rgba(160, 110, 155, 0.1);
-        }
-
-        .login-btn {
-            padding: 12px 24px;
-            background: #f2b95f;
-            color: #0e132f;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            background: #b28134;
-            box-shadow: 0 8px 20px rgba(242, 185, 95, 0.4);
-        }
-
-        .login-btn:active {
-            transform: translateY(0);
-        }
-
-        .login-error {
-            display: none;
-            padding: 12px;
-            background: rgba(220, 38, 38, 0.1);
-            border: 1px solid rgba(220, 38, 38, 0.3);
-            border-radius: 6px;
-            color: #fca5a5;
-            font-size: 13px;
-            text-align: center;
-            animation: shake 0.5s ease-in-out;
-        }
-
-        .login-error.show {
-            display: block;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-
-        /* ===== DASHBOARD SCREEN ===== */
-        .dashboard-screen {
-            display: none;
-        }
-
-        .dashboard-header {
-            background: rgba(14, 19, 47, 0.8);
-            border-bottom: 1px solid rgba(160, 110, 155, 0.2);
-            padding: 24px 32px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .header-branding {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-icon {
-            font-size: 32px;
-        }
-
-        .header-branding h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ffefc2;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
-
-        .last-updated {
-            font-size: 12px;
-            color: #978cb5;
-        }
-
-        .logout-btn {
-            padding: 8px 16px;
-            background: rgba(220, 38, 38, 0.15);
-            color: #fca5a5;
-            border: 1px solid rgba(220, 38, 38, 0.3);
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background: rgba(220, 38, 38, 0.25);
-            border-color: rgba(220, 38, 38, 0.5);
-        }
-
-        .filters-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .filter-label {
-            font-size: 12px;
-            color: #978cb5;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .filter-select, .search-input {
-            padding: 8px 12px;
-            background: rgba(14, 19, 47, 0.7);
-            border: 1px solid rgba(160, 110, 155, 0.2);
-            border-radius: 6px;
-            color: #ffefc2;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .filter-select:focus, .search-input:focus {
-            outline: none;
-            border-color: #a06e9b;
-            background: rgba(14, 19, 47, 0.9);
-        }
-
-        .search-input {
-            min-width: 200px;
-            cursor: text;
-        }
-
-        .dashboard-content {
-            padding: 32px;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* ===== STATS SECTION ===== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .stat-card {
-            background: rgba(48, 33, 84, 0.6);
-            border: 1px solid rgba(160, 110, 155, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .stat-card:hover {
-            border-color: rgba(160, 110, 155, 0.4);
-            background: rgba(48, 33, 84, 0.8);
-            transform: translateY(-2px);
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: #978cb5;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #f2b95f;
-        }
-
-        /* ===== TABLES ===== */
-        .section {
-            margin-bottom: 32px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .section-header h2 {
-            font-size: 18px;
-            font-weight: 700;
-            color: #ffefc2;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .section-toggle {
-            font-size: 20px;
-            transition: transform 0.3s ease;
-            color: #f2b95f;
-            min-width: 44px;
-            min-height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .section-toggle.collapsed {
-            transform: rotate(-90deg);
-        }
-
-        .section-content {
-            max-height: 50000px;
-            overflow: visible;
-            transition: max-height 0.3s ease;
-        }
-
-        .section-content.collapsed {
-            max-height: 0;
-            overflow: hidden;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(26, 31, 61, 0.6);
-            border: 1px solid rgba(160, 110, 155, 0.2);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        thead {
-            background: rgba(48, 33, 84, 0.9);
-            border-bottom: 1px solid rgba(160, 110, 155, 0.2);
-        }
-
-        th {
-            padding: 14px 16px;
-            text-align: left;
-            font-size: 12px;
-            font-weight: 700;
-            color: #978cb5;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        td {
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(160, 110, 155, 0.1);
-            font-size: 13px;
-            color: #ceabca;
-        }
-
-        tbody tr:hover {
-            background: rgba(76, 62, 112, 0.3);
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .task-id {
-            font-weight: 600;
-            color: #f2b95f;
-            font-family: 'Courier New', monospace;
-        }
-
-        .task-name {
-            color: #ffefc2;
-            max-width: 300px;
-            word-wrap: break-word;
-        }
-
-        /* ===== BADGES ===== */
-        .badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
-        }
-
-        .priority-high {
-            background: #773c71;
-            color: #ffefc2;
-            border: none;
-        }
-
-        .priority-medium {
-            background: #b28134;
-            color: #ffefc2;
-            border: none;
-        }
-
-        .priority-low {
-            background: #4c3e70;
-            color: #ceabca;
-            border: none;
-        }
-
-        .status-not-started {
-            background: #6a719a;
-            color: #ffefc2;
-            border: none;
-        }
-
-        .status-wip {
-            background: #a06e9b;
-            color: #ffefc2;
-            border: none;
-        }
-
-        .status-draft-ready {
-            background: #a06e9b;
-            color: #ffefc2;
-            border: none;
-        }
-
-        .status-under-review {
-            background: #a06e9b;
-            color: #ffefc2;
-            border: none;
-        }
-
-        /* ===== SORTABLE HEADERS ===== */
-        th.sortable {
-            cursor: pointer;
-            user-select: none;
-            position: relative;
-            padding-right: 22px;
-            transition: color 0.2s ease;
-        }
-
-        th.sortable:hover {
-            color: #f2b95f;
-        }
-
-        th.sortable::after {
-            content: '⇅';
-            position: absolute;
-            right: 4px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 10px;
-            opacity: 0.4;
-        }
-
-        th.sortable.sort-asc::after {
-            content: '▲';
-            opacity: 0.9;
-            color: #f2b95f;
-        }
-
-        th.sortable.sort-desc::after {
-            content: '▼';
-            opacity: 0.9;
-            color: #f2b95f;
-        }
-
-        /* ===== DEADLINE & OVERDUE ===== */
-        .deadline-overdue {
-            color: #dc2626;
-            font-weight: 700;
-        }
-
-        .deadline-overdue::before {
-            content: '🔴 ';
-        }
-
-        .deadline-due-soon {
-            color: #f2b95f;
-            font-weight: 600;
-        }
-
-        .deadline-due-soon::before {
-            content: '🟡 ';
-        }
-
-        .deadline-on-track {
-            color: #a06e9b;
-        }
-
-        .deadline-none {
-            color: #6a719a;
-        }
-
-        tr.row-overdue {
-            border-left: 3px solid #dc2626;
-        }
-
-        tr.row-due-soon {
-            border-left: 3px solid #f2b95f;
-        }
-
-        /* ===== HIGHLIGHT CLASSES ===== */
-        @keyframes pulse-gold {
-            0%, 100% { border-color: #f2b95f; box-shadow: 0 0 0 0 rgba(242, 185, 95, 0.7); }
-            50% { border-color: #ba9c4a; box-shadow: 0 0 0 4px rgba(242, 185, 95, 0.3); }
-        }
-
-        tr.highlight-overdue {
-            animation: pulse-gold 3s ease-in-out 1;
-            border-left: 3px solid #f2b95f !important;
-        }
-
-        tr.highlight-stale {
-            animation: pulse-gold 3s ease-in-out 1;
-            border-left: 3px solid #ba9c4a !important;
-        }
-
-        /* ===== ACTIVITY FEED ===== */
-        .activity-feed {
-            background: rgba(26, 31, 61, 0.6);
-            border: 1px solid rgba(160, 110, 155, 0.2);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 32px;
-        }
-
-        .activity-feed h3 {
-            font-size: 15px;
-            font-weight: 700;
-            color: #ffefc2;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .feed-items {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .feed-item {
-            display: grid;
-            grid-template-columns: 24px 1fr auto;
-            gap: 10px;
-            align-items: start;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(160, 110, 155, 0.1);
-            font-size: 13px;
-        }
-
-        .feed-item:last-child {
-            border-bottom: none;
-        }
-
-        .feed-icon {
-            font-size: 16px;
-            text-align: center;
-            padding-top: 1px;
-        }
-
-        .feed-text {
-            color: #ceabca;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            line-height: 1.4;
-        }
-
-        .feed-time {
-            font-size: 11px;
-            color: #6a719a;
-            white-space: nowrap;
-            padding-top: 2px;
-        }
-
-        /* ===== VIEW TOGGLE ===== */
-        .view-toggle {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .view-btn {
-            padding: 8px 14px;
-            background: rgba(48, 33, 84, 0.6);
-            border: 1px solid rgba(160, 110, 155, 0.2);
-            border-radius: 6px;
-            color: #ceabca;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .view-btn:hover {
-            border-color: rgba(160, 110, 155, 0.4);
-            background: rgba(48, 33, 84, 0.8);
-        }
-
-        .view-btn.active {
-            background: #f2b95f;
-            color: #0e132f;
-            border-color: #f2b95f;
-        }
-
-        /* ===== KANBAN VIEW ===== */
-        #kanbanView {
-            display: none;
-        }
-
-        .kanban-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-
-        .kanban-column {
-            background: rgba(26, 31, 61, 0.6);
-            border: 1px solid rgba(160, 110, 155, 0.2);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .kanban-header {
-            background: rgba(48, 33, 84, 0.8);
-            padding: 16px;
-            border-bottom: 1px solid rgba(160, 110, 155, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .kanban-header h3 {
-            font-size: 13px;
-            font-weight: 700;
-            color: #ffefc2;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .kanban-count {
-            background: #f2b95f;
-            color: #0e132f;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .kanban-cards {
-            padding: 16px;
-            flex: 1;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .kanban-card {
-            background: rgba(48, 33, 84, 0.6);
-            border-radius: 8px;
-            padding: 12px;
-            border-left: 4px solid;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 12px;
-        }
-
-        .kanban-card:hover {
-            transform: translateY(-2px);
-            background: rgba(48, 33, 84, 0.9);
-        }
-
-        .kanban-card.high {
-            border-left-color: #773c71;
-        }
-
-        .kanban-card.medium {
-            border-left-color: #b28134;
-        }
-
-        .kanban-card.low {
-            border-left-color: #4c3e70;
-        }
-
-        .kanban-id {
-            font-weight: 700;
-            color: #f2b95f;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-        }
-
-        .kanban-title {
-            color: #ceabca;
-            margin-top: 4px;
-            line-height: 1.3;
-            max-width: 100%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .kanban-badge {
-            display: inline-block;
-            padding: 2px 6px;
-            background: rgba(160, 110, 155, 0.3);
-            border-radius: 3px;
-            font-size: 10px;
-            color: #ceabca;
-            margin-top: 6px;
-        }
-
-        /* ===== TIMELINE & SECTIONS ===== */
-        .timeline {
-            display: flex;
-            overflow-x: auto;
-            gap: 0;
-            padding: 20px 0 12px;
-            position: relative;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .timeline::-webkit-scrollbar { display: none; }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 38px;
-            height: 2px;
-            background: linear-gradient(90deg, #4c3e70, #f2b95f, #4c3e70);
-        }
-
-        .milestone {
-            flex: 0 0 auto;
-            width: 140px;
-            text-align: center;
-            position: relative;
-            padding-top: 28px;
-        }
-
-        .milestone::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 30px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #f2b95f;
-            border: 2px solid #0e132f;
-            transform: translateX(-50%);
-            z-index: 2;
-        }
-
-        .milestone-date {
-            font-size: 10px;
-            color: #6a719a;
-            font-weight: 600;
-            margin-top: 16px;
-        }
-
-        .milestone-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #ffefc2;
-            margin-top: 2px;
-        }
-
-        .milestone-desc {
-            font-size: 10px;
-            color: #ceabca;
-            margin-top: 2px;
-            line-height: 1.3;
-            padding: 0 4px;
-        }
-
-        /* ===== DEPENDENCIES ===== */
-        .dependency-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: rgba(48, 33, 84, 0.4);
-            border: 1px solid rgba(160, 110, 155, 0.15);
-            border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 13px;
-        }
-
-        .dependency-from {
-            font-weight: 700;
-            color: #f2b95f;
-            font-family: 'Courier New', monospace;
-        }
-
-        .dependency-arrow {
-            color: #a06e9b;
-            font-weight: 700;
-        }
-
-        .dependency-to {
-            font-weight: 700;
-            color: #f2b95f;
-            font-family: 'Courier New', monospace;
-        }
-
-        .dependency-reason {
-            color: #6a719a;
-            font-size: 11px;
-        }
-
-        .dependency-status {
-            margin-left: auto;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        /* ===== CALENDAR ===== */
-        .week-view {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            margin-bottom: 32px;
-        }
-
-        .day-column {
-            background: rgba(48, 33, 84, 0.4);
-            border: 1px solid rgba(160, 110, 155, 0.15);
-            border-radius: 8px;
-            padding: 12px;
-            min-height: 200px;
-        }
-
-        .day-column.today {
-            border: 2px solid #f2b95f;
-            background: rgba(242, 185, 95, 0.1);
-        }
-
-        .day-date {
-            font-size: 12px;
-            font-weight: 700;
-            color: #f2b95f;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 8px;
-        }
-
-        .day-events {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .calendar-event {
-            background: rgba(160, 110, 155, 0.3);
-            border-left: 3px solid #a06e9b;
-            padding: 6px 8px;
-            border-radius: 4px;
-            font-size: 11px;
-            color: #ceabca;
-            line-height: 1.3;
-        }
-
-        .calendar-event-time {
-            font-weight: 600;
-            color: #f2b95f;
-            display: block;
-            font-size: 10px;
-        }
-
-        /* ===== CHARTS ===== */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .chart-card {
-            background: rgba(26, 31, 61, 0.6);
-            border: 1px solid rgba(160, 110, 155, 0.2);
-            border-radius: 12px;
-            padding: 24px;
-            min-height: 300px;
-        }
-
-        .chart-card h3 {
-            font-size: 15px;
-            font-weight: 700;
-            color: #ffefc2;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 250px;
-            overflow-x: auto;
-        }
-
-
-        /* ===== EMPTY STATE ===== */
-        .empty-message {
-            text-align: center;
-            padding: 40px 20px;
-            color: #6a719a;
-            font-size: 14px;
-        }
-
-        /* ===== SCROLLBAR STYLING ===== */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #4c3e70;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #a06e9b;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #b28134;
-        }
-
-        /* ===== RESPONSIVE — TABLET (769px-1024px) ===== */
-        @media (max-width: 1024px) {
-            .kanban-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .week-view {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        /* ===== RESPONSIVE — MOBILE (375px-768px) ===== */
-        @media (max-width: 768px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 12px;
-            }
-
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .chart-card {
-                min-height: 250px;
-            }
-
-            .kanban-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .week-view {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .timeline {
-                padding: 16px 0;
-            }
-
-            .milestone::before {
-                left: -28px;
-            }
-
-            table thead {
-                display: none;
-            }
-
-            table tbody {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            table tr {
-                display: block;
-                background: rgba(26, 31, 61, 0.8);
-                border: 1px solid rgba(160, 110, 155, 0.15);
-                border-radius: 8px;
-                padding: 12px;
-                border-left: 3px solid #f2b95f;
-                margin-bottom: 0;
-            }
-
-            table td {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                padding: 6px 0;
-                border-bottom: none;
-                flex-wrap: wrap;
-            }
-
-            table td::before {
-                content: attr(data-label);
-                font-weight: 600;
-                color: #f2b95f;
-                margin-right: 8px;
-                min-width: 80px;
-                flex-shrink: 0;
-            }
-
-            .section-toggle {
-                min-width: 44px;
-                min-height: 44px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
-            }
-
-            .section-header h2 {
-                font-size: 15px;
-            }
-        }
-
-        /* ===== RESPONSIVE — MOBILE (iPhone 375px) ===== */
-        @media (max-width: 480px) {
-            html, body {
-                -webkit-text-size-adjust: 100%;
-                overflow-x: hidden;
-                overflow-y: auto;
-                -webkit-overflow-scrolling: touch;
-                height: auto;
-                min-height: 100vh;
-            }
-
-            .dashboard-header {
-                padding: 12px;
-                position: sticky;
-                top: 0;
-                z-index: 100;
-                background: rgba(14, 19, 47, 0.97);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-            }
-
-            .header-top {
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                gap: 8px;
-                margin-bottom: 12px;
-            }
-
-            .header-icon {
-                font-size: 24px;
-            }
-
-            .header-branding h1 {
-                font-size: 16px;
-            }
-
-            .header-actions {
-                gap: 8px;
-            }
-
-            .last-updated {
-                display: none;
-            }
-
-            .logout-btn {
-                padding: 6px 10px;
-                font-size: 11px;
-            }
-
-            /* Filters — vertical stack on mobile */
-            .filters-row {
-                flex-direction: column;
-                flex-wrap: nowrap;
-                overflow-x: visible;
-                gap: 10px;
-                padding-bottom: 8px;
-            }
-
-            .filter-group {
-                flex-direction: column;
-                flex-shrink: 0;
-                width: 100%;
-                gap: 4px;
-            }
-
-            .filter-label {
-                display: block;
-                font-size: 11px;
-                color: #f2b95f;
-                font-weight: 600;
-            }
-
-            .filter-select {
-                width: 100%;
-                min-width: unset;
-                padding: 12px 14px;
-                font-size: 14px;
-                -webkit-appearance: none;
-                appearance: none;
-                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23f2b95f' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-                background-repeat: no-repeat;
-                background-position: right 12px center;
-                background-size: 12px;
-                border-radius: 8px;
-                touch-action: manipulation;
-            }
-
-            .filter-select:focus {
-                outline: 2px solid #f2b95f;
-                outline-offset: -2px;
-            }
-
-            .search-input {
-                min-width: unset;
-                width: 100%;
-                flex-shrink: 0;
-                font-size: 14px;
-                padding: 12px 14px;
-                border-radius: 8px;
-            }
-
-            /* Content area */
-            .dashboard-content {
-                padding: 12px;
-            }
-
-            /* Stats — 2 columns, compact */
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 8px;
-                margin-bottom: 20px;
-            }
-
-            .stat-card {
-                padding: 12px;
-                border-radius: 8px;
-            }
-
-            .stat-label {
-                font-size: 10px;
-                margin-bottom: 4px;
-            }
-
-            .stat-value {
-                font-size: 20px;
-            }
-
-            /* Charts — stack vertically on mobile */
-            .charts-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-                margin-bottom: 20px;
-            }
-
-            .chart-card {
-                padding: 16px;
-                min-height: 250px;
-                border-radius: 8px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            /* Department health chart needs extra height for horizontal bars */
-            .chart-card[style*="grid-column"] {
-                min-height: 300px;
-            }
-
-            .chart-card[style*="grid-column"] .chart-container {
-                height: 250px !important;
-            }
-
-            .chart-card h3 {
-                font-size: 13px;
-                margin-bottom: 12px;
-            }
-
-            .chart-container {
-                height: 180px;
-            }
-
-            /* Section headers — bigger tap target */
-            .section {
-                margin-bottom: 20px;
-            }
-
-            .section-header {
-                padding: 12px 0;
-                margin-bottom: 8px;
-            }
-
-            .section-header h2 {
-                font-size: 15px;
-            }
-
-            /* Tables — card layout on mobile */
-            .table-wrapper {
-                overflow-x: visible;
-                overflow-y: visible;
-            }
-
-            table {
-                display: block;
-                border: none;
-                background: none;
-            }
-
-            table tbody {
-                display: flex;
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            table tr {
-                display: flex;
-                flex-direction: column;
-                background: rgba(26, 31, 61, 0.8);
-                border: 1px solid rgba(160, 110, 155, 0.15);
-                border-radius: 8px;
-                padding: 12px;
-                border-left: 3px solid #f2b95f;
-                gap: 6px;
-            }
-
-            table tr:hover {
-                background: rgba(26, 31, 61, 0.95);
-            }
-
-            table td {
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                padding: 2px 0;
-                border-bottom: none;
-                font-size: 13px;
-                line-height: 1.4;
-                flex-wrap: wrap;
-            }
-
-            table td::before {
-                content: attr(data-label);
-                font-size: 10px;
-                font-weight: 700;
-                color: #f2b95f;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-                min-width: 70px;
-                flex-shrink: 0;
-                padding-top: 2px;
-            }
-
-            .task-name {
-                max-width: none;
-                text-align: right;
-            }
-
-            .task-id {
-                font-size: 12px;
-            }
-
-            .badge {
-                font-size: 10px;
-                padding: 3px 8px;
-            }
-
-            /* Login screen mobile */
-            .login-container {
-                padding: 28px 20px;
-                margin: 12px;
-                border-radius: 12px;
-            }
-
-            .login-icon {
-                font-size: 36px;
-            }
-
-            .login-header h1 {
-                font-size: 22px;
-            }
-
-            .login-form input[type="password"],
-            .password-field input {
-                font-size: 16px;
-                padding: 14px;
-            }
-
-            .login-btn {
-                padding: 14px;
-                font-size: 15px;
-            }
-
-            /* View toggle on mobile */
-            .view-toggle {
-                gap: 4px;
-            }
-
-            .view-btn {
-                flex: 1;
-                padding: 6px 8px;
-                font-size: 10px;
-            }
-
-            /* Activity feed on mobile */
-            .activity-feed {
-                padding: 12px;
-                margin-bottom: 16px;
-            }
-
-            .activity-feed h3 {
-                font-size: 13px;
-                margin-bottom: 12px;
-            }
-
-            .feed-items {
-                max-height: 250px;
-            }
-
-            .feed-item {
-                grid-template-columns: 16px 1fr auto;
-                gap: 8px;
-                padding: 8px 0;
-                font-size: 12px;
-            }
-
-            .feed-icon {
-                font-size: 14px;
-            }
-
-            .feed-time {
-                font-size: 10px;
-            }
-
-            /* Kanban on mobile */
-            .kanban-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .kanban-header {
-                padding: 12px;
-            }
-
-            .kanban-cards {
-                padding: 12px;
-                gap: 8px;
-                max-height: 300px;
-            }
-
-            .kanban-card {
-                padding: 10px;
-            }
-
-            /* Timeline on mobile */
-            .week-view {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-
-            .day-column {
-                padding: 10px;
-                min-height: 150px;
-            }
-
-            .day-date {
-                font-size: 11px;
-                margin-bottom: 6px;
-            }
-
-            .calendar-event {
-                padding: 5px 6px;
-                font-size: 10px;
-            }
-
-            .calendar-event-time {
-                font-size: 9px;
-            }
-
-            /* Timeline milestones on mobile — horizontal scroll */
-            .timeline {
-                gap: 0;
-                padding: 16px 0 8px;
-            }
-
-            .milestone {
-                width: 120px;
-            }
-
-            .milestone-date {
-                font-size: 9px;
-            }
-
-            .milestone-title {
-                font-size: 11px;
-            }
-
-            .milestone-desc {
-                font-size: 9px;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-
-            /* Dependencies on mobile */
-            .dependency-item {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 10px;
-            }
-
-            .dependency-status {
-                margin-left: 0;
-                margin-top: 4px;
-            }
-        }
-
-        /* ===== PRINT STYLES ===== */
-        @media print {
-            body {
-                background: white !important;
-                color: #1a1f3d !important;
-                font-size: 11px;
-            }
-
-            .login-screen, .logout-btn, .view-toggle, .filters-row,
-            .dashboard-header, .section-toggle {
-                display: none !important;
-            }
-
-            .dashboard-screen {
-                display: block !important;
-            }
-
-            .dashboard-content {
-                padding: 0 !important;
-            }
-
-            .stat-card, .chart-card, .activity-feed, .section,
-            .kanban-card, .day-column, .dependency-item {
-                background: white !important;
-                border: 1px solid #ddd !important;
-                color: #1a1f3d !important;
-                box-shadow: none !important;
-                break-inside: avoid;
-            }
-
-            .section-content {
-                max-height: none !important;
-                overflow: visible !important;
-                display: block !important;
-            }
-
-            .section-content.collapsed {
-                max-height: none !important;
-                overflow: visible !important;
-                display: block !important;
-            }
-
-            .stat-label, .feed-text, .milestone-desc,
-            .dependency-reason, h2, h3 {
-                color: #333 !important;
-            }
-
-            .stat-value, .milestone-title, .section-header h2 {
-                color: #1a1f3d !important;
-            }
-
-            .feed-time, .milestone-date {
-                color: #666 !important;
-            }
-
-            table {
-                display: table !important;
-            }
-
-            table thead {
-                display: table-header-group !important;
-            }
-
-            table tr {
-                display: table-row !important;
-                background: white !important;
-                border: none !important;
-                border-bottom: 1px solid #eee !important;
-            }
-
-            table td {
-                display: table-cell !important;
-                color: #333 !important;
-                border-bottom: 1px solid #eee !important;
-            }
-
-            table td::before {
-                display: none !important;
-            }
-
-            table th {
-                background: #f5f5f5 !important;
-                color: #1a1f3d !important;
-            }
-
-            .badge {
-                border: 1px solid #999 !important;
-                color: #333 !important;
-                background: #f0f0f0 !important;
-            }
-
-            .charts-grid {
-                display: none !important;
-            }
-
-            a { color: #1a1f3d !important; }
-
-            @page {
-                margin: 1cm;
-                size: A4 landscape;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="1800">
+  <title>TMW — Tasks</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="dashboard-tokens.css">
+  <link rel="stylesheet" href="dashboard-components.css">
+  <style>
+    /* Page-specific tweaks — shared components carry all structural styling */
+    .ds-top { position: sticky; top: 0; z-index: 40; background: var(--bg-base); }
+    .ds-filters { position: sticky; top: 73px; z-index: 30; background: var(--bg-base);
+      padding: var(--sp-sm) 0; border-bottom: 1px solid var(--line-soft); margin-bottom: var(--sp-lg); }
+    .view-toggle { display: flex; gap: var(--sp-xs); margin-bottom: var(--sp-md); }
+    .view-btn { }
+    .view-btn.active { color: var(--ink-hi); border-color: var(--gold); background: var(--gold-tint-soft); }
+    .kanban-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-md); }
+    @media (max-width: 900px) { .kanban-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .kanban-grid { grid-template-columns: 1fr; } }
+    .kanban-col-head { display: flex; justify-content: space-between; align-items: center;
+      padding: var(--sp-sm) var(--sp-md); border-bottom: 1px solid var(--line-soft);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mid); }
+    .kanban-col-count { font-variant-numeric: tabular-nums; color: var(--ink-low); }
+    .kanban-cards { padding: var(--sp-sm); display: flex; flex-direction: column; gap: var(--sp-xs); }
+    .kanban-card { background: var(--bg-base); border: 1px solid var(--line-soft); border-radius: var(--r-sm);
+      padding: var(--sp-sm) var(--sp-md); }
+    .kanban-card:hover { background: var(--bg-elev); }
+    .kanban-card-id { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: var(--ink-low);
+      font-variant-numeric: tabular-nums; margin-bottom: 3px; }
+    .kanban-card-title { font-size: 12px; font-weight: 500; color: var(--ink-hi); line-height: 1.4;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .kanban-card-foot { margin-top: var(--sp-xs); display: flex; gap: var(--sp-xs); align-items: center; flex-wrap: wrap; }
+    .dep-item { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-xs);
+      padding: var(--sp-sm) var(--sp-md); border-bottom: 1px solid var(--line-soft); font-size: 13px; }
+    .dep-item:last-child { border-bottom: none; }
+    .dep-arrow { color: var(--ink-low); font-size: 11px; }
+    .dep-reason { color: var(--ink-mid); font-size: 11.5px; }
+    .feed-item { display: grid; grid-template-columns: 1fr auto; gap: var(--sp-sm);
+      padding: var(--sp-sm) var(--sp-md); border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-event { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 4px; }
+    .feed-event.ev-completed { color: var(--plum); }
+    .feed-event.ev-created { color: var(--gold); }
+    .feed-event.ev-other { color: var(--ink-low); }
+    .feed-time { color: var(--ink-low); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .cal-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); border-radius: var(--r-md); overflow: hidden; }
+    .cal-day { background: var(--bg-card); padding: var(--sp-sm); min-height: 90px; }
+    .cal-day.today { background: var(--bg-elev); }
+    .cal-day-label { font-size: 10.5px; font-weight: 600; color: var(--ink-low); letter-spacing: 0.06em; margin-bottom: 4px; }
+    .cal-day.today .cal-day-label { color: var(--gold); }
+    .cal-event { background: var(--plum-tint); color: var(--plum); border-radius: var(--r-xs);
+      padding: 2px 5px; font-size: 10.5px; margin-bottom: 2px; line-height: 1.3; }
+    @media (max-width: 700px) { .cal-week { grid-template-columns: 1fr; } }
+    .section-head-btn { background: transparent; border: none; cursor: pointer; padding: 0;
+      text-align: left; width: 100%; display: flex; justify-content: space-between; align-items: baseline; }
+    .section-caret { color: var(--ink-low); font-size: 10px; transition: transform var(--t-fast) var(--ease); }
+    .section-caret.open { transform: rotate(180deg); }
+    .section-body { display: none; }
+    .section-body.open { display: block; }
+    .owner-badge { display: inline-block; padding: 2px 7px; background: var(--plum-tint);
+      color: var(--plum); border-radius: var(--r-xs); font-size: 10.5px; font-weight: 600; white-space: nowrap; }
+    .owner-badge.owner-rohan { background: var(--gold-tint); color: var(--gold); }
+    .ds-top-brand { display: flex; align-items: center; gap: var(--sp-md); }
+    .ds-top-text .ds-lede { margin-top: 0; }
+    .ds-top-right { display: flex; gap: var(--sp-sm); align-items: center; flex-wrap: wrap; }
+  </style>
 </head>
 <body>
-    <!-- LOGIN SCREEN -->
-    <div class="login-screen" id="loginScreen">
-        <div class="login-container">
-            <div class="login-header">
-                <div class="login-icon">✈️</div>
-                <h1>TrackMyWings</h1>
-                <p>Task Management Dashboard</p>
-            </div>
-            <form class="login-form" id="loginForm">
-                <div class="password-field">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter password" autofocus>
-                </div>
-                <button type="submit" class="login-btn">Enter</button>
-                <div class="login-error" id="loginError">Incorrect password</div>
-            </form>
-        </div>
+
+<!-- ===== LOGIN OVERLAY ===== -->
+<div class="ds-login-overlay" id="loginOverlay">
+  <form class="ds-login-card" id="loginForm" onsubmit="handleLogin(event)">
+    <img src="logo.jpeg" class="ds-login-logo" alt="TrackMyWings">
+    <h2 class="ds-login-title">TrackMyWings</h2>
+    <p class="ds-login-sub">Tasks</p>
+    <input class="ds-filter" type="password" id="password" placeholder="Password" autocomplete="current-password">
+    <button class="ds-btn-primary" type="submit">Unlock</button>
+    <div class="ds-login-err" id="loginErr">Incorrect password.</div>
+  </form>
+</div>
+
+<!-- ===== MAIN SHELL ===== -->
+<div class="ds-wrap" id="mainShell" style="display:none;">
+
+  <!-- Stale data banner -->
+  <div class="ds-stale" id="staleBanner">
+    <b>Data may be stale</b> — last rebuild was over 150 min ago. The hourly launchd job may have failed.
+    <code id="staleAge"></code>
+  </div>
+
+  <!-- TOP BAR -->
+  <header class="ds-top">
+    <div class="ds-top-brand">
+      <img src="logo.jpeg" class="ds-top-logo" alt="TMW">
+      <div class="ds-top-text">
+        <h1 class="ds-display" style="color:var(--ink-hi);letter-spacing:-0.02em;">Tasks</h1>
+        <p class="ds-lede">Operating cockpit. Hourly refresh.</p>
+      </div>
     </div>
-
-    <!-- DASHBOARD SCREEN -->
-    <div class="dashboard-screen" id="dashboardScreen">
-        <!-- Header -->
-        <div class="dashboard-header">
-            <div class="header-top">
-                <div class="header-branding">
-                    <div class="header-icon">✈️</div>
-                    <h1>TrackMyWings</h1>
-                </div>
-                <div class="header-actions">
-                    <div class="view-toggle">
-                        <button class="view-btn active" onclick="toggleView('table')">📊 Table</button>
-                        <button class="view-btn" onclick="toggleView('kanban')">📋 Kanban</button>
-                        <button class="view-btn" onclick="location.reload(true)" title="Hard refresh">🔄</button>
-                        <button class="view-btn" onclick="window.location.href='folder-map.html'">📂 Folder Map</button>
-                        <button class="view-btn" onclick="window.location.href='claude-usage.html'">🧠 Claude Usage</button>
-                    </div>
-                    <div class="last-updated">Last updated: 2026-04-30</span></div>
-                    <button class="logout-btn" id="logoutBtn">Logout</button>
-                </div>
-            </div>
-
-            <!-- Filters -->
-            <div class="filters-row">
-                <div class="filter-group">
-                    <label class="filter-label">🔍 Search</label>
-                    <input type="text" class="search-input" id="searchInput" placeholder="Search tasks...">
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Department</label>
-                    <select class="filter-select" id="departmentFilter">
-                        <option value="">All Departments</option>
-                        <option value="Legal">Legal</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Sales">Sales</option>
-                        <option value="Finance">Finance</option>
-                        <option value="Operations">Operations</option>
-                        <option value="Product">Product</option>
-                        <option value="Design">Design</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Strategy">Strategy</option>
-                        <option value="People">People</option>
-                        <option value="Self Learning">Self Learning</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Priority</label>
-                    <select class="filter-select" id="priorityFilter">
-                        <option value="">All Priorities</option>
-                        <option value="High">High</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Low">Low</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Status</label>
-                    <select class="filter-select" id="statusFilter">
-                        <option value="">All Status</option>
-                        <option value="Not Started">Not Started</option>
-                        <option value="WIP">WIP</option>
-                        <option value="Blocked">Blocked</option>
-                        <option value="Scheduled">Scheduled</option>
-                        <option value="Parked">Parked</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label class="filter-label">Owner</label>
-                    <select class="filter-select" id="ownerFilter">
-                        <option value="">All Owners</option>
-                        <option value="Rohan">Rohan</option>
-                        <option value="Amol">Amol</option>
-                        <option value="Ruchi">Ruchi</option>
-                        <option value="Adhi">Adhi</option>
-                        <option value="Claude">Claude</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- Content -->
-        <div class="dashboard-content">
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card" onclick="onStatCardClick('active')">
-                    <div class="stat-label">Active Tasks</div>
-                    <div class="stat-value" id="activeTasksCount">0</div>
-                </div>
-                <div class="stat-card" onclick="onStatCardClick('high-priority')">
-                    <div class="stat-label">High Priority</div>
-                    <div class="stat-value" id="highPriorityCount">0</div>
-                </div>
-                <div class="stat-card" onclick="onStatCardClick('completed')">
-                    <div class="stat-label">Completed Tasks</div>
-                    <div class="stat-value" id="completedCount">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Completion Rate</div>
-                    <div class="stat-value" id="completionRate">0%</div>
-                </div>
-            </div>
-
-            <!-- Charts -->
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <h3>Tasks by Department</h3>
-                    <div class="chart-container">
-                        <canvas id="departmentChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-card">
-                    <h3>Tasks by Priority</h3>
-                    <div class="chart-container">
-                        <canvas id="priorityChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Velocity & Insights Section -->
-            <div class="section" style="border-top: 2px solid rgba(59, 130, 246, 0.3); margin-top: 32px; padding-top: 24px;">
-                <h2 style="margin-bottom: 20px;"><span>⚡</span> Velocity & Insights</h2>
-
-                <div class="stats-grid">
-                    <div class="stat-card" onclick="onStatCardClick('today-velocity')">
-                        <div class="stat-label">Today's Velocity</div>
-                        <div class="stat-value" id="todayVelocity">0</div>
-                    </div>
-                    <div class="stat-card" onclick="onStatCardClick('this-week-velocity')">
-                        <div class="stat-label">This Week</div>
-                        <div class="stat-value" id="thisWeekVelocity">0</div>
-                    </div>
-                    <div class="stat-card" style="border-color: rgba(220, 38, 38, 0.3);" onclick="onStatCardClick('overdue')">
-                        <div class="stat-label">Overdue</div>
-                        <div class="stat-value" id="overdueCount" style="color: #dc2626;">0</div>
-                    </div>
-                    <div class="stat-card" style="border-color: rgba(242, 185, 95, 0.3);" onclick="onStatCardClick('stale')">
-                        <div class="stat-label">Stale Tasks</div>
-                        <div class="stat-value" id="staleCount" style="color: #f2b95f;">0</div>
-                    </div>
-                </div>
-
-                <div class="charts-grid" style="margin-top: 24px;">
-                    <div class="chart-card">
-                        <h3>Daily Velocity (14 days)</h3>
-                        <div class="chart-container">
-                            <canvas id="dailyVelocityChart"></canvas>
-                        </div>
-                    </div>
-                    <div class="chart-card">
-                        <h3>Weekly Velocity (4 weeks)</h3>
-                        <div class="chart-container">
-                            <canvas id="weeklyVelocityChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Activity Feed Section -->
-            <div class="activity-feed">
-                <h3>📡 Recent Activity</h3>
-                <div class="feed-items" id="activityFeedItems">
-                    <!-- JS rendered -->
-                </div>
-            </div>
-
-            <!-- Calendar Section -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2><span>📅</span> This Week's Calendar</h2>
-                    <span class="section-toggle">▼</span>
-                </div>
-                <div class="section-content">
-                    <div class="week-view" id="weekView">
-                        <!-- JS rendered -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Kanban View -->
-            <div id="kanbanView">
-                <div class="kanban-grid" id="kanbanGrid">
-                    <!-- JS rendered -->
-                </div>
-            </div>
-
-            <!-- Table Views Container -->
-            <div id="tableViewsContainer">
-
-            <!-- Department Health Section -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2><span>🏥</span> Department Health <span id="deptHealthToggle"></span></h2>
-                    <span class="section-toggle">▼</span>
-                </div>
-                <div class="section-content">
-                    <div class="charts-grid">
-                        <div class="chart-card" style="grid-column: 1 / -1;">
-                            <h3>Active Tasks by Department</h3>
-                            <div class="chart-container">
-                                <canvas id="departmentHealthChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="table-wrapper" style="margin-top: 24px;">
-                        <table id="departmentHealthTable">
-                            <thead>
-                                <tr>
-                                    <th>Department</th>
-                                    <th>Active</th>
-                                    <th>WIP</th>
-                                    <th>Not Started</th>
-                                    <th>Overdue</th>
-                                    <th>Stale</th>
-                                    <th>Avg Age (days)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="departmentHealthBody">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Owner Workload Section -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2><span>👥</span> Owner Workload <span id="ownerWorkloadToggle"></span></h2>
-                    <span class="section-toggle collapsed">▼</span>
-                </div>
-                <div class="section-content collapsed">
-                    <div class="charts-grid">
-                        <div class="chart-card" style="grid-column: 1 / -1;">
-                            <h3>Priority Distribution by Owner</h3>
-                            <div class="chart-container">
-                                <canvas id="ownerWorkloadChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="table-wrapper" style="margin-top: 24px;">
-                        <table id="ownerWorkloadTable">
-                            <thead>
-                                <tr>
-                                    <th>Owner</th>
-                                    <th>Active Tasks</th>
-                                    <th>High Priority</th>
-                                    <th>Overdue</th>
-                                </tr>
-                            </thead>
-                            <tbody id="ownerWorkloadBody">
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Burndown Chart -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2><span>📉</span> Burndown Chart (14 days) <span id="burndownToggle"></span></h2>
-                    <span class="section-toggle collapsed">▼</span>
-                </div>
-                <div class="section-content collapsed">
-                    <div class="charts-grid">
-                        <div class="chart-card" style="grid-column: 1 / -1;">
-                            <div class="chart-container">
-                                <canvas id="burndownChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Active Tasks Section -->
-            <div class="section" id="activeTasksSection">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2><span>📋</span> Active Tasks (<span id="activeCount">0</span>)</h2>
-                    <span class="section-toggle">▼</span>
-                </div>
-                <div class="section-content">
-                    <div class="table-wrapper">
-                        <table id="activeTasksTable">
-                            <thead>
-                                <tr>
-                                    <th class="sortable" data-sort="id" data-table="active">ID</th>
-                                    <th class="sortable" data-sort="task" data-table="active">Task</th>
-                                    <th class="sortable" data-sort="owner" data-table="active">Owner</th>
-                                    <th class="sortable" data-sort="department" data-table="active">Dept</th>
-                                    <th class="sortable" data-sort="priority" data-table="active">Priority</th>
-                                    <th class="sortable" data-sort="status" data-table="active">Status</th>
-                                    <th class="sortable" data-sort="deadline" data-table="active">Deadline</th>
-                                    <th class="sortable" data-sort="created" data-table="active">Created</th>
-                                </tr>
-                            </thead>
-                            <tbody id="activeTasksBody">
-                            </tbody>
-                        </table>
-                        <div class="empty-message" id="activeEmptyMessage" style="display: none;">No active tasks found</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Completed Tasks Section -->
-            <div class="section" id="completedTasksSection">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2><span>✅</span> Completed Tasks (<span id="completedTaskCount">0</span>)</h2>
-                    <span class="section-toggle collapsed">▼</span>
-                </div>
-                <div class="section-content collapsed">
-                    <div class="table-wrapper">
-                        <table id="completedTasksTable">
-                            <thead>
-                                <tr>
-                                    <th class="sortable" data-sort="id" data-table="completed">ID</th>
-                                    <th class="sortable" data-sort="task" data-table="completed">Task</th>
-                                    <th class="sortable" data-sort="owner" data-table="completed">Owner</th>
-                                    <th class="sortable" data-sort="department" data-table="completed">Dept</th>
-                                    <th class="sortable" data-sort="completed" data-table="completed">Completed</th>
-                                </tr>
-                            </thead>
-                            <tbody id="completedTasksBody">
-                            </tbody>
-                        </table>
-                        <div class="empty-message" id="completedEmptyMessage" style="display: none;">No completed tasks found</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Backlog Section -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2><span>📦</span> Backlog (<span id="backlogCount">0</span>)</h2>
-                    <span class="section-toggle collapsed">▼</span>
-                </div>
-                <div class="section-content collapsed">
-                    <div class="table-wrapper">
-                        <table id="backlogTable">
-                            <thead>
-                                <tr>
-                                    <th class="sortable" data-sort="id" data-table="backlog">ID</th>
-                                    <th class="sortable" data-sort="task" data-table="backlog">Task</th>
-                                    <th class="sortable" data-sort="owner" data-table="backlog">Owner</th>
-                                    <th class="sortable" data-sort="department" data-table="backlog">Dept</th>
-                                    <th class="sortable" data-sort="priority" data-table="backlog">Priority</th>
-                                </tr>
-                            </thead>
-                            <tbody id="backlogBody">
-                            </tbody>
-                        </table>
-                        <div class="empty-message" id="backlogEmptyMessage" style="display: none;">No backlog items found</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Self Learning Section -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2><span>🧠</span> Self Learning (<span id="selfLearningCount">0</span>)</h2>
-                    <span class="section-toggle collapsed">▼</span>
-                </div>
-                <div class="section-content collapsed">
-                    <div class="table-wrapper">
-                        <table id="selfLearningTable">
-                            <thead>
-                                <tr>
-                                    <th class="sortable" data-sort="id" data-table="selfLearning">ID</th>
-                                    <th class="sortable" data-sort="task" data-table="selfLearning">Task</th>
-                                    <th class="sortable" data-sort="owner" data-table="selfLearning">Owner</th>
-                                    <th class="sortable" data-sort="priority" data-table="selfLearning">Priority</th>
-                                    <th class="sortable" data-sort="status" data-table="selfLearning">Status</th>
-                                    <th class="sortable" data-sort="deadline" data-table="selfLearning">Deadline</th>
-                                </tr>
-                            </thead>
-                            <tbody id="selfLearningBody"></tbody>
-                        </table>
-                        <div class="empty-message" id="selfLearningEmptyMessage" style="display: none;">No self-learning tasks yet. Add them via Apple Notes or edit TASKS.md directly.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dependencies Section -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2><span>🔗</span> Dependencies</h2>
-                    <span class="section-toggle collapsed">▼</span>
-                </div>
-                <div class="section-content collapsed">
-                    <div id="dependenciesContainer" style="padding: 0;">
-                        <!-- JS rendered -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Milestone Timeline Section -->
-            <div class="section">
-                <div class="section-header" onclick="toggleSection(this)">
-                    <h2><span>🏆</span> Milestone Timeline</h2>
-                    <span class="section-toggle">▼</span>
-                </div>
-                <div class="section-content">
-                    <div class="timeline" id="timelineContainer">
-                        <!-- JS rendered -->
-                    </div>
-                </div>
-            </div>
-
-            </div><!-- Close tableViewsContainer -->
-        </div>
+    <div class="ds-top-right">
+      <nav class="ds-nav">
+        <a href="index.html">Founder</a>
+        <a href="finance-mis.html">Finance MIS</a>
+        <a href="tasks.html" class="ds-nav-active">Tasks</a>
+        <a href="claude-usage.html">Claude</a>
+        <a href="folder-map.html">Files</a>
+        <button class="ds-btn-ghost" onclick="location.reload()">Refresh</button>
+      </nav>
     </div>
+  </header>
 
-    <script>
-        // Activity Feed Data - populated by rebuild script
-        const activityFeed = [
-            {
-                        "date": "2026-04-29",
-                        "task_id": "TMW-113",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "UI design sprint via Stitch \u2014 CLOSED ..."
-            },
-            {
-                        "date": "2026-04-29",
-                        "task_id": "TMW-156",
-                        "event": "completed",
-                        "department": "Marketing",
-                        "task_name": "Content calendar + Launch Playbook da..."
-            },
-            {
-                        "date": "2026-04-28",
-                        "task_id": "TMW-157",
-                        "event": "completed",
-                        "department": "Finance / Legal",
-                        "task_name": "Reimburse CA \u20b911,433 for MCA govt fil..."
-            },
-            {
-                        "date": "2026-04-28",
-                        "task_id": "TMW-162",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "Wave 2 \u2014 HM apex 15 screens shipped. ..."
-            },
-            {
-                        "date": "2026-04-28",
-                        "task_id": "TMW-163",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "Patch v5 fully complete \u2014 Block A: 9 ..."
-            },
-            {
-                        "date": "2026-04-28",
-                        "task_id": "TMW-158",
-                        "event": "completed",
-                        "department": "Legal",
-                        "task_name": "CA chase fully closed \u2014 all remaining..."
-            },
-            {
-                        "date": "2026-04-27",
-                        "task_id": "TMW-155",
-                        "event": "completed",
-                        "department": "Engineering / Product",
-                        "task_name": "Review and verify airport + airlines ..."
-            },
-            {
-                        "date": "2026-04-27",
-                        "task_id": "TMW-160",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "Fire Patch v4 (Blocks A\u2013I) per PHASE_..."
-            },
-            {
-                        "date": "2026-04-26",
-                        "task_id": "TMW-159",
-                        "event": "completed",
-                        "department": "Finance / Legal",
-                        "task_name": "Collect Amol's PAN + Aadhaar scans fo..."
-            },
-            {
-                        "date": "2026-04-25",
-                        "task_id": "TMW-147",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "Drop nb2.png into sprint folder + con..."
-            },
-            {
-                        "date": "2026-04-25",
-                        "task_id": "TMW-148",
-                        "event": "completed",
-                        "department": "Operations",
-                        "task_name": "Grant `/usr/bin/python3` Full Disk Ac..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "TMW-037",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "Brand Book \u2014 CANCELLED (S069). Sprint..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "TMW-146",
-                        "event": "completed",
-                        "department": "Operations",
-                        "task_name": "Post-sprint housekeeping \u2014 CANCELLED ..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "TMW-B01",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "Brand guidelines document from Ruchi ..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "TMW-149",
-                        "event": "completed",
-                        "department": "Legal",
-                        "task_name": "Stamp paper + NOC + rent agreement co..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "TMW-150",
-                        "event": "completed",
-                        "department": "Legal",
-                        "task_name": "Address registration + incorporation ..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "**INC**",
-                        "event": "completed",
-                        "department": "Legal",
-                        "task_name": "\ud83c\udf89 **TrackMyWings Technologies Pvt. Lt..."
-            },
-            {
-                        "date": "2026-04-20",
-                        "task_id": "TMW-036",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "Font / Typeface finalized \u2014 Raleway (..."
-            },
-            {
-                        "date": "2026-04-11",
-                        "task_id": "TMW-144",
-                        "event": "completed",
-                        "department": "Operations / Design",
-                        "task_name": "Environment setup for DEC-089 multi-m..."
-            },
-            {
-                        "date": "2026-04-11",
-                        "task_id": "TMW-142",
-                        "event": "completed",
-                        "department": "Design / Product",
-                        "task_name": "Rohan formally approved sprint plan v..."
-            }
-];
+  <!-- HERO MILESTONE STRIP -->
+  <section class="ds-section" id="heroSection">
+    <div class="ds-section-head">
+      <span class="ds-section-title">The journey so far</span>
+    </div>
+    <div class="ds-milestones">
+      <div class="ds-milestone-rail" id="heroRail"></div>
+    </div>
+  </section>
 
-        // Calendar Events - populated by rebuild script
-        const calendarEvents = [
-            {
-                        "id": "tjnnrdpo9bhm3vn7a6kke1sjsk",
-                        "summary": "TMW Calendar Sync Test",
-                        "description": "Test event to verify calendar-sync agent is working correctly.",
-                        "start": "2026-04-08T16:00:00+05:30",
-                        "end": "2026-04-08T16:30:00+05:30",
-                        "all_day": false,
-                        "status": "confirmed",
-                        "creator": "rohan@trackmywings.com",
-                        "task_connections": [
-                                    {
-                                                "task_id": "TMW-135",
-                                                "task": "Verified Claude Code launchd scheduled tasks \u2014 all 10 agents firing, iMessages confirmed",
-                                                "status": "COMPLETED",
-                                                "connection": "Test event validates the calendar-sync scheduled agent infrastructure confirmed complete on 2026-04-08"
-                                    }
-                        ]
-            }
-];
+  <!-- ASYMMETRIC STAT BAND — urgency-first -->
+  <div class="ds-metrics ds-metrics-3" id="statBand" style="grid-template-columns:1.6fr 1fr 1fr 1fr;">
+    <div class="ds-metric ds-metric-lead" id="tileOverdue" onclick="scrollToActive()" style="cursor:pointer;">
+      <div class="ds-metric-lbl">Overdue</div>
+      <div class="ds-metric-val" id="metricOverdue">—</div>
+      <div class="ds-metric-sub">Active tasks past deadline</div>
+    </div>
+    <div class="ds-metric" onclick="scrollToActive()" style="cursor:pointer;">
+      <div class="ds-metric-lbl">Active Tasks</div>
+      <div class="ds-metric-val" id="metricActive">—</div>
+      <div class="ds-metric-sub">In flight now</div>
+    </div>
+    <div class="ds-metric" onclick="scrollToActive(); setFilter('priority','High')" style="cursor:pointer;">
+      <div class="ds-metric-lbl">High Priority</div>
+      <div class="ds-metric-val" id="metricHighPri">—</div>
+      <div class="ds-metric-sub">Critical + High</div>
+    </div>
+    <div class="ds-metric">
+      <div class="ds-metric-lbl">Completion Rate</div>
+      <div class="ds-metric-val" id="metricCompletion">—</div>
+      <div class="ds-metric-sub">All time</div>
+    </div>
+  </div>
 
-        // Milestones - populated by rebuild script
-        const taskDependencies = [];
-        const milestones = [
-            {
-                        "date": "2026-03-13",
-                        "title": "Founded",
-                        "desc": "Task system created, folder audit, 12 initial tasks"
-            },
-            {
-                        "date": "2026-03-15",
-                        "title": "Product Defined",
-                        "desc": "118 features, 607 components, UI/UX specs complete"
-            },
+  <!-- VIEW TOGGLE -->
+  <div class="view-toggle">
+    <button class="ds-btn-ghost view-btn active" id="btnTable" onclick="toggleView('table')" tabindex="0">Table</button>
+    <button class="ds-btn-ghost view-btn" id="btnKanban" onclick="toggleView('kanban')" tabindex="0">Kanban</button>
+  </div>
+
+  <!-- FILTERS ROW (sticky) -->
+  <div class="ds-filters" id="filtersRow" role="search">
+    <input class="ds-filter ds-filter-search" type="search" id="searchInput"
+      placeholder="Search task ID, name, owner  ( / focuses )" autocomplete="off"
+      oninput="filterTasks()" aria-label="Search tasks">
+    <select class="ds-filter" id="departmentFilter" onchange="filterTasks()" aria-label="Department">
+      <option value="">All Depts</option>
+      <option>Engineering</option>
+      <option>Product</option>
+      <option>Design</option>
+      <option>Marketing</option>
+      <option>Finance</option>
+      <option>Legal</option>
+      <option>Operations</option>
+      <option>Sales</option>
+      <option>Strategy</option>
+      <option>People</option>
+      <option>Customer Success</option>
+      <option>Archive</option>
+    </select>
+    <select class="ds-filter" id="priorityFilter" onchange="filterTasks()" aria-label="Priority">
+      <option value="">All Priority</option>
+      <option>Critical</option>
+      <option>High</option>
+      <option>Medium</option>
+      <option>Low</option>
+    </select>
+    <select class="ds-filter" id="statusFilter" onchange="filterTasks()" aria-label="Status">
+      <option value="">All Status</option>
+      <option>Not Started</option>
+      <option>WIP</option>
+      <option>Draft Ready</option>
+      <option>Under Legal Review</option>
+      <option>Blocked</option>
+      <option>Parked</option>
+      <option>Scheduled</option>
+    </select>
+    <select class="ds-filter" id="ownerFilter" onchange="filterTasks()" aria-label="Owner">
+      <option value="">All Owners</option>
+      <option>Rohan</option>
+      <option>Amol</option>
+      <option>Adhi</option>
+      <option>Ruchi</option>
+      <option>Anshul Bansal</option>
+      <option>Anshul Attri</option>
+    </select>
+    <button class="ds-filter-clear" onclick="clearFilters()" id="clearFiltersBtn" aria-label="Clear all filters">Clear filters</button>
+  </div>
+
+  <!-- TABLE VIEW CONTAINER -->
+  <div id="tableViewContainer">
+
+    <!-- ACTIVE TASKS -->
+    <section class="ds-section" id="activeSection">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('activeBody','activeCaret')"
+          aria-expanded="true" aria-controls="activeBody" tabindex="0">
+          <span class="ds-section-title">Active Tasks <span id="activeCountLabel" style="color:var(--ink-low);font-weight:400;"></span></span>
+          <span class="section-caret open" id="activeCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body open" id="activeBody">
+        <div class="ds-frame ds-frame-flush" style="overflow-x:auto;">
+          <table class="ds-table" id="activeTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="id" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">ID</th>
+                <th class="sortable" data-sort="task" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Task</th>
+                <th class="sortable" data-sort="owner" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Owner</th>
+                <th class="sortable" data-sort="department" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Dept</th>
+                <th class="sortable" data-sort="priority" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Priority</th>
+                <th class="sortable" data-sort="status" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Status</th>
+                <th class="sortable" data-sort="deadline" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Deadline</th>
+                <th class="sortable ds-num" data-sort="created" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Created</th>
+              </tr>
+            </thead>
+            <tbody id="activeTbody">
+              <tr><td colspan="8" class="ds-table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHARTS ROW (below active tasks) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('chartsBody','chartsCaret')"
+          aria-expanded="true" aria-controls="chartsBody" tabindex="0">
+          <span class="ds-section-title">Task Distribution</span>
+          <span class="section-caret open" id="chartsCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body open" id="chartsBody">
+        <div class="ds-cols-2">
+          <div class="ds-frame">
+            <div class="ds-section-head" style="margin-bottom:var(--sp-sm);">
+              <span class="ds-section-title" style="font-size:10.5px;">By Department</span>
+            </div>
+            <canvas id="deptChart"></canvas>
+          </div>
+          <div class="ds-frame">
+            <div class="ds-section-head" style="margin-bottom:var(--sp-sm);">
+              <span class="ds-section-title" style="font-size:10.5px;">By Priority</span>
+            </div>
+            <canvas id="priChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPLETED TASKS (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('completedBody','completedCaret')"
+          aria-expanded="false" aria-controls="completedBody" tabindex="0">
+          <span class="ds-section-title">Completed Tasks <span id="completedCountLabel" style="color:var(--ink-low);font-weight:400;"></span></span>
+          <span class="section-caret" id="completedCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="completedBody">
+        <div class="ds-frame ds-frame-flush" style="overflow-x:auto;">
+          <table class="ds-table" id="completedTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="id" data-table="completed" tabindex="0">ID</th>
+                <th class="sortable" data-sort="task" data-table="completed" tabindex="0">Task</th>
+                <th class="sortable" data-sort="owner" data-table="completed" tabindex="0">Owner</th>
+                <th class="sortable" data-sort="department" data-table="completed" tabindex="0">Dept</th>
+                <th class="sortable ds-num" data-sort="completed" data-table="completed" tabindex="0">Completed</th>
+              </tr>
+            </thead>
+            <tbody id="completedTbody">
+              <tr><td colspan="5" class="ds-table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- BACKLOG (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('backlogBody','backlogCaret')"
+          aria-expanded="false" aria-controls="backlogBody" tabindex="0">
+          <span class="ds-section-title">Backlog <span id="backlogCountLabel" style="color:var(--ink-low);font-weight:400;"></span></span>
+          <span class="section-caret" id="backlogCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="backlogBody">
+        <div class="ds-frame ds-frame-flush" style="overflow-x:auto;">
+          <table class="ds-table" id="backlogTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="id" data-table="backlog" tabindex="0">ID</th>
+                <th class="sortable" data-sort="task" data-table="backlog" tabindex="0">Task</th>
+                <th class="sortable" data-sort="owner" data-table="backlog" tabindex="0">Owner</th>
+                <th class="sortable" data-sort="department" data-table="backlog" tabindex="0">Dept</th>
+                <th class="sortable" data-sort="priority" data-table="backlog" tabindex="0">Priority</th>
+              </tr>
+            </thead>
+            <tbody id="backlogTbody">
+              <tr><td colspan="5" class="ds-table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SELF LEARNING (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('selfLBody','selfLCaret')"
+          aria-expanded="false" aria-controls="selfLBody" tabindex="0">
+          <span class="ds-section-title">Self Learning <span id="selfLCountLabel" style="color:var(--ink-low);font-weight:400;"></span></span>
+          <span class="section-caret" id="selfLCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="selfLBody">
+        <div class="ds-frame ds-frame-flush" style="overflow-x:auto;">
+          <table class="ds-table" id="selfLTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="id" data-table="selfLearning" tabindex="0">ID</th>
+                <th class="sortable" data-sort="task" data-table="selfLearning" tabindex="0">Task</th>
+                <th class="sortable" data-sort="owner" data-table="selfLearning" tabindex="0">Owner</th>
+                <th class="sortable" data-sort="priority" data-table="selfLearning" tabindex="0">Priority</th>
+                <th class="sortable" data-sort="status" data-table="selfLearning" tabindex="0">Status</th>
+                <th class="sortable ds-num" data-sort="deadline" data-table="selfLearning" tabindex="0">Deadline</th>
+              </tr>
+            </thead>
+            <tbody id="selfLTbody">
+              <tr><td colspan="6" class="ds-table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDAR (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('calBody','calCaret')"
+          aria-expanded="false" aria-controls="calBody" tabindex="0">
+          <span class="ds-section-title">Calendar — This Week</span>
+          <span class="section-caret" id="calCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="calBody">
+        <div class="cal-week" id="calWeek"></div>
+      </div>
+    </section>
+
+    <!-- DEPENDENCIES (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('depsBody','depsCaret')"
+          aria-expanded="false" aria-controls="depsBody" tabindex="0">
+          <span class="ds-section-title">Task Dependencies</span>
+          <span class="section-caret" id="depsCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="depsBody">
+        <div class="ds-frame ds-frame-flush" id="depsContainer">
+          <div class="ds-table-empty" style="padding:36px 14px;text-align:center;color:var(--ink-mid);">No dependencies logged.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MILESTONE TIMELINE (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('msBody','msCaret')"
+          aria-expanded="false" aria-controls="msBody" tabindex="0">
+          <span class="ds-section-title">Milestone Timeline</span>
+          <span class="section-caret" id="msCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="msBody">
+        <div class="ds-milestones">
+          <div class="ds-milestone-rail" id="msRail" style="grid-template-columns:repeat(6,minmax(180px,1fr));"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACTIVITY FEED (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('feedBody','feedCaret')"
+          aria-expanded="false" aria-controls="feedBody" tabindex="0">
+          <span class="ds-section-title">Activity Feed</span>
+          <span class="section-caret" id="feedCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="feedBody">
+        <div class="ds-frame ds-frame-flush" id="feedContainer">
+          <div class="ds-table-empty">Loading…</div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /#tableViewContainer -->
+
+  <!-- KANBAN VIEW (hidden by default) -->
+  <div id="kanbanContainer" style="display:none;">
+    <div class="kanban-grid" id="kanbanGrid"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="ds-meta">
+    <span>Last updated: <time id="lastUpdated">—</time></span>
+    <span>TrackMyWings Technologies Pvt. Ltd.</span>
+  </footer>
+
+</div><!-- /#mainShell -->
+
+<script>
+/* =====================================================================
+ * DATA — replaced on every rebuild by rebuild_dashboard.py regex
+ * ===================================================================== */
+const heroMilestones = [
             {
                         "date": "2026-03-16",
-                        "title": "Ops & Finance",
-                        "desc": "MIS workbook, survey kit, Google Ads, dashboard live"
+                        "label": "Genesis",
+                        "title": "Co-founders + equity locked",
+                        "note": "Rohan 62 / Amol 38, MoU v6 finalized."
             },
             {
-                        "date": "2026-03-17",
-                        "title": "Brand Identity",
-                        "desc": "15-color palette, fonts, brand book kicked off"
+                        "date": "2026-03-29",
+                        "label": "North Star",
+                        "title": "1M downloads / 6 months",
+                        "note": "Mihir sir advisor confirmed (3-hr session)."
             },
             {
-                        "date": "2026-03-18",
-                        "title": "Legal + Strategy",
-                        "desc": "MoU signed, Razorpay chosen, ad strategy, V2 website deployed"
+                        "date": "2026-04-10",
+                        "label": "Sprint Approved",
+                        "title": "Plan v11 \u2014 142 screens",
+                        "note": "Multi-model Figma sprint committed."
             },
             {
-                        "date": "2026-03-19",
-                        "title": "Legal Drafts + SEO",
-                        "desc": "Privacy, ToS, SHA, Term Sheet drafted. 19 pages, GSC live"
+                        "date": "2026-04-23",
+                        "label": "Incorporated",
+                        "title": "Trackmywings Technologies Pvt. Ltd.",
+                        "note": "Cert + PAN + TAN received. The keystone.",
+                        "keystone": true
+            },
+            {
+                        "date": "2026-04-28",
+                        "label": "Production Proof",
+                        "title": "Wave 2 HM-apex shipped",
+                        "note": "15/15 PASS, reviewer avg 8.49."
             }
 ];
-
-        // Task data - hardcoded from TASKS.md
-        const activeTasks = [
+const activeTasks = [
             { id: 'TMW-007', task: 'Populate Marketing/Content folder with launch content', owner: 'Adhi', department: 'Marketing', priority: 'Medium', status: 'WIP', deadline: '—', created: '2026-03-13' },
             { id: 'TMW-008', task: 'Populate Sales/Pipeline with CRM structure', owner: 'Rohan', department: 'Sales', priority: 'Low', status: 'Not Started', deadline: '—', created: '2026-03-13' },
             { id: 'TMW-010', task: 'Review and update 60-Month Operating Plan', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'WIP', deadline: '—', created: '2026-03-13' },
@@ -2231,8 +507,7 @@
             { id: 'TMW-153', task: 'File copyright application for TrackMyWings (app, content, brand) — coordinate with Anshul Bansal', owner: 'Rohan', department: 'Legal', priority: 'High', status: 'Not Started', deadline: 'Post TMW-152', created: '2026-04-23' },
             { id: 'TMW-154', task: 'Apply for startup funding — Startup India, grants, angel/seed — run in parallel post bank account', owner: 'Rohan', department: 'Finance / Strategy', priority: 'Medium', status: 'Not Started', deadline: 'Post TMW-151', created: '2026-04-23' }
         ];
-
-        const completedTasks = [
+const completedTasks = [
             { id: 'TMW-162', task: 'Wave 2 — HM apex 15 screens shipped. All 15 PASS, reviewer avg 8.49 (vs Wave 1 redo 8.52). Zero rebuilds. Mid-Fi 2.0 framework validated at production scale. Highest scores: 7.7 (8.86), 5.6 (8.83), 7.6 (8.73). Sonnet fallback (Batch 4) avg 8.53 — comparable to Opus.', owner: 'Claude (with Rohan)', department: 'Design', completed: '2026-04-28' },
             { id: 'TMW-163', task: 'Patch v5 fully complete — Block A: 9 lucide icons re-fetched from unpkg (40-icon set 100% integrity restored). Block B: wing_mark_micro.svg + cabin_aperture_faithful.svg copied to /assets/. Block C (Figma): 3 gradient paint styles published (primary/warm/gold), share-card 3 HM variants (728:2/11/25), stat-tile xl-hero (729:2), chip leading-icon (730:2/5/8), top-app-bar transparent + light (731:2/6), list-row with-badge=flag (732:2/7), settings-section form-content (734:2), circular-progress-arc placeholder cleanup. Block D: PATCH_V5_REPORT.md, TMW-INV-077/078 codified (76→78). Wave 3 unblocked.', owner: 'Claude (with Rohan)', department: 'Design', completed: '2026-04-28' },
             { id: 'TMW-158', task: 'CA chase fully closed — all remaining items received via email: TAN PIN, MCA portal credentials (company + Rohan), Director Stamp template, Letterhead template, SHA template, Share Certificates template. CA service invoice ₹15K already received (LHR\101). Full incorporation toolkit in hand.', owner: 'Rohan', department: 'Legal', completed: '2026-04-28' },
@@ -2470,8 +745,7 @@
             { id: 'TMW-104', task: 'Execute Launch Playbook Phase 0 (superseded by TMW-106, DEC-059 — posting starts May 1 not Apr 1)', owner: 'Rohan + Adhi + Claude', department: 'Marketing', completed: '2026-03-30' },
             { id: 'TMW-086', task: 'Fill content calendar 949 slots (superseded by TMW-105 — full calendar rebuild for 12 platforms)', owner: 'Rohan + Adhi', department: 'Marketing', completed: '2026-03-30' }
         ];
-
-        const backlogTasks = [
+const backlogTasks = [
             { id: 'TMW-161', task: 'Connect Stripe MCP (pre-launch payment setup) + Canva MCP (post-stealth design assets). Skip: Klaviyo (Loops.so chosen), Atlassian/Notion (not in stack), HubSpot/Gamma/Miro/HuggingFace/VibePros (no current value).', owner: 'Rohan', department: 'Operations', priority: 'Medium' },
             { id: 'TMW-B02', task: 'Create investor pitch deck', owner: 'Rohan', department: 'Strategy', priority: 'Medium' },
             { id: 'TMW-B04', task: 'Document engineering architecture (ADR format)', owner: 'Amol', department: 'Engineering', priority: 'Medium' },
@@ -2480,15 +754,208 @@
             { id: 'TMW-033', task: 'Review insurance guide and decide on coverage', owner: 'Rohan', department: 'Legal', priority: 'Low' },
             { id: 'TMW-164', task: 'Harden tmw-dashboard auth. Current model is a client-side JS gate (SHA256 password literal in published HTML, brute-forceable in seconds). Move to real auth: (a) make `kingerosah-arch/tmw-dashboard` repo private + Cloudflare Access in front, or (b) self-host dashboards on a small EC2 with Basic Auth, or (c) move to GitHub Pages org-private with token. Currently low because dashboard URL is unguessable, but stealth-mode-correct fix is real auth before any wider sharing.', owner: 'Rohan + Amol', department: 'Operations', priority: 'Low' }
         ];
-
-        const selfLearningTasks = [
+const selfLearningTasks = [
             { id: 'SL-001', task: 'Advanced Claude API prompt engineering', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' },
             { id: 'SL-002', task: 'Google Garage — Digital Marketing course', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' },
             { id: 'SL-003', task: 'Google Garage — SEO course', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' },
             { id: 'SL-004', task: 'Claude SEO skill — learn and apply', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' }
         ];
-
-        const analyticsData = {
+const activityFeed = [
+            {
+                        "date": "2026-04-29",
+                        "task_id": "TMW-113",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "UI design sprint via Stitch \u2014 CLOSED ..."
+            },
+            {
+                        "date": "2026-04-29",
+                        "task_id": "TMW-156",
+                        "event": "completed",
+                        "department": "Marketing",
+                        "task_name": "Content calendar + Launch Playbook da..."
+            },
+            {
+                        "date": "2026-04-28",
+                        "task_id": "TMW-157",
+                        "event": "completed",
+                        "department": "Finance / Legal",
+                        "task_name": "Reimburse CA \u20b911,433 for MCA govt fil..."
+            },
+            {
+                        "date": "2026-04-28",
+                        "task_id": "TMW-162",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Wave 2 \u2014 HM apex 15 screens shipped. ..."
+            },
+            {
+                        "date": "2026-04-28",
+                        "task_id": "TMW-163",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Patch v5 fully complete \u2014 Block A: 9 ..."
+            },
+            {
+                        "date": "2026-04-28",
+                        "task_id": "TMW-158",
+                        "event": "completed",
+                        "department": "Legal",
+                        "task_name": "CA chase fully closed \u2014 all remaining..."
+            },
+            {
+                        "date": "2026-04-27",
+                        "task_id": "TMW-155",
+                        "event": "completed",
+                        "department": "Engineering / Product",
+                        "task_name": "Review and verify airport + airlines ..."
+            },
+            {
+                        "date": "2026-04-27",
+                        "task_id": "TMW-160",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Fire Patch v4 (Blocks A\u2013I) per PHASE_..."
+            },
+            {
+                        "date": "2026-04-26",
+                        "task_id": "TMW-159",
+                        "event": "completed",
+                        "department": "Finance / Legal",
+                        "task_name": "Collect Amol's PAN + Aadhaar scans fo..."
+            },
+            {
+                        "date": "2026-04-25",
+                        "task_id": "TMW-147",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Drop nb2.png into sprint folder + con..."
+            },
+            {
+                        "date": "2026-04-25",
+                        "task_id": "TMW-148",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "Grant `/usr/bin/python3` Full Disk Ac..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "TMW-037",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Brand Book \u2014 CANCELLED (S069). Sprint..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "TMW-146",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "Post-sprint housekeeping \u2014 CANCELLED ..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "TMW-B01",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Brand guidelines document from Ruchi ..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "TMW-149",
+                        "event": "completed",
+                        "department": "Legal",
+                        "task_name": "Stamp paper + NOC + rent agreement co..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "TMW-150",
+                        "event": "completed",
+                        "department": "Legal",
+                        "task_name": "Address registration + incorporation ..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "**INC**",
+                        "event": "completed",
+                        "department": "Legal",
+                        "task_name": "\ud83c\udf89 **TrackMyWings Technologies Pvt. Lt..."
+            },
+            {
+                        "date": "2026-04-20",
+                        "task_id": "TMW-036",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Font / Typeface finalized \u2014 Raleway (..."
+            },
+            {
+                        "date": "2026-04-11",
+                        "task_id": "TMW-144",
+                        "event": "completed",
+                        "department": "Operations / Design",
+                        "task_name": "Environment setup for DEC-089 multi-m..."
+            },
+            {
+                        "date": "2026-04-11",
+                        "task_id": "TMW-142",
+                        "event": "completed",
+                        "department": "Design / Product",
+                        "task_name": "Rohan formally approved sprint plan v..."
+            }
+];
+const calendarEvents = [
+            {
+                        "id": "tjnnrdpo9bhm3vn7a6kke1sjsk",
+                        "summary": "TMW Calendar Sync Test",
+                        "description": "Test event to verify calendar-sync agent is working correctly.",
+                        "start": "2026-04-08T16:00:00+05:30",
+                        "end": "2026-04-08T16:30:00+05:30",
+                        "all_day": false,
+                        "status": "confirmed",
+                        "creator": "rohan@trackmywings.com",
+                        "task_connections": [
+                                    {
+                                                "task_id": "TMW-135",
+                                                "task": "Verified Claude Code launchd scheduled tasks \u2014 all 10 agents firing, iMessages confirmed",
+                                                "status": "COMPLETED",
+                                                "connection": "Test event validates the calendar-sync scheduled agent infrastructure confirmed complete on 2026-04-08"
+                                    }
+                        ]
+            }
+];
+const taskDependencies = [];
+const milestones = [
+            {
+                        "date": "2026-03-13",
+                        "title": "Founded",
+                        "desc": "Task system created, folder audit, 12 initial tasks"
+            },
+            {
+                        "date": "2026-03-15",
+                        "title": "Product Defined",
+                        "desc": "118 features, 607 components, UI/UX specs complete"
+            },
+            {
+                        "date": "2026-03-16",
+                        "title": "Ops & Finance",
+                        "desc": "MIS workbook, survey kit, Google Ads, dashboard live"
+            },
+            {
+                        "date": "2026-03-17",
+                        "title": "Brand Identity",
+                        "desc": "15-color palette, fonts, brand book kicked off"
+            },
+            {
+                        "date": "2026-03-18",
+                        "title": "Legal + Strategy",
+                        "desc": "MoU signed, Razorpay chosen, ad strategy, V2 website deployed"
+            },
+            {
+                        "date": "2026-03-19",
+                        "title": "Legal Drafts + SEO",
+                        "desc": "Privacy, ToS, SHA, Term Sheet drafted. 19 pages, GSC live"
+            }
+];
+const analyticsData = {
             "dailyVelocity": [
                         {
                                     "date": "2026-04-20",
@@ -2912,1158 +1379,768 @@
             }
 };
 
-        // Password hash function (SHA-256)
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        // Password hash for "tmw2026"
-        const CORRECT_HASH = '2e7d1236fba12ba3c4c6c6c5c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6';
-        const expectedHash = 'c2f6e8c6f3e8c6c3e8c6e8c6e8e8e8e8e8e8e8e8e8e8e8e8e8e8e8e8e8e8'; // Will be set on load
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', async function() {
-            // Set the correct hash
-            const correctHash = await hashPassword('Adhi');
-            window.correctHash = correctHash;
-
-            setupEventListeners();
-            checkAuthStatus();
-            renderDashboard();
-        });
-
-        // Sort state per table
-        const sortState = {
-            active: { key: null, dir: 'asc' },
-            completed: { key: null, dir: 'asc' },
-            backlog: { key: null, dir: 'asc' },
-            selfLearning: { key: null, dir: 'asc' }
-        };
-
-        function setupEventListeners() {
-            document.getElementById('loginForm').addEventListener('submit', handleLogin);
-            document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-            document.getElementById('searchInput').addEventListener('input', filterTasks);
-            document.getElementById('departmentFilter').addEventListener('change', filterTasks);
-            document.getElementById('priorityFilter').addEventListener('change', filterTasks);
-            document.getElementById('statusFilter').addEventListener('change', filterTasks);
-            document.getElementById('ownerFilter').addEventListener('change', filterTasks);
-
-            // Sortable column headers
-            document.querySelectorAll('th.sortable').forEach(th => {
-                th.addEventListener('click', function() {
-                    const sortKey = this.dataset.sort;
-                    const tableName = this.dataset.table;
-                    const state = sortState[tableName];
-
-                    // Toggle direction or set new key
-                    if (state.key === sortKey) {
-                        state.dir = state.dir === 'asc' ? 'desc' : 'asc';
-                    } else {
-                        state.key = sortKey;
-                        state.dir = 'asc';
-                    }
-
-                    // Update header classes
-                    this.closest('tr').querySelectorAll('th.sortable').forEach(h => {
-                        h.classList.remove('sort-asc', 'sort-desc');
-                    });
-                    this.classList.add(state.dir === 'asc' ? 'sort-asc' : 'sort-desc');
-
-                    // Re-render the relevant table
-                    if (tableName === 'active') renderActiveTasks();
-                    else if (tableName === 'completed') renderCompletedTasks();
-                    else if (tableName === 'backlog') renderBacklogTasks();
-                    else if (tableName === 'selfLearning') renderSelfLearningTasks();
-                });
-            });
-        }
-
-        // Priority sort order
-        const priorityOrder = { 'High': 0, 'Medium': 1, 'Low': 2 };
-
-        function sortTasks(tasks, tableName) {
-            const state = sortState[tableName];
-            if (!state.key) return tasks;
-
-            const sorted = [...tasks].sort((a, b) => {
-                let valA = a[state.key] || '';
-                let valB = b[state.key] || '';
-
-                // Special sort for priority
-                if (state.key === 'priority') {
-                    valA = priorityOrder[valA] !== undefined ? priorityOrder[valA] : 99;
-                    valB = priorityOrder[valB] !== undefined ? priorityOrder[valB] : 99;
-                    return state.dir === 'asc' ? valA - valB : valB - valA;
-                }
-
-                // Special sort for dates (deadline, created, completed)
-                if (state.key === 'deadline' || state.key === 'created' || state.key === 'completed') {
-                    const dateA = valA && valA !== '—' ? new Date(valA) : new Date('9999-12-31');
-                    const dateB = valB && valB !== '—' ? new Date(valB) : new Date('9999-12-31');
-                    return state.dir === 'asc' ? dateA - dateB : dateB - dateA;
-                }
-
-                // String sort
-                valA = valA.toString().toLowerCase();
-                valB = valB.toString().toLowerCase();
-                if (valA < valB) return state.dir === 'asc' ? -1 : 1;
-                if (valA > valB) return state.dir === 'asc' ? 1 : -1;
-                return 0;
-            });
-            return sorted;
-        }
-
-        function getDeadlineClass(deadline) {
-            if (!deadline || deadline === '—') return 'deadline-none';
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const dl = new Date(deadline);
-            dl.setHours(0, 0, 0, 0);
-            const daysUntil = Math.ceil((dl - today) / (1000 * 60 * 60 * 24));
-
-            if (daysUntil < 0) return 'deadline-overdue';
-            if (daysUntil <= 3) return 'deadline-due-soon';
-            return 'deadline-on-track';
-        }
-
-        function getRowClass(deadline) {
-            if (!deadline || deadline === '—') return '';
-            const cls = getDeadlineClass(deadline);
-            if (cls === 'deadline-overdue') return 'row-overdue';
-            if (cls === 'deadline-due-soon') return 'row-due-soon';
-            return '';
-        }
-
-        function formatDeadline(deadline) {
-            if (!deadline || deadline === '—') return '<span class="deadline-none">—</span>';
-            const cls = getDeadlineClass(deadline);
-            return '<span class="' + cls + '">' + deadline + '</span>';
-        }
-
-        function checkAuthStatus() {
-            const isAuthenticated = sessionStorage.getItem('tmw_auth');
-            if (isAuthenticated === 'true') {
-                showDashboard();
-            } else {
-                showLogin();
-            }
-        }
-
-        async function handleLogin(e) {
-            e.preventDefault();
-            const password = document.getElementById('password').value;
-            const hash = await hashPassword(password);
-
-            if (hash === window.correctHash) {
-                sessionStorage.setItem('tmw_auth', 'true');
-                document.getElementById('password').value = '';
-                document.getElementById('loginError').classList.remove('show');
-                showDashboard();
-            } else {
-                document.getElementById('loginError').classList.add('show');
-                document.getElementById('password').value = '';
-            }
-        }
-
-        function handleLogout() {
-            sessionStorage.removeItem('tmw_auth');
-            showLogin();
-            document.getElementById('password').focus();
-        }
-
-        function showLogin() {
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('dashboardScreen').style.display = 'none';
-        }
-
-        function showDashboard() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('dashboardScreen').style.display = 'block';
-            renderDashboard();
-        }
-
-        function renderDashboard() {
-            renderStats();
-            renderActivityFeed();
-            renderCalendarView();
-            renderMilestones();
-            renderDependencies();
-            renderActiveTasks();
-            renderCompletedTasks();
-            renderBacklogTasks();
-            renderSelfLearningTasks();
-            renderCharts();
-            updateTabTitle();
-        }
-
-        function updateTabTitle() {
-            const overdue = analyticsData.velocity ? analyticsData.velocity.overdue : 0;
-            const stale = analyticsData.velocity ? analyticsData.velocity.stale : 0;
-            const active = activeTasks.length;
-            let badge = '';
-            if (overdue > 0) badge = `(${overdue} overdue) `;
-            else if (stale > 0) badge = `(${stale} stale) `;
-            else badge = `(${active} active) `;
-            document.title = `✈️ TMW ${badge}— Dashboard`;
-        }
-
-        function renderStats() {
-            const activeCount = activeTasks.length;
-            const highPriorityCount = activeTasks.filter(t => t.priority === 'High').length;
-            const completedCount = completedTasks.length;
-            const totalTasks = activeCount + completedCount;
-            const completionRate = Math.round((completedCount / totalTasks) * 100);
-
-            document.getElementById('activeTasksCount').textContent = activeCount;
-            document.getElementById('highPriorityCount').textContent = highPriorityCount;
-            document.getElementById('completedCount').textContent = completedCount;
-            document.getElementById('completionRate').textContent = completionRate + '%';
-        }
-
-        function renderActiveTasks() {
-            const tbody = document.getElementById('activeTasksBody');
-            let filtered = getFilteredActiveTasks();
-            filtered = sortTasks(filtered, 'active');
-
-            tbody.innerHTML = '';
-            if (filtered.length === 0) {
-                document.getElementById('activeEmptyMessage').style.display = 'block';
-                document.getElementById('activeTasksTable').style.display = 'none';
-            } else {
-                document.getElementById('activeEmptyMessage').style.display = 'none';
-                document.getElementById('activeTasksTable').style.display = '';
-                filtered.forEach(task => {
-                    const row = document.createElement('tr');
-                    row.setAttribute('data-task-id', task.id);
-                    const rowCls = getRowClass(task.deadline);
-                    if (rowCls) row.classList.add(rowCls);
-                    row.innerHTML = `
-                        <td data-label="ID"><span class="task-id">${task.id}</span></td>
-                        <td data-label="Task"><span class="task-name">${task.task}</span></td>
-                        <td data-label="Owner">${task.owner}</td>
-                        <td data-label="Dept">${task.department}</td>
-                        <td data-label="Priority">${getPriorityBadge(task.priority)}</td>
-                        <td data-label="Status">${getStatusBadge(task.status)}</td>
-                        <td data-label="Deadline">${formatDeadline(task.deadline)}</td>
-                        <td data-label="Created">${task.created}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            }
-            document.getElementById('activeCount').textContent = filtered.length;
-        }
-
-        function renderCompletedTasks() {
-            const tbody = document.getElementById('completedTasksBody');
-            let filtered = getFilteredCompletedTasks();
-            filtered = sortTasks(filtered, 'completed');
-
-            tbody.innerHTML = '';
-            if (filtered.length === 0) {
-                document.getElementById('completedEmptyMessage').style.display = 'block';
-                document.getElementById('completedTasksTable').style.display = 'none';
-            } else {
-                document.getElementById('completedEmptyMessage').style.display = 'none';
-                document.getElementById('completedTasksTable').style.display = '';
-                filtered.forEach(task => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td data-label="ID"><span class="task-id">${task.id}</span></td>
-                        <td data-label="Task"><span class="task-name">${task.task}</span></td>
-                        <td data-label="Owner">${task.owner}</td>
-                        <td data-label="Dept">${task.department}</td>
-                        <td data-label="Done">${task.completed}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            }
-            document.getElementById('completedTaskCount').textContent = filtered.length;
-        }
-
-        function renderBacklogTasks() {
-            const tbody = document.getElementById('backlogBody');
-            let filtered = getFilteredBacklogTasks();
-            filtered = sortTasks(filtered, 'backlog');
-
-            tbody.innerHTML = '';
-            if (filtered.length === 0) {
-                document.getElementById('backlogEmptyMessage').style.display = 'block';
-                document.getElementById('backlogTable').style.display = 'none';
-            } else {
-                document.getElementById('backlogEmptyMessage').style.display = 'none';
-                document.getElementById('backlogTable').style.display = '';
-                filtered.forEach(task => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td data-label="ID"><span class="task-id">${task.id}</span></td>
-                        <td data-label="Task"><span class="task-name">${task.task}</span></td>
-                        <td data-label="Owner">${task.owner}</td>
-                        <td data-label="Dept">${task.department}</td>
-                        <td data-label="Priority">${getPriorityBadge(task.priority)}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            }
-            document.getElementById('backlogCount').textContent = filtered.length;
-        }
-
-        function renderSelfLearningTasks() {
-            const tbody = document.getElementById('selfLearningBody');
-            const searchTerm = getSearchTerm();
-            let filtered = selfLearningTasks.filter(task => {
-                if (!searchTerm) return true;
-                return task.task.toLowerCase().includes(searchTerm) ||
-                       task.id.toLowerCase().includes(searchTerm) ||
-                       task.owner.toLowerCase().includes(searchTerm);
-            });
-            filtered = sortTasks(filtered, 'selfLearning');
-
-            tbody.innerHTML = '';
-            if (filtered.length === 0) {
-                document.getElementById('selfLearningEmptyMessage').style.display = 'block';
-                document.getElementById('selfLearningTable').style.display = 'none';
-            } else {
-                document.getElementById('selfLearningEmptyMessage').style.display = 'none';
-                document.getElementById('selfLearningTable').style.display = '';
-                filtered.forEach(task => {
-                    const row = document.createElement('tr');
-                    const rowCls = getRowClass(task.deadline);
-                    if (rowCls) row.classList.add(rowCls);
-                    row.innerHTML = `
-                        <td data-label="ID"><span class="task-id">${task.id}</span></td>
-                        <td data-label="Task"><span class="task-name">${task.task}</span></td>
-                        <td data-label="Owner">${task.owner}</td>
-                        <td data-label="Priority">${getPriorityBadge(task.priority)}</td>
-                        <td data-label="Status">${getStatusBadge(task.status)}</td>
-                        <td data-label="Deadline">${formatDeadline(task.deadline)}</td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            }
-            document.getElementById('selfLearningCount').textContent = filtered.length;
-        }
-
-        function getPriorityBadge(priority) {
-            const className = `priority-${priority.toLowerCase()}`;
-            return `<span class="badge ${className}">${priority}</span>`;
-        }
-
-        function getStatusBadge(status) {
-            let className = 'status-not-started';
-            if (status === 'WIP') className = 'status-wip';
-            else if (status === 'Draft Ready') className = 'status-draft-ready';
-            else if (status === 'Under Legal Review') className = 'status-under-review';
-
-            return `<span class="badge ${className}">${status}</span>`;
-        }
-
-        function getSearchTerm() {
-            return document.getElementById('searchInput').value.toLowerCase();
-        }
-
-        function getDepartmentFilter() {
-            return document.getElementById('departmentFilter').value;
-        }
-
-        function getPriorityFilter() {
-            return document.getElementById('priorityFilter').value;
-        }
-
-        function getStatusFilter() {
-            return document.getElementById('statusFilter').value;
-        }
-
-        function getOwnerFilter() {
-            const el = document.getElementById('ownerFilter');
-            return el ? el.value : '';
-        }
-
-        function matchesOwner(task, ownerFilter) {
-            if (!ownerFilter) return true;
-            return task.owner && task.owner.includes(ownerFilter);
-        }
-
-        function matchesSearch(task, searchTerm) {
-            if (!searchTerm) return true;
-            return task.task.toLowerCase().includes(searchTerm) ||
-                   task.id.toLowerCase().includes(searchTerm) ||
-                   task.owner.toLowerCase().includes(searchTerm) ||
-                   task.department.toLowerCase().includes(searchTerm);
-        }
-
-        function getFilteredActiveTasks() {
-            const searchTerm = getSearchTerm();
-            const department = getDepartmentFilter();
-            const priority = getPriorityFilter();
-            const status = getStatusFilter();
-            const owner = getOwnerFilter();
-
-            return activeTasks.filter(task => {
-                const statusMatch = !status || task.status === status || (status === 'Blocked' && task.status.includes('Blocked')) || (status === 'Parked' && task.status.includes('Parked'));
-                return matchesSearch(task, searchTerm) &&
-                       (!department || task.department === department) &&
-                       (!priority || task.priority === priority) &&
-                       statusMatch &&
-                       matchesOwner(task, owner);
-            });
-        }
-
-        function getFilteredCompletedTasks() {
-            const searchTerm = getSearchTerm();
-            const department = getDepartmentFilter();
-            const owner = getOwnerFilter();
-
-            return completedTasks.filter(task => {
-                return matchesSearch(task, searchTerm) &&
-                       (!department || task.department === department) &&
-                       matchesOwner(task, owner);
-            });
-        }
-
-        function getFilteredBacklogTasks() {
-            const searchTerm = getSearchTerm();
-            const department = getDepartmentFilter();
-            const priority = getPriorityFilter();
-            const owner = getOwnerFilter();
-
-            return backlogTasks.filter(task => {
-                return matchesSearch(task, searchTerm) &&
-                       (!department || task.department === department) &&
-                       (!priority || task.priority === priority) &&
-                       matchesOwner(task, owner);
-            });
-        }
-
-        function filterTasks() {
-            renderActiveTasks();
-            renderCompletedTasks();
-            renderBacklogTasks();
-            renderSelfLearningTasks();
-            renderCharts();
-        }
-
-        function renderCharts() {
-            renderDepartmentChart();
-            renderPriorityChart();
-            renderAnalyticsCharts();
-        }
-
-        function renderAnalyticsCharts() {
-            // Update velocity stats
-            if (analyticsData.velocity) {
-                document.getElementById('todayVelocity').textContent = analyticsData.velocity.today || 0;
-                document.getElementById('thisWeekVelocity').textContent = analyticsData.velocity.this_week || 0;
-                document.getElementById('overdueCount').textContent = analyticsData.velocity.overdue || 0;
-                document.getElementById('staleCount').textContent = analyticsData.velocity.stale || 0;
-            }
-
-            // Daily velocity chart
-            if (analyticsData.dailyVelocity && analyticsData.dailyVelocity.length > 0) {
-                renderDailyVelocityChart();
-            }
-
-            // Weekly velocity chart
-            if (analyticsData.weeklyVelocity && analyticsData.weeklyVelocity.length > 0) {
-                renderWeeklyVelocityChart();
-            }
-
-            // Department health
-            if (analyticsData.departmentHealth && analyticsData.departmentHealth.length > 0) {
-                renderDepartmentHealthChart();
-                renderDepartmentHealthTable();
-            }
-
-            // Owner workload
-            if (analyticsData.ownerWorkload && analyticsData.ownerWorkload.length > 0) {
-                renderOwnerWorkloadChart();
-                renderOwnerWorkloadTable();
-            }
-
-            // Burndown chart
-            if (analyticsData.burndownData && analyticsData.burndownData.length > 0) {
-                renderBurndownChart();
-            }
-        }
-
-        function renderDailyVelocityChart() {
-            const ctx = document.getElementById('dailyVelocityChart').getContext('2d');
-            if (window.dailyVelocityChartInstance) {
-                window.dailyVelocityChartInstance.destroy();
-            }
-
-            const dates = analyticsData.dailyVelocity.map(d => d.date.slice(-5));
-            const completed = analyticsData.dailyVelocity.map(d => d.completed);
-            const added = analyticsData.dailyVelocity.map(d => d.added);
-
-            window.dailyVelocityChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: dates,
-                    datasets: [
-                        {
-                            label: 'Completed',
-                            data: completed,
-                            backgroundColor: '#a06e9b',
-                            borderColor: '#773c71',
-                            borderWidth: 1,
-                            yAxisID: 'y'
-                        },
-                        {
-                            label: 'Added',
-                            data: added,
-                            borderColor: '#f2b95f',
-                            backgroundColor: 'transparent',
-                            borderWidth: 2,
-                            type: 'line',
-                            tension: 0.4,
-                            yAxisID: 'y'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false
-                    },
-                    plugins: {
-                        legend: {
-                            labels: { color: '#ffefc2', font: { size: 11 }, padding: 12 }
-                        }
-                    },
-                    scales: {
-                        y: {
-                            ticks: { color: '#978cb5' },
-                            grid: { color: 'rgba(160, 110, 155, 0.1)' },
-                            beginAtZero: true
-                        },
-                        x: {
-                            ticks: { color: '#978cb5' }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderWeeklyVelocityChart() {
-            const ctx = document.getElementById('weeklyVelocityChart').getContext('2d');
-            if (window.weeklyVelocityChartInstance) {
-                window.weeklyVelocityChartInstance.destroy();
-            }
-
-            const weeks = analyticsData.weeklyVelocity.map(w => 'W' + w.week.slice(-5));
-            const completed = analyticsData.weeklyVelocity.map(w => w.completed);
-            const added = analyticsData.weeklyVelocity.map(w => w.added);
-
-            window.weeklyVelocityChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: weeks,
-                    datasets: [
-                        {
-                            label: 'Completed',
-                            data: completed,
-                            backgroundColor: '#a06e9b',
-                            borderColor: '#773c71',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Added',
-                            data: added,
-                            backgroundColor: '#f2b95f',
-                            borderColor: '#b28134',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: { color: '#ffefc2', font: { size: 11 }, padding: 12 }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            stacked: false,
-                            ticks: { color: '#978cb5' },
-                            grid: { color: 'rgba(160, 110, 155, 0.1)' }
-                        },
-                        y: {
-                            stacked: false,
-                            ticks: { color: '#978cb5' },
-                            grid: { color: 'rgba(160, 110, 155, 0.1)' },
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderDepartmentHealthChart() {
-            const ctx = document.getElementById('departmentHealthChart').getContext('2d');
-            if (window.departmentHealthChartInstance) {
-                window.departmentHealthChartInstance.destroy();
-            }
-
-            const depts = analyticsData.departmentHealth.map(d => d.department);
-            const active = analyticsData.departmentHealth.map(d => d.active);
-            const overdue = analyticsData.departmentHealth.map(d => d.overdue);
-            const stale = analyticsData.departmentHealth.map(d => d.stale);
-
-            window.departmentHealthChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: depts,
-                    datasets: [
-                        {
-                            label: 'Active',
-                            data: active,
-                            backgroundColor: '#a06e9b',
-                            borderColor: '#773c71',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Overdue',
-                            data: overdue,
-                            backgroundColor: '#dc2626',
-                            borderColor: '#991b1b',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Stale',
-                            data: stale,
-                            backgroundColor: '#f2b95f',
-                            borderColor: '#b28134',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#ffefc2', font: { size: 11 }, padding: 12 } }
-                    },
-                    scales: {
-                        x: {
-                            stacked: false,
-                            ticks: { color: '#978cb5' },
-                            grid: { color: 'rgba(160, 110, 155, 0.1)' },
-                            beginAtZero: true
-                        },
-                        y: {
-                            ticks: { color: '#978cb5' }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderDepartmentHealthTable() {
-            const tbody = document.getElementById('departmentHealthBody');
-            tbody.innerHTML = '';
-            analyticsData.departmentHealth.forEach(dept => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td data-label="Department">${dept.department}</td>
-                    <td data-label="Active">${dept.active}</td>
-                    <td data-label="WIP">${dept.wip}</td>
-                    <td data-label="Not Started">${dept.not_started}</td>
-                    <td data-label="Overdue">${dept.overdue > 0 ? '<span style="color: #dc2626;">' + dept.overdue + '</span>' : '0'}</td>
-                    <td data-label="Stale">${dept.stale > 0 ? '<span style="color: #f2b95f;">' + dept.stale + '</span>' : '0'}</td>
-                    <td data-label="Avg Age">${dept.avg_age_days}d</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function renderOwnerWorkloadChart() {
-            const ctx = document.getElementById('ownerWorkloadChart').getContext('2d');
-            if (window.ownerWorkloadChartInstance) {
-                window.ownerWorkloadChartInstance.destroy();
-            }
-
-            const owners = analyticsData.ownerWorkload.map(o => o.owner);
-            const highPriority = analyticsData.ownerWorkload.map(o => o.high_priority);
-            const mediumPriority = analyticsData.ownerWorkload.map(o => (o.active - o.high_priority - o.overdue));
-
-            window.ownerWorkloadChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: owners,
-                    datasets: [
-                        {
-                            label: 'High Priority',
-                            data: highPriority,
-                            backgroundColor: '#dc2626',
-                            borderColor: '#991b1b',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Other Priority',
-                            data: mediumPriority,
-                            backgroundColor: '#a06e9b',
-                            borderColor: '#773c71',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            stacked: true,
-                            ticks: { color: '#978cb5' },
-                            grid: { color: 'rgba(160, 110, 155, 0.1)' },
-                            beginAtZero: true
-                        },
-                        y: {
-                            stacked: true,
-                            ticks: { color: '#978cb5' }
-                        }
-                    },
-                    plugins: {
-                        legend: { labels: { color: '#ffefc2', font: { size: 11 }, padding: 12 } }
-                    }
-                }
-            });
-        }
-
-        function renderOwnerWorkloadTable() {
-            const tbody = document.getElementById('ownerWorkloadBody');
-            tbody.innerHTML = '';
-            analyticsData.ownerWorkload.forEach(owner => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td data-label="Owner">${owner.owner}</td>
-                    <td data-label="Active">${owner.active}</td>
-                    <td data-label="High Priority">${owner.high_priority}</td>
-                    <td data-label="Overdue">${owner.overdue > 0 ? '<span style="color: #dc2626;">' + owner.overdue + '</span>' : '0'}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        function renderBurndownChart() {
-            const ctx = document.getElementById('burndownChart').getContext('2d');
-            if (window.burndownChartInstance) {
-                window.burndownChartInstance.destroy();
-            }
-
-            const dates = analyticsData.burndownData.map(d => d.date.slice(-5));
-            const remaining = analyticsData.burndownData.map(d => d.remaining);
-
-            // Calculate trendline
-            const trendline = [];
-            if (remaining.length > 1) {
-                const start = remaining[0];
-                const end = remaining[remaining.length - 1];
-                const slope = (end - start) / (remaining.length - 1);
-                for (let i = 0; i < remaining.length; i++) {
-                    trendline.push(Math.max(0, Math.round(start + slope * i)));
-                }
-            }
-
-            window.burndownChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: dates,
-                    datasets: [
-                        {
-                            label: 'Remaining Tasks',
-                            data: remaining,
-                            borderColor: '#a06e9b',
-                            backgroundColor: 'rgba(160, 110, 155, 0.1)',
-                            borderWidth: 2,
-                            tension: 0.4,
-                            fill: true
-                        },
-                        {
-                            label: 'Trend',
-                            data: trendline,
-                            borderColor: '#f2b95f',
-                            backgroundColor: 'transparent',
-                            borderWidth: 2,
-                            borderDash: [5, 5],
-                            tension: 0,
-                            pointRadius: 0
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#ffefc2', font: { size: 11 }, padding: 12 } }
-                    },
-                    scales: {
-                        y: {
-                            ticks: { color: '#978cb5' },
-                            grid: { color: 'rgba(160, 110, 155, 0.1)' },
-                            beginAtZero: true
-                        },
-                        x: {
-                            ticks: { color: '#978cb5' }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderDepartmentChart() {
-            const filtered = getFilteredActiveTasks();
-            const departments = {};
-
-            filtered.forEach(task => {
-                departments[task.department] = (departments[task.department] || 0) + 1;
-            });
-
-            const ctx = document.getElementById('departmentChart').getContext('2d');
-
-            if (window.departmentChartInstance) {
-                window.departmentChartInstance.destroy();
-            }
-
-            const colors = ['#f2b95f', '#a06e9b', '#4c3e70', '#773c71', '#978cb5', '#6a719a', '#b28134', '#ba9c4a', '#ceabca', '#ffefc2', '#e8d5c4'];
-            const labels = Object.keys(departments);
-            const data = Object.values(departments);
-
-            window.departmentChartInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: colors.slice(0, labels.length),
-                        borderColor: 'rgba(14, 19, 47, 0.95)',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                color: '#ffefc2',
-                                font: { size: 12, weight: '600' },
-                                padding: 16
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderPriorityChart() {
-            const filtered = getFilteredActiveTasks();
-            const highCount = filtered.filter(t => t.priority === 'High').length;
-            const mediumCount = filtered.filter(t => t.priority === 'Medium').length;
-            const lowCount = filtered.filter(t => t.priority === 'Low').length;
-
-            const ctx = document.getElementById('priorityChart').getContext('2d');
-
-            if (window.priorityChartInstance) {
-                window.priorityChartInstance.destroy();
-            }
-
-            window.priorityChartInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['High', 'Medium', 'Low'],
-                    datasets: [{
-                        label: 'Tasks by Priority',
-                        data: [highCount, mediumCount, lowCount],
-                        backgroundColor: ['#773c71', '#b28134', '#4c3e70'],
-                        borderColor: ['#6a1e5c', '#8b6329', '#3a3055'],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
-                    scales: {
-                        x: {
-                            ticks: { color: '#978cb5' },
-                            grid: { color: 'rgba(160, 110, 155, 0.1)' },
-                            beginAtZero: true
-                        },
-                        y: {
-                            ticks: { color: '#978cb5' }
-                        }
-                    }
-                }
-            });
-        }
-
-        // ===== NEW FEATURES =====
-
-        function toggleView(mode) {
-            const tableViews = document.getElementById('tableViewsContainer');
-            const kanbanView = document.getElementById('kanbanView');
-            const buttons = document.querySelectorAll('.view-btn');
-
-            buttons.forEach(btn => btn.classList.remove('active'));
-
-            if (mode === 'kanban') {
-                tableViews.style.display = 'none';
-                kanbanView.style.display = 'block';
-                buttons[1].classList.add('active');
-                renderKanbanView();
-            } else {
-                tableViews.style.display = 'block';
-                kanbanView.style.display = 'none';
-                buttons[0].classList.add('active');
-            }
-        }
-
-        function onStatCardClick(cardType) {
-            const activeSection = document.getElementById('activeTasksSection');
-            const completedSection = document.getElementById('completedTasksSection');
-
-            if (cardType === 'active') {
-                activeSection.scrollIntoView({ behavior: 'smooth' });
-            } else if (cardType === 'high-priority') {
-                document.getElementById('priorityFilter').value = 'High';
-                filterTasks();
-                activeSection.scrollIntoView({ behavior: 'smooth' });
-            } else if (cardType === 'completed') {
-                completedSection.scrollIntoView({ behavior: 'smooth' });
-                const toggle = completedSection.querySelector('.section-header .section-toggle');
-                const content = completedSection.querySelector('.section-content');
-                if (content.classList.contains('collapsed')) {
-                    toggle.classList.toggle('collapsed');
-                    content.classList.toggle('collapsed');
-                }
-            } else if (cardType === 'overdue') {
-                activeSection.scrollIntoView({ behavior: 'smooth' });
-                highlightOverdueTasks();
-            } else if (cardType === 'stale') {
-                activeSection.scrollIntoView({ behavior: 'smooth' });
-                highlightStaleTasks();
-            }
-        }
-
-        function highlightOverdueTasks() {
-            document.querySelectorAll('tbody tr').forEach(row => row.classList.remove('highlight-overdue'));
-            const today = new Date();
-            activeTasks.forEach(task => {
-                if (task.deadline && task.deadline !== '—') {
-                    const deadline = new Date(task.deadline);
-                    if (deadline < today) {
-                        const row = document.querySelector(`tr[data-task-id="${task.id}"]`);
-                        if (row) {
-                            row.classList.add('highlight-overdue');
-                            setTimeout(() => row.classList.remove('highlight-overdue'), 3000);
-                        }
-                    }
-                }
-            });
-        }
-
-        function highlightStaleTasks() {
-            document.querySelectorAll('tbody tr').forEach(row => row.classList.remove('highlight-stale'));
-            const today = new Date();
-            activeTasks.forEach(task => {
-                if (task.status === 'Not Started') {
-                    const created = new Date(task.created);
-                    const age = Math.floor((today - created) / (1000 * 60 * 60 * 24));
-                    if (age > 5) {
-                        const row = document.querySelector(`tr[data-task-id="${task.id}"]`);
-                        if (row) {
-                            row.classList.add('highlight-stale');
-                            setTimeout(() => row.classList.remove('highlight-stale'), 3000);
-                        }
-                    }
-                }
-            });
-        }
-
-        function renderActivityFeed() {
-            const container = document.getElementById('activityFeedItems');
-            if (!container || activityFeed.length === 0) return;
-
-            container.innerHTML = activityFeed.slice(0, 15).map(item => {
-                const date = new Date(item.date);
-                const now = new Date();
-                const diff = now - date;
-                const seconds = Math.floor(diff / 1000);
-                const minutes = Math.floor(seconds / 60);
-                const hours = Math.floor(minutes / 60);
-                const days = Math.floor(hours / 24);
-
-                let timeStr = '';
-                if (seconds < 60) timeStr = 'now';
-                else if (minutes < 60) timeStr = `${minutes}m ago`;
-                else if (hours < 24) timeStr = `${hours}h ago`;
-                else timeStr = `${days}d ago`;
-
-                let icon = '⚙️';
-                if (item.event === 'created') icon = '➕';
-                else if (item.event === 'completed') icon = '✅';
-                else if (item.event && item.event.includes('→')) icon = '🔄';
-
-                const taskDesc = item.task_name ? ` — ${item.task_name}` : '';
-                return `
-                    <div class="feed-item">
-                        <div class="feed-icon">${icon}</div>
-                        <div class="feed-text"><strong>${item.task_id}</strong> ${item.event}${taskDesc}</div>
-                        <div class="feed-time">${timeStr}</div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderCalendarView() {
-            const container = document.getElementById('weekView');
-            if (!container) return;
-
-            const today = new Date();
-            const dayOfWeek = today.getDay();
-            const weekStart = new Date(today);
-            weekStart.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-
-            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-            let html = '';
-
-            for (let i = 0; i < 7; i++) {
-                const date = new Date(weekStart);
-                date.setDate(weekStart.getDate() + i);
-                const dateStr = date.toISOString().split('T')[0];
-                const isToday = date.toDateString() === today.toDateString();
-
-                const dayEvents = calendarEvents.filter(e => e.date === dateStr);
-                const eventsHtml = dayEvents.map(e => `
-                    <div class="calendar-event">
-                        <span class="calendar-event-time">${e.time}</span>
-                        ${e.summary}
-                    </div>
-                `).join('');
-
-                html += `
-                    <div class="day-column ${isToday ? 'today' : ''}">
-                        <div class="day-date">${days[i]} ${date.getDate()}</div>
-                        <div class="day-events">
-                            ${eventsHtml || '<div style="color: #6a719a; font-size: 11px;">No events</div>'}
-                        </div>
-                    </div>
-                `;
-            }
-
-            container.innerHTML = html;
-        }
-
-        function renderKanbanView() {
-            const container = document.getElementById('kanbanGrid');
-            if (!container) return;
-
-            const columns = {
-                'Not Started': { tasks: [], title: 'Not Started' },
-                'WIP': { tasks: [], title: 'WIP / In Progress' },
-                'Blocked': { tasks: [], title: 'Blocked' },
-                'Completed': { tasks: [], title: 'Completed (Recent)' }
-            };
-
-            // Categorize active tasks
-            activeTasks.forEach(task => {
-                if (task.status === 'Not Started' || task.status === 'Scheduled') {
-                    columns['Not Started'].tasks.push(task);
-                } else if (task.status === 'WIP' || task.status === 'Draft Ready' || task.status === 'Under Legal Review') {
-                    columns['WIP'].tasks.push(task);
-                } else if (task.status && task.status.includes('Blocked')) {
-                    columns['Blocked'].tasks.push(task);
-                }
-            });
-
-            // Add recent completed tasks
-            completedTasks.slice(0, 10).forEach(task => {
-                columns['Completed'].tasks.push({...task, priority: 'High'});
-            });
-
-            let html = '';
-            Object.values(columns).forEach(col => {
-                html += `
-                    <div class="kanban-column">
-                        <div class="kanban-header">
-                            <h3>${col.title}</h3>
-                            <span class="kanban-count">${col.tasks.length}</span>
-                        </div>
-                        <div class="kanban-cards">
-                            ${col.tasks.map(task => `
-                                <div class="kanban-card ${(task.priority || 'Medium').toLowerCase()}">
-                                    <div class="kanban-id">${task.id}</div>
-                                    <div class="kanban-title">${(task.task || task.Task || '').substring(0, 60)}...</div>
-                                    <span class="kanban-badge">${task.department}</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-        }
-
-        function renderDependencies() {
-            const container = document.getElementById('dependenciesContainer');
-            if (!container || taskDependencies.length === 0) return;
-
-            container.innerHTML = taskDependencies.map(dep => {
-                const blockingTask = activeTasks.find(t => t.id === dep.to) || completedTasks.find(t => t.id === dep.to);
-                const isCompleted = completedTasks.some(t => t.id === dep.to);
-                const statusColor = isCompleted ? '#a06e9b' : '#f2b95f';
-                const statusText = isCompleted ? 'Completed' : 'Active';
-
-                return `
-                    <div class="dependency-item">
-                        <span class="dependency-from">${dep.from}</span>
-                        <span class="dependency-arrow">← blocked by →</span>
-                        <span class="dependency-to">${dep.to}</span>
-                        <span class="dependency-reason">(${dep.reason})</span>
-                        <span class="dependency-status" style="background: ${statusColor}20; color: ${statusColor}; border: 1px solid ${statusColor};">${statusText}</span>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderMilestones() {
-            const container = document.getElementById('timelineContainer');
-            if (!container || milestones.length === 0) return;
-
-            container.innerHTML = milestones.map(m => `
-                <div class="milestone">
-                    <div class="milestone-date">${m.date}</div>
-                    <div class="milestone-title">${m.title}</div>
-                    <div class="milestone-desc">${m.desc || m.description || ''}</div>
-                </div>
-            `).join('');
-        }
-
-        function toggleSection(header) {
-            const toggle = header.querySelector('.section-toggle');
-            const content = header.nextElementSibling;
-
-            toggle.classList.toggle('collapsed');
-            content.classList.toggle('collapsed');
-        }
-    </script>
+/* =====================================================================
+ * AUTH
+ * ===================================================================== */
+const PASSWORD_HASH = '22900e4738455f5c92593a95b6e0c5d228698a80385e4f1f2d272e8f8f49aec6';
+
+async function sha256(msg) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function unlock() {
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('mainShell').style.display = 'block';
+  initDashboard();
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const pw = document.getElementById('password').value;
+  const hash = await sha256(pw);
+  if (hash === PASSWORD_HASH) {
+    sessionStorage.setItem('tmw_auth', 'true');
+    document.getElementById('password').value = '';
+    document.getElementById('loginErr').classList.remove('show');
+    unlock();
+  } else {
+    document.getElementById('loginErr').classList.add('show');
+    document.getElementById('password').value = '';
+    document.getElementById('password').focus();
+  }
+}
+
+if (sessionStorage.getItem('tmw_auth') === 'true') {
+  document.addEventListener('DOMContentLoaded', unlock);
+} else {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('password').focus();
+  });
+}
+
+/* =====================================================================
+ * SORT STATE
+ * ===================================================================== */
+const sortState = {
+  active:       { key: null, dir: 'asc' },
+  completed:    { key: null, dir: 'asc' },
+  backlog:      { key: null, dir: 'asc' },
+  selfLearning: { key: null, dir: 'asc' }
+};
+
+const PRIORITY_ORDER = { 'Critical': 0, 'High': 1, 'Medium': 2, 'Low': 3 };
+
+function sortTasks(tasks, tableName) {
+  const s = sortState[tableName];
+  if (!s.key) return tasks;
+  return [...tasks].sort((a, b) => {
+    let vA = a[s.key] || '', vB = b[s.key] || '';
+    if (s.key === 'priority') {
+      vA = PRIORITY_ORDER[vA] !== undefined ? PRIORITY_ORDER[vA] : 99;
+      vB = PRIORITY_ORDER[vB] !== undefined ? PRIORITY_ORDER[vB] : 99;
+      return s.dir === 'asc' ? vA - vB : vB - vA;
+    }
+    if (s.key === 'deadline' || s.key === 'created' || s.key === 'completed') {
+      const dA = vA && vA !== '—' ? new Date(vA) : new Date('9999-12-31');
+      const dB = vB && vB !== '—' ? new Date(vB) : new Date('9999-12-31');
+      return s.dir === 'asc' ? dA - dB : dB - dA;
+    }
+    vA = String(vA).toLowerCase(); vB = String(vB).toLowerCase();
+    return s.dir === 'asc' ? vA.localeCompare(vB) : vB.localeCompare(vA);
+  });
+}
+
+/* =====================================================================
+ * DEADLINE HELPERS
+ * ===================================================================== */
+function deadlineStatus(deadline) {
+  if (!deadline || deadline === '—') return 'none';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const dl = new Date(deadline); dl.setHours(0,0,0,0);
+  const days = Math.ceil((dl - today) / 86400000);
+  if (days < 0) return 'overdue';
+  if (days <= 3) return 'due-soon';
+  return 'ok';
+}
+
+function rowClass(deadline) {
+  const s = deadlineStatus(deadline);
+  if (s === 'overdue') return 'row-overdue';
+  if (s === 'due-soon') return 'row-due-soon';
+  return '';
+}
+
+function fmtDeadline(deadline) {
+  if (!deadline || deadline === '—') return '<span style="color:var(--ink-low)">—</span>';
+  const s = deadlineStatus(deadline);
+  const color = s === 'overdue' ? 'var(--danger)' : s === 'due-soon' ? 'var(--warn)' : 'var(--ink-hi)';
+  const suffix = s === 'overdue' ? ' !' : s === 'due-soon' ? ' ~' : '';
+  return `<span style="color:${color};font-variant-numeric:tabular-nums;">${deadline}${suffix}</span>`;
+}
+
+/* =====================================================================
+ * BADGE HELPERS
+ * ===================================================================== */
+function deptBadgeClass(dept) {
+  if (!dept) return 'ds-badge-dept-other';
+  const d = dept.toLowerCase();
+  if (d.includes('finance') && !d.includes('legal')) return 'ds-badge-dept-finance';
+  if (d.includes('legal') && !d.includes('finance')) return 'ds-badge-dept-legal';
+  if (d.includes('archive') || d.includes('people') || d.includes('sales') || d.includes('customer')) return 'ds-badge-dept-other';
+  return 'ds-badge-dept';
+}
+
+function priBadgeClass(pri) {
+  const map = { 'Critical': 'ds-badge-pri-critical', 'High': 'ds-badge-pri-high',
+    'Medium': 'ds-badge-pri-medium', 'Low': 'ds-badge-pri-low' };
+  return map[pri] || 'ds-badge-pri-low';
+}
+
+function priHtml(pri) {
+  if (!pri) return '';
+  return `<span class="ds-badge ${priBadgeClass(pri)}">${pri}</span>`;
+}
+
+function deptHtml(dept) {
+  if (!dept) return '';
+  return `<span class="ds-badge ${deptBadgeClass(dept)}" title="${dept}">${dept}</span>`;
+}
+
+function ownerHtml(owner) {
+  if (!owner) return '';
+  const cls = owner === 'Rohan' ? 'owner-badge owner-rohan' : 'owner-badge';
+  return `<span class="${cls}">${owner}</span>`;
+}
+
+function statusHtml(status) {
+  if (!status) return '';
+  let cls = 'ds-badge ds-badge-other';
+  if (status === 'WIP') cls = 'ds-badge ds-badge-warn';
+  else if (status === 'Blocked' || status.includes('Blocked')) cls = 'ds-badge ds-badge-danger';
+  else if (status === 'Draft Ready' || status === 'Under Legal Review') cls = 'ds-badge ds-badge-sonnet';
+  else if (status === 'Scheduled') cls = 'ds-badge ds-badge-haiku';
+  return `<span class="${cls}">${status}</span>`;
+}
+
+/* =====================================================================
+ * FILTERS
+ * ===================================================================== */
+function getFilters() {
+  return {
+    q:    document.getElementById('searchInput').value.toLowerCase().trim(),
+    dept: document.getElementById('departmentFilter').value,
+    pri:  document.getElementById('priorityFilter').value,
+    stat: document.getElementById('statusFilter').value,
+    own:  document.getElementById('ownerFilter').value,
+  };
+}
+
+function matchTask(task, f) {
+  const q = f.q;
+  if (q) {
+    const text = ((task.id||'') + ' ' + (task.task||'') + ' ' + (task.owner||'') + ' ' + (task.department||'')).toLowerCase();
+    if (!text.includes(q)) return false;
+  }
+  if (f.dept && task.department !== f.dept) return false;
+  if (f.pri && task.priority !== f.pri) return false;
+  if (f.stat) {
+    const s = task.status || '';
+    if (f.stat === 'Blocked') { if (!s.includes('Blocked')) return false; }
+    else if (f.stat === 'Parked') { if (!s.includes('Parked')) return false; }
+    else if (s !== f.stat) return false;
+  }
+  if (f.own && !(task.owner || '').includes(f.own)) return false;
+  return true;
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('departmentFilter').value = '';
+  document.getElementById('priorityFilter').value = '';
+  document.getElementById('statusFilter').value = '';
+  document.getElementById('ownerFilter').value = '';
+  filterTasks();
+}
+
+function setFilter(field, val) {
+  const map = { priority: 'priorityFilter', dept: 'departmentFilter',
+    status: 'statusFilter', owner: 'ownerFilter' };
+  if (map[field]) document.getElementById(map[field]).value = val;
+  filterTasks();
+}
+
+function filterTasks() {
+  renderActiveTasks();
+  renderCompletedTasks();
+  renderBacklogTasks();
+  renderSelfLearningTasks();
+  renderCharts();
+}
+
+/* =====================================================================
+ * RENDER — ACTIVE TASKS
+ * ===================================================================== */
+function renderActiveTasks() {
+  const f = getFilters();
+  let data = activeTasks.filter(t => matchTask(t, f));
+  data = sortTasks(data, 'active');
+
+  // Overdue count (for stat band live update)
+  const today = new Date(); today.setHours(0,0,0,0);
+  const overdue = activeTasks.filter(t => {
+    if (!t.deadline || t.deadline === '—') return false;
+    const dl = new Date(t.deadline); dl.setHours(0,0,0,0);
+    return dl < today;
+  }).length;
+  document.getElementById('metricOverdue').textContent = overdue;
+  const tileOverdue = document.getElementById('tileOverdue');
+  if (overdue > 0) {
+    tileOverdue.classList.add('tone-danger');
+  } else {
+    tileOverdue.classList.remove('tone-danger');
+  }
+  document.getElementById('activeCountLabel').textContent = `(${activeTasks.length})`;
+
+  const tbody = document.getElementById('activeTbody');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" class="ds-table-empty">No tasks match the current filters.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(t => {
+    const rc = rowClass(t.deadline);
+    return `<tr class="clickable${rc ? ' ' + rc : ''}" data-task-id="${t.id || ''}">
+      <td><code class="ds-mono">${t.id || ''}</code></td>
+      <td style="max-width:340px;white-space:normal;">${t.task || ''}</td>
+      <td>${ownerHtml(t.owner)}</td>
+      <td>${deptHtml(t.department)}</td>
+      <td>${priHtml(t.priority)}</td>
+      <td>${statusHtml(t.status)}</td>
+      <td class="ds-num">${fmtDeadline(t.deadline)}</td>
+      <td class="ds-num" style="color:var(--ink-low);">${t.created || '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * RENDER — COMPLETED TASKS
+ * ===================================================================== */
+function renderCompletedTasks() {
+  const f = getFilters();
+  let data = completedTasks.filter(t => matchTask(t, f));
+  data = sortTasks(data, 'completed');
+  document.getElementById('completedCountLabel').textContent = `(${completedTasks.length})`;
+  const tbody = document.getElementById('completedTbody');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="ds-table-empty">No completed tasks match the current filters.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(t => `
+    <tr class="clickable">
+      <td><code class="ds-mono">${t.id || ''}</code></td>
+      <td style="max-width:360px;white-space:normal;">${t.task || ''}</td>
+      <td>${ownerHtml(t.owner)}</td>
+      <td>${deptHtml(t.department)}</td>
+      <td class="ds-num" style="color:var(--ink-mid);">${t.completed || '—'}</td>
+    </tr>`).join('');
+}
+
+/* =====================================================================
+ * RENDER — BACKLOG
+ * ===================================================================== */
+function renderBacklogTasks() {
+  const f = getFilters();
+  let data = backlogTasks.filter(t => matchTask(t, f));
+  data = sortTasks(data, 'backlog');
+  document.getElementById('backlogCountLabel').textContent = `(${backlogTasks.length})`;
+  const tbody = document.getElementById('backlogTbody');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="ds-table-empty">No backlog items match the current filters.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(t => `
+    <tr class="clickable">
+      <td><code class="ds-mono">${t.id || ''}</code></td>
+      <td style="max-width:360px;white-space:normal;">${t.task || ''}</td>
+      <td>${ownerHtml(t.owner)}</td>
+      <td>${deptHtml(t.department)}</td>
+      <td>${priHtml(t.priority)}</td>
+    </tr>`).join('');
+}
+
+/* =====================================================================
+ * RENDER — SELF LEARNING
+ * ===================================================================== */
+function renderSelfLearningTasks() {
+  const f = getFilters();
+  let data = selfLearningTasks.filter(t => matchTask(t, f));
+  data = sortTasks(data, 'selfLearning');
+  document.getElementById('selfLCountLabel').textContent = `(${selfLearningTasks.length})`;
+  const tbody = document.getElementById('selfLTbody');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="ds-table-empty">No self-learning tasks match filters.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(t => {
+    const rc = rowClass(t.deadline);
+    return `<tr class="clickable${rc ? ' ' + rc : ''}">
+      <td><code class="ds-mono">${t.id || ''}</code></td>
+      <td style="max-width:320px;white-space:normal;">${t.task || ''}</td>
+      <td>${ownerHtml(t.owner)}</td>
+      <td>${priHtml(t.priority)}</td>
+      <td>${statusHtml(t.status)}</td>
+      <td class="ds-num">${fmtDeadline(t.deadline)}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * RENDER — STATS BAND
+ * ===================================================================== */
+function renderStats() {
+  const active = activeTasks.length;
+  const highPri = activeTasks.filter(t => t.priority === 'Critical' || t.priority === 'High').length;
+  const completed = completedTasks.length;
+  const total = active + completed;
+  const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+  document.getElementById('metricActive').textContent = active;
+  document.getElementById('metricHighPri').textContent = highPri;
+  document.getElementById('metricCompletion').textContent = rate + '%';
+
+  // Completion rate from analyticsData if available
+  if (analyticsData && analyticsData.completionRate !== undefined) {
+    document.getElementById('metricCompletion').textContent = analyticsData.completionRate + '%';
+  }
+}
+
+/* =====================================================================
+ * RENDER — CHARTS
+ * ===================================================================== */
+let deptChartInst = null, priChartInst = null;
+
+const CHART_DEFAULTS = {
+  responsive: true,
+  maintainAspectRatio: true,
+  animation: { duration: 400, easing: 'easeOutQuart' },
+  plugins: {
+    legend: {
+      position: 'bottom',
+      labels: { color: 'oklch(55% 0.04 295)', font: { size: 11, family: 'Inter, -apple-system, sans-serif' }, padding: 12, boxWidth: 12 }
+    },
+    tooltip: {
+      backgroundColor: 'oklch(22% 0.05 285)',
+      titleColor: 'oklch(94% 0.04 85)',
+      bodyColor: 'oklch(72% 0.04 300)',
+      borderColor: 'oklch(35% 0.04 300 / 0.40)',
+      borderWidth: 1,
+      padding: 10,
+    }
+  }
+};
+
+function getComputedCssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function renderCharts() {
+  renderDeptChart();
+  renderPriChart();
+}
+
+function renderDeptChart() {
+  const f = getFilters();
+  const filtered = activeTasks.filter(t => matchTask(t, f));
+  const depts = {};
+  filtered.forEach(t => { depts[t.department] = (depts[t.department] || 0) + 1; });
+
+  const labels = Object.keys(depts);
+  const data = Object.values(depts);
+
+  // Two-color system: gold for primary depts, plum variants for the rest (One-Hue-One-Job)
+  const bgColors = labels.map((l, i) => {
+    if (i === 0) return 'oklch(78% 0.13 75 / 0.85)';
+    if (i === 1) return 'oklch(75% 0.06 320 / 0.85)';
+    if (i === 2) return 'oklch(70% 0.10 350 / 0.85)';
+    // Vary lightness of plum for remaining
+    const L = Math.max(40, 72 - i * 6);
+    return `oklch(${L}% 0.05 320 / 0.80)`;
+  });
+
+  const ctx = document.getElementById('deptChart').getContext('2d');
+  if (deptChartInst) deptChartInst.destroy();
+  deptChartInst = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{ data, backgroundColor: bgColors, borderColor: 'oklch(18% 0.04 280)', borderWidth: 2 }]
+    },
+    options: { ...CHART_DEFAULTS }
+  });
+}
+
+function renderPriChart() {
+  const f = getFilters();
+  const filtered = activeTasks.filter(t => matchTask(t, f));
+  const counts = { Critical: 0, High: 0, Medium: 0, Low: 0 };
+  filtered.forEach(t => { if (counts[t.priority] !== undefined) counts[t.priority]++; });
+
+  const ctx = document.getElementById('priChart').getContext('2d');
+  if (priChartInst) priChartInst.destroy();
+  priChartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Critical', 'High', 'Medium', 'Low'],
+      datasets: [{
+        label: 'Tasks',
+        data: [counts.Critical, counts.High, counts.Medium, counts.Low],
+        backgroundColor: [
+          'oklch(62% 0.22 25 / 0.85)',
+          'oklch(70% 0.18 50 / 0.85)',
+          'oklch(78% 0.13 75 / 0.85)',
+          'oklch(55% 0.04 295 / 0.60)',
+        ],
+        borderRadius: 3,
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      indexAxis: 'y',
+      plugins: { ...CHART_DEFAULTS.plugins, legend: { display: false } },
+      scales: {
+        x: { ticks: { color: 'oklch(55% 0.04 295)', font: { size: 11 } },
+             grid: { color: 'oklch(35% 0.04 300 / 0.12)' }, beginAtZero: true },
+        y: { ticks: { color: 'oklch(72% 0.04 300)', font: { size: 12 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+/* =====================================================================
+ * RENDER — HERO MILESTONE STRIP
+ * ===================================================================== */
+function renderHeroMilestones() {
+  const rail = document.getElementById('heroRail');
+  if (!heroMilestones.length) { document.getElementById('heroSection').style.display = 'none'; return; }
+
+  // Adjust grid columns to match item count
+  rail.style.gridTemplateColumns = `repeat(${heroMilestones.length}, minmax(200px, 1fr))`;
+
+  rail.innerHTML = heroMilestones.map(m => {
+    const isKeystone = !!m.keystone;
+    const dotHtml = isKeystone
+      ? `<div class="ds-milestone-dot"><img src="logo.jpeg" class="ds-milestone-logo" alt="TMW"></div>`
+      : `<div class="ds-milestone-dot"></div>`;
+    return `
+      <div class="ds-milestone${isKeystone ? ' keystone' : ''}">
+        ${dotHtml}
+        <div class="ds-milestone-date">${m.label || m.date}</div>
+        <div class="ds-milestone-title">${m.title}</div>
+        <div class="ds-milestone-note">${m.note || ''}</div>
+      </div>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * RENDER — MILESTONE TIMELINE (live milestones from TASKS.md)
+ * ===================================================================== */
+function renderMilestoneTimeline() {
+  const rail = document.getElementById('msRail');
+  if (!milestones.length) {
+    rail.innerHTML = '<div style="color:var(--ink-low);font-size:12px;padding:var(--sp-md);">No milestones available.</div>';
+    return;
+  }
+  rail.style.gridTemplateColumns = `repeat(${Math.min(milestones.length, 6)}, minmax(180px, 1fr))`;
+  rail.innerHTML = milestones.map(m => `
+    <div class="ds-milestone">
+      <div class="ds-milestone-dot"></div>
+      <div class="ds-milestone-date">${m.date || ''}</div>
+      <div class="ds-milestone-title">${m.title || ''}</div>
+      <div class="ds-milestone-note">${m.desc || m.description || ''}</div>
+    </div>`).join('');
+}
+
+/* =====================================================================
+ * RENDER — ACTIVITY FEED
+ * ===================================================================== */
+function renderActivityFeed() {
+  const container = document.getElementById('feedContainer');
+  if (!activityFeed.length) {
+    container.innerHTML = '<div class="ds-table-empty">No activity yet.</div>';
+    return;
+  }
+  const now = new Date();
+  container.innerHTML = activityFeed.slice(0, 20).map(item => {
+    const d = new Date(item.date);
+    const diff = now - d;
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor(diff / 3600000);
+    const mins = Math.floor(diff / 60000);
+    let ago = days > 0 ? `${days}d ago` : hours > 0 ? `${hours}h ago` : `${mins}m ago`;
+
+    const evClass = item.event === 'completed' ? 'ev-completed' :
+                    item.event === 'created'   ? 'ev-created' : 'ev-other';
+    const evLabel = item.event || 'update';
+
+    return `<div class="feed-item">
+      <div>
+        <code class="ds-mono" style="color:var(--gold);">${item.task_id || ''}</code>
+        <span class="feed-event ${evClass}">${evLabel}</span>
+        <span style="color:var(--ink-hi);font-size:12.5px;">${(item.task_name || '').replace(/\*\*/g,'')}</span>
+        ${item.department ? `<span style="color:var(--ink-low);font-size:11px;margin-left:4px;">${item.department}</span>` : ''}
+      </div>
+      <time class="feed-time" datetime="${item.date}">${ago}</time>
+    </div>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * RENDER — CALENDAR
+ * ===================================================================== */
+function renderCalendar() {
+  const container = document.getElementById('calWeek');
+  const today = new Date();
+  const dow = today.getDay();
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1));
+  const dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart);
+    d.setDate(weekStart.getDate() + i);
+    const dateStr = d.toISOString().split('T')[0];
+    const isToday = d.toDateString() === today.toDateString();
+    const evs = calendarEvents.filter(e => {
+      const eDate = (e.start || e.date || '').substring(0, 10);
+      return eDate === dateStr;
+    });
+    const evHtml = evs.map(e =>
+      `<div class="cal-event" title="${e.description || e.summary || ''}">${(e.summary || '').substring(0, 26)}</div>`
+    ).join('') || `<div style="color:var(--ink-low);font-size:10.5px;">—</div>`;
+    html += `<div class="cal-day${isToday ? ' today' : ''}">
+      <div class="cal-day-label">${dayNames[i]} ${d.getDate()}</div>
+      ${evHtml}
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+/* =====================================================================
+ * RENDER — DEPENDENCIES
+ * ===================================================================== */
+function renderDependencies() {
+  const container = document.getElementById('depsContainer');
+  if (!taskDependencies.length) return;
+  container.innerHTML = taskDependencies.map(dep => {
+    const isResolved = completedTasks.some(t => t.id === dep.to);
+    const statusCls = isResolved ? 'ds-badge ds-badge-ok' : 'ds-badge ds-badge-warn';
+    const statusTxt = isResolved ? 'Resolved' : 'Active';
+    return `<div class="dep-item">
+      <code class="ds-mono" style="color:var(--gold)">${dep.from}</code>
+      <span class="dep-arrow">← blocked by</span>
+      <code class="ds-mono" style="color:var(--ink-mid)">${dep.to}</code>
+      ${dep.reason ? `<span class="dep-reason">(${dep.reason})</span>` : ''}
+      <span class="${statusCls}">${statusTxt}</span>
+    </div>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * RENDER — KANBAN
+ * ===================================================================== */
+function renderKanban() {
+  const cols = {
+    'Not Started': { label: 'Not Started', tasks: [] },
+    'WIP':         { label: 'WIP / In Progress', tasks: [] },
+    'Blocked':     { label: 'Blocked', tasks: [] },
+    'Completed':   { label: 'Completed (Recent)', tasks: [] },
+  };
+  activeTasks.forEach(t => {
+    const s = t.status || '';
+    if (s === 'WIP' || s === 'Draft Ready' || s === 'Under Legal Review') cols['WIP'].tasks.push(t);
+    else if (s.includes('Blocked') || s.includes('Parked')) cols['Blocked'].tasks.push(t);
+    else cols['Not Started'].tasks.push(t);
+  });
+  completedTasks.slice(0, 12).forEach(t => cols['Completed'].tasks.push(t));
+
+  document.getElementById('kanbanGrid').innerHTML = Object.values(cols).map(col => {
+    const cards = col.tasks.map(t => `
+      <div class="kanban-card" title="${(t.task || '').replace(/"/g, '&quot;')}">
+        <div class="kanban-card-id">${t.id || ''}</div>
+        <div class="kanban-card-title">${t.task || t.Task || ''}</div>
+        <div class="kanban-card-foot">
+          ${t.department ? deptHtml(t.department) : ''}
+          ${t.priority ? priHtml(t.priority) : ''}
+        </div>
+      </div>`).join('');
+    return `<div class="ds-frame ds-frame-flush">
+      <div class="kanban-col-head">
+        <span>${col.label}</span>
+        <span class="kanban-col-count">${col.tasks.length}</span>
+      </div>
+      <div class="kanban-cards">${cards || '<div style="color:var(--ink-low);font-size:12px;padding:var(--sp-sm);">Empty</div>'}</div>
+    </div>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * VIEW TOGGLE
+ * ===================================================================== */
+function toggleView(mode) {
+  const table = document.getElementById('tableViewContainer');
+  const kanban = document.getElementById('kanbanContainer');
+  const btnT = document.getElementById('btnTable');
+  const btnK = document.getElementById('btnKanban');
+  if (mode === 'kanban') {
+    table.style.display = 'none';
+    kanban.style.display = 'block';
+    btnT.classList.remove('active');
+    btnK.classList.add('active');
+    renderKanban();
+  } else {
+    table.style.display = 'block';
+    kanban.style.display = 'none';
+    btnT.classList.add('active');
+    btnK.classList.remove('active');
+  }
+}
+
+/* =====================================================================
+ * SECTION COLLAPSE / EXPAND
+ * ===================================================================== */
+function toggleSection(bodyId, caretId) {
+  const body = document.getElementById(bodyId);
+  const caret = document.getElementById(caretId);
+  const btn = caret ? caret.closest('button') : null;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (caret) caret.classList.toggle('open', !isOpen);
+  if (btn) btn.setAttribute('aria-expanded', !isOpen);
+}
+
+/* =====================================================================
+ * STALE BANNER
+ * ===================================================================== */
+function checkStale() {
+  if (!analyticsData || !analyticsData.generated_at_epoch) return;
+  const ageMin = (Date.now() / 1000 - analyticsData.generated_at_epoch) / 60;
+  if (ageMin > 150) {
+    const banner = document.getElementById('staleBanner');
+    const ageEl = document.getElementById('staleAge');
+    ageEl.textContent = `(${Math.round(ageMin)} min old)`;
+    banner.classList.add('show');
+  }
+}
+
+/* =====================================================================
+ * SCROLL HELPERS
+ * ===================================================================== */
+function scrollToActive() {
+  document.getElementById('activeSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Ensure active section is open
+  const body = document.getElementById('activeBody');
+  if (!body.classList.contains('open')) toggleSection('activeBody', 'activeCaret');
+}
+
+/* =====================================================================
+ * LAST UPDATED
+ * ===================================================================== */
+function setLastUpdated() {
+  const el = document.getElementById('lastUpdated');
+  if (analyticsData && analyticsData.generated_at) {
+    el.textContent = analyticsData.generated_at;
+  } else {
+    // Fall back to regex-replaced date
+    el.textContent = el.textContent || '—';
+  }
+}
+
+/* =====================================================================
+ * TITLE BADGE
+ * ===================================================================== */
+function setTabTitle() {
+  const overdue = parseInt(document.getElementById('metricOverdue').textContent) || 0;
+  const active = activeTasks.length;
+  let badge = overdue > 0 ? `(${overdue} overdue) ` : `(${active} active) `;
+  document.title = `TMW ${badge}— Tasks`;
+}
+
+/* =====================================================================
+ * KEYBOARD SHORTCUTS
+ * ===================================================================== */
+document.addEventListener('keydown', e => {
+  // / focuses search (if not already in an input)
+  if (e.key === '/' && !['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+  // Esc clears filters (and closes any open modal — future-proofed)
+  if (e.key === 'Escape') {
+    clearFilters();
+    document.activeElement.blur();
+  }
+});
+
+// Sortable header keyboard support
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('sortable')) {
+    e.preventDefault();
+    e.target.click();
+  }
+});
+
+/* =====================================================================
+ * SORTABLE HEADERS — event delegation
+ * ===================================================================== */
+document.addEventListener('click', e => {
+  const th = e.target.closest('th.sortable');
+  if (!th) return;
+  const sortKey = th.dataset.sort;
+  const tableName = th.dataset.table;
+  if (!tableName || !sortKey) return;
+  const s = sortState[tableName];
+  if (s.key === sortKey) {
+    s.dir = s.dir === 'asc' ? 'desc' : 'asc';
+  } else {
+    s.key = sortKey;
+    s.dir = 'asc';
+  }
+  // Update ARIA + active class in that thead
+  const thead = th.closest('thead');
+  thead.querySelectorAll('th.sortable').forEach(h => {
+    h.classList.remove('active');
+    h.removeAttribute('aria-sort');
+  });
+  th.classList.add('active');
+  th.setAttribute('aria-sort', s.dir === 'asc' ? 'ascending' : 'descending');
+  th.textContent = th.textContent.replace(/ [▾▴]$/, '') + (s.dir === 'asc' ? ' ▴' : ' ▾');
+
+  if (tableName === 'active') renderActiveTasks();
+  else if (tableName === 'completed') renderCompletedTasks();
+  else if (tableName === 'backlog') renderBacklogTasks();
+  else if (tableName === 'selfLearning') renderSelfLearningTasks();
+});
+
+/* =====================================================================
+ * INIT
+ * ===================================================================== */
+function initDashboard() {
+  renderStats();
+  renderActiveTasks();
+  renderCompletedTasks();
+  renderBacklogTasks();
+  renderSelfLearningTasks();
+  renderHeroMilestones();
+  renderMilestoneTimeline();
+  renderActivityFeed();
+  renderCalendar();
+  renderDependencies();
+  renderCharts();
+  checkStale();
+  setLastUpdated();
+  setTabTitle();
+}
+</script>
 </body>
 </html>

@@ -117,3 +117,29 @@ code, .ds-mono {
 
 /* --- Selection --- */
 ::selection { background: var(--gold-tint); color: var(--ink-hi); }
+
+/* ============================================================
+ * Mobile baseline (≤ 700px = tablet portrait, ≤ 480px = phone)
+ * Added S081 Phase 7+ per Rohan: dashboards must be usable on phone.
+ * ============================================================ */
+@media (max-width: 700px) {
+  body { font-size: 12.5px; }
+  .ds-display { font-size: 24px; letter-spacing: -0.015em; }
+  .ds-headline { font-size: 17px; }
+  .ds-label { font-size: 10.5px; letter-spacing: 0.06em; }
+}
+
+@media (max-width: 480px) {
+  body { font-size: 12.5px; }
+  .ds-display { font-size: 22px; }
+}
+
+/* Phone-only horizontal scroll wrapper for any table that won't fit.
+   Pages that wrap a <table> in <div class="ds-frame ds-frame-flush"> get
+   horizontal-only scrolling automatically below 700px. */
+@media (max-width: 700px) {
+  .ds-frame.ds-frame-flush {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

@@ -28,6 +28,19 @@
   .fm-chart-wrap { height: 260px; padding: 10px 4px; }
   .fm-chart-tall { height: 320px; padding: 10px 4px; }
   .tone-danger { color: var(--danger); }
+
+  /* --- Phone: truth banner wraps; runway stacks vertically; callouts shrink --- */
+  @media (max-width: 700px) {
+    .fm-truth { padding: 10px 14px; font-size: 11.5px; line-height: 1.6; }
+    .fm-callouts { padding: 8px 14px 0; font-size: 11.5px; line-height: 1.65; }
+    .fm-runway-row { grid-template-columns: 1fr; gap: 8px; padding: 14px 16px; }
+    .fm-runway-num { font-size: 28px; }
+    .fm-runway-sub { font-size: 12px; }
+    .fm-foot-links { flex-wrap: wrap; gap: 12px; }
+    .fm-chart-wrap { height: 220px; }
+    .fm-chart-tall { height: 260px; }
+    .fm-pnl-band .ds-metric-lbl { font-size: 9.5px; }
+  }
 </style>
 </head>
 <body>
@@ -43,7 +56,7 @@
   </form>
 </div>
 
-<div class="fm-truth">Truth at 2026-04-30 02:20 IST · Cash ₹0 · YTD spend ₹87,862 · Receivable ₹87,862 · Burn rate ₹60,800/mo · Runway: pre-launch (no revenue yet)</div>
+<div class="fm-truth">Truth at 2026-04-30 02:29 IST · Cash ₹0 · YTD spend ₹87,862 · Receivable ₹87,862 · Burn rate ₹60,800/mo · Runway: pre-launch (no revenue yet)</div>
 
 <div class="ds-wrap">
   <header class="ds-top">
@@ -582,7 +595,7 @@
       </div>
       <div class="ds-metric">
         <div class="ds-metric-lbl">Generator last run</div>
-        <div class="ds-metric-val num">2026-04-30 02:20</div>
+        <div class="ds-metric-val num">2026-04-30 02:29</div>
         <div class="ds-metric-sub">launchd · hourly :20.</div>
       </div>
       <div class="ds-metric ">
@@ -603,7 +616,7 @@
   </div>
 
   <div class="ds-meta">
-    <span>Generated <span id="generatedAt">2026-04-30T02:20:05</span></span>
+    <span>Generated <span id="generatedAt">2026-04-30T02:29:28</span></span>
     <span>Finance MIS v1 · launchd twice daily</span>
   </div>
 </div>
@@ -635,7 +648,7 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
 });
 
 // --- Stale banner: warn if generator >150 min old ---
-const GENERATED_EPOCH = 1777495805;
+const GENERATED_EPOCH = 1777496368;
 (function(){
   const ageMin = (Date.now()/1000 - GENERATED_EPOCH) / 60;
   if (ageMin > 150) {

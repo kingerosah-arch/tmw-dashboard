@@ -12,7 +12,8 @@
   .fc-truth { padding: 10px 28px; border-bottom: 1px solid var(--hairline-soft); background: var(--bg-elev); color: var(--ink-mid); font-size: 12.5px; font-feature-settings: 'tnum'; letter-spacing: 0; }
   .fc-truth b { color: var(--ink-hi); font-weight: 600; }
   .fc-truth .sep { color: var(--ink-low); margin: 0 10px; }
-  .ds-metrics-equal { grid-template-columns: repeat(4, 1fr) !important; }
+  /* .ds-metrics-equal removed — pages now inherit the asymmetric 1.6/1/1/1 grid from
+     dashboard-tokens.css, with one tile carrying the .ds-metric-lead modifier. */
   .fc-pri-row { display: grid; grid-template-columns: 36px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--hairline-soft); }
   .fc-pri-row:last-child { border-bottom: 0; }
   .fc-pri-num { font-family: 'JetBrains Mono', ui-monospace, monospace; color: var(--ink-low); font-size: 16px; font-weight: 600; padding-top: 2px; }
@@ -25,9 +26,9 @@
   .fc-cp-step { display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
   .fc-cp-dot { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 600; background: var(--bg-elev); border: 1px solid var(--hairline); }
   .fc-cp-dot.done { background: var(--signal-gold); border-color: var(--signal-gold); color: var(--bg); }
-  .fc-cp-dot.inflight { background: transparent; border: 2px solid var(--signal-gold); color: var(--signal-gold); box-shadow: 0 0 0 4px var(--signal-gold-tint); animation: fcPulse 2.4s ease-in-out infinite; }
+  .fc-cp-dot.inflight { background: transparent; border: 2px solid var(--signal-gold); color: var(--signal-gold); outline: 4px solid var(--signal-gold-tint); outline-offset: 0; animation: fcPulse 2.4s ease-in-out infinite; }
   .fc-cp-dot.pending { color: var(--ink-low); }
-  @keyframes fcPulse { 0%,100% { box-shadow: 0 0 0 4px var(--signal-gold-tint); } 50% { box-shadow: 0 0 0 8px var(--signal-gold-tint); } }
+  @keyframes fcPulse { 0%,100% { outline-width: 4px; opacity: 1; } 50% { outline-width: 8px; opacity: 0.85; } }
   @media (prefers-reduced-motion: reduce) { .fc-cp-dot.inflight { animation: none; } }
   .fc-cp-label { margin-top: 10px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-hi); }
   .fc-cp-detail { margin-top: 3px; font-size: 11px; color: var(--ink-low); font-feature-settings: 'tnum'; }
@@ -64,7 +65,7 @@
   </form>
 </div>
 
-<div class="fc-truth">T-76 launch · TMW-151 T-2 · Phase 3 25% · ₹0 cash / ₹87,862 receivable · 5 priorities · 0 overdue · last sync 23m ago</div>
+<div class="fc-truth">T-76 launch · TMW-151 T-2 · Phase 3 25% · ₹0 cash / ₹87,862 receivable · 5 priorities · 0 overdue · last sync 7m ago</div>
 
 <div class="ds-wrap">
   <header class="ds-top">
@@ -101,7 +102,7 @@
       </div>
       <div class="ds-metric">
         <div class="ds-metric-lbl">Opus output, TMW · this month</div>
-        <div class="ds-metric-val num">21.22M</div>
+        <div class="ds-metric-val num">21.26M</div>
         <div class="ds-metric-sub">Scoped to TrackMyWings project. Raw output tokens, no ceiling.</div>
       </div>
       <div class="ds-metric ">
@@ -115,8 +116,8 @@
   <section class="ds-section">
     <div class="ds-section-head"><div class="ds-section-title">Cash position</div></div>
     
-        <div class="ds-metrics ds-metrics-equal">
-          <div class="ds-metric">
+        <div class="ds-metrics">
+          <div class="ds-metric ds-metric-lead">
             <div class="ds-metric-lbl">Cash on hand</div>
             <div class="ds-metric-val num">₹0</div>
             <div class="ds-metric-sub">Pre-bank. Becomes ₹1,00,000 after TMW-151 capital deposit.</div>
@@ -124,17 +125,17 @@
           <div class="ds-metric">
             <div class="ds-metric-lbl">Founder receivable</div>
             <div class="ds-metric-val num">₹87,862</div>
-            <div class="ds-metric-sub">YTD founder-funded bills (Expenses sheet).</div>
+            <div class="ds-metric-sub">YTD founder-funded bills.</div>
           </div>
           <div class="ds-metric">
             <div class="ds-metric-lbl">YTD burn</div>
             <div class="ds-metric-val num">₹87,862</div>
-            <div class="ds-metric-sub">Equal to receivable today — founder-funded only.</div>
+            <div class="ds-metric-sub">Equal to receivable today.</div>
           </div>
           <div class="ds-metric">
             <div class="ds-metric-lbl">Pending capital</div>
             <div class="ds-metric-val num">₹100,000</div>
-            <div class="ds-metric-sub">Rohan ₹62K + Amol ₹38K, deposit at bank visit.</div>
+            <div class="ds-metric-sub">₹62K + ₹38K at bank visit.</div>
           </div>
         </div>
         
@@ -150,7 +151,7 @@
     <div class="fc-pri-row">
       <div class="fc-pri-num">1</div>
       <div class="fc-pri-body">
-        <div class="fc-pri-task">**TMW-151 ICICI bank visit — KEYSTONE.** MOA + AOA + all CA deliverables in hand (TMW-158 closed). **Branch visit SCHEDULED Saturday 2026-05-02.** Single highest-leverage unblock — opens entire downstream chain (UDHYAM → Copyright → TM → Stealth exit → Funding).</div>
+        <div class="fc-pri-task">TMW-151 ICICI bank visit — KEYSTONE. MOA + AOA + all CA deliverables in hand (TMW-158 closed). Branch visit SCHEDULED Saturday 2026-05-02. Single highest-leverage unblock — opens entire downstream chain (UDHYAM → Copyright → TM → Stealth e…</div>
         <div class="fc-pri-meta">
           <span class="fc-pri-owner">Rohan + Amol</span>
           <span class="fc-pri-deadline tone-warn"><span class="num">2026-05-02 · T-2d</span></span>
@@ -161,7 +162,7 @@
     <div class="fc-pri-row">
       <div class="fc-pri-num">2</div>
       <div class="fc-pri-body">
-        <div class="fc-pri-task">**TMW-143 Patch v6 → Batch 7 — S081 head task.** Patch v6 = library-level token rebinds (content/tertiary on small body, content/inverse forbidden combo, 40→44pt icon-button minimums, plus chip-eyebrow + arc dot-on-path variants). Sonnet, ~30-45 min. Then Batch 7 (status display + flight detail family, 8 screens: 2.10/11/12/13/14/15/21/22). Forecast Batches 7-8 ~1.0-1.5M Opus → ~50-55% end of Wave 3. Reviewer prompts use rubric's 3 caps only (S080 fix held). Pre-assigned seqs (S080 fix held — zero race).</div>
+        <div class="fc-pri-task">TMW-143 Patch v6 → Batch 7 — S081 head task. Patch v6 = library-level token rebinds (content/tertiary on small body, content/inverse forbidden combo, 40→44pt icon-button minimums, plus chip-eyebrow + arc dot-on-path variants). Sonnet, ~30-…</div>
         <div class="fc-pri-meta">
           <span class="fc-pri-owner">Claude (with Rohan checkpoints between batches)</span>
           <span class="fc-pri-deadline "></span>
@@ -172,7 +173,7 @@
     <div class="fc-pri-row">
       <div class="fc-pri-num">3</div>
       <div class="fc-pri-body">
-        <div class="fc-pri-task">**TMW-152/153/123 UDHYAM → Copyright → Trademark** — sequential post-bank chain. Unblocked by TMW-151. Once bank opens, fire UDHYAM/GST/MSME → Copyright → TM.</div>
+        <div class="fc-pri-task">TMW-152/153/123 UDHYAM → Copyright → Trademark — sequential post-bank chain. Unblocked by TMW-151. Once bank opens, fire UDHYAM/GST/MSME → Copyright → TM.</div>
         <div class="fc-pri-meta">
           <span class="fc-pri-owner">Rohan</span>
           <span class="fc-pri-deadline "></span>
@@ -253,7 +254,7 @@
         <div class="fc-sprint-pct num">25%</div>
       </div>
       <div class="fc-sprint-sub">
-        TMW Opus output this month: 21.22M (raw).
+        TMW Opus output this month: 21.26M (raw).
         TMW-143 head task · S081 in flight.
       </div>
     </section>
@@ -345,10 +346,10 @@
   
     <section class="ds-section">
       <div class="ds-section-head"><div class="ds-section-title">This week</div></div>
-      <div class="ds-metrics ds-metrics-equal">
-        <div class="ds-metric">
+      <div class="ds-metrics ds-metrics-3">
+        <div class="ds-metric ds-metric-lead">
           <div class="ds-metric-lbl">Claude burn (Opus output)</div>
-          <div class="ds-metric-val num">10.59M</div>
+          <div class="ds-metric-val num">10.64M</div>
           <div class="ds-metric-sub">154 sessions · last 0.0h ago.</div>
         </div>
         <div class="ds-metric">
@@ -441,8 +442,8 @@
         <tbody>
         <tr>
           <td><code>folder-map-generator</code></td>
-          <td class="num">2026-04-30 01:55</td>
-          <td>14m ago</td>
+          <td class="num">2026-04-30 02:17</td>
+          <td>0m ago</td>
           <td><span class="ds-badge ds-badge-pri-medium">◉ stale</span></td>
           <td class="num"><span class="num">2</span></td>
         </tr>
@@ -450,15 +451,15 @@
         <tr>
           <td><code>task-dashboard</code></td>
           <td class="num">2026-04-30 01:15</td>
-          <td>54m ago</td>
+          <td>1.0h ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
         
         <tr>
           <td><code>claude-usage</code></td>
-          <td class="num">2026-04-30 01:15</td>
-          <td>54m ago</td>
+          <td class="num">2026-04-30 02:17</td>
+          <td>0m ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
@@ -466,15 +467,15 @@
         <tr>
           <td><code>founder-control-panel</code></td>
           <td class="num">2026-04-30 02:10</td>
-          <td>0m ago</td>
+          <td>7m ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
         
         <tr>
           <td><code>file-watcher</code></td>
-          <td class="num">2026-04-30 01:15</td>
-          <td>55m ago</td>
+          <td class="num">2026-04-30 02:15</td>
+          <td>2m ago</td>
           <td><span class="ds-badge ds-badge-pri-medium">◉ stale</span></td>
           <td class="num"><span class="num">108</span></td>
         </tr>
@@ -500,7 +501,7 @@
   </div>
 
   <div class="ds-meta">
-    <span>Generated <span id="generatedAt">2026-04-30T02:10:05</span></span>
+    <span>Generated <span id="generatedAt">2026-04-30T02:17:49</span></span>
     <span>Founder Control v1 · launchd hourly</span>
   </div>
 </div>
@@ -532,7 +533,7 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
 });
 
 // --- Stale banner: warn if >150 min old (hourly @ :15 schedule) ---
-const GENERATED_EPOCH = 1777495205;
+const GENERATED_EPOCH = 1777495669;
 (function(){
   const ageMin = (Date.now()/1000 - GENERATED_EPOCH) / 60;
   if (ageMin > 150) {

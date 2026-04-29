@@ -65,6 +65,14 @@
     .ds-top-brand { display: flex; align-items: center; gap: var(--sp-md); }
     .ds-top-text .ds-lede { margin-top: 0; }
     .ds-top-right { display: flex; gap: var(--sp-sm); align-items: center; flex-wrap: wrap; }
+
+    /* --- Phone: tables scroll horizontally (auto-set on .ds-frame-flush in tokens.css)
+       so we don't need to hide columns. Just shrink owner badges + kanban meta on phone. --- */
+    @media (max-width: 700px) {
+      .owner-badge { font-size: 9.5px; padding: 1px 5px; }
+      .kanban-card { padding: 10px; }
+      .kanban-card-meta { font-size: 10.5px; }
+    }
   </style>
 </head>
 <body>

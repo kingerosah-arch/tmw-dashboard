@@ -2477,7 +2477,8 @@
             { id: 'TMW-B04', task: 'Document engineering architecture (ADR format)', owner: 'Amol', department: 'Engineering', priority: 'Medium' },
             { id: 'TMW-B05', task: 'Create onboarding docs for new team members', owner: 'Rohan', department: 'People', priority: 'Low' },
             { id: 'TMW-025', task: 'Complete Google Ads campaign setup — upload logo, bid strategy, budget, payment, launch', owner: 'Rohan', department: 'Marketing', priority: 'Medium' },
-            { id: 'TMW-033', task: 'Review insurance guide and decide on coverage', owner: 'Rohan', department: 'Legal', priority: 'Low' }
+            { id: 'TMW-033', task: 'Review insurance guide and decide on coverage', owner: 'Rohan', department: 'Legal', priority: 'Low' },
+            { id: 'TMW-164', task: 'Harden tmw-dashboard auth. Current model is a client-side JS gate (SHA256 password literal in published HTML, brute-forceable in seconds). Move to real auth: (a) make `kingerosah-arch/tmw-dashboard` repo private + Cloudflare Access in front, or (b) self-host dashboards on a small EC2 with Basic Auth, or (c) move to GitHub Pages org-private with token. Currently low because dashboard URL is unguessable, but stealth-mode-correct fix is real auth before any wider sharing.', owner: 'Rohan + Amol', department: 'Operations', priority: 'Low' }
         ];
 
         const selfLearningTasks = [

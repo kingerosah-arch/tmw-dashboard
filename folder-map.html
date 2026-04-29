@@ -160,6 +160,28 @@
     transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
   }
   .fm-ctrl-btn:hover { color: var(--gold); border-color: var(--gold); }
+
+  /* --- Phone: tighter tree + summary + breadcrumb wraps --- */
+  @media (max-width: 700px) {
+    .fm-summary { font-size: 12px; padding: var(--sp-sm) 0 var(--sp-md); }
+    .fm-controls { gap: 6px; }
+    .fm-controls .ds-filter { min-width: 0; flex: 1 1 calc(50% - 6px); }
+    .fm-controls input.ds-filter { flex: 1 1 100%; }
+    .fm-ctrl-btn { padding: 8px 11px; font-size: 11.5px; }
+    .fm-tree { font-size: 12px; padding: 10px 0; max-height: 70vh; }
+    .fm-node { padding: 2px 10px 2px 6px; }
+    .fm-children { margin-left: 14px; }
+    .fm-node.fm-depth-1 { font-size: 12.5px; }
+    .fm-node.fm-depth-2 { font-size: 12px; }
+    .fm-node.fm-depth-3 { font-size: 11.5px; }
+    .fm-node.fm-depth-4,
+    .fm-node.fm-depth-5,
+    .fm-node.fm-depth-6,
+    .fm-node.fm-depth-7 { font-size: 11px; }
+    .fm-meta .ds-badge { display: none; }  /* dept badges hidden on phone — too cramped */
+    .fm-breadcrumb { padding: 8px 12px; flex-wrap: wrap; gap: 8px; }
+    .fm-bc-path { font-size: 11.5px; flex: 1 1 100%; }
+  }
 </style>
 </head>
 <body>
@@ -231,7 +253,7 @@
   <div class="fm-tree" id="folderTree"></div>
 
   <div class="ds-meta">
-    <span>Generated 2026-04-30 02:17</span>
+    <span>Generated 2026-04-30 02:29</span>
     <span>287 folders</span>
     <span>306 files</span>
   </div>

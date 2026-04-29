@@ -30,6 +30,26 @@
   .fc-cp-dot.pending { color: var(--ink-low); }
   @keyframes fcPulse { 0%,100% { outline-width: 4px; opacity: 1; } 50% { outline-width: 8px; opacity: 0.85; } }
   @media (prefers-reduced-motion: reduce) { .fc-cp-dot.inflight { animation: none; } }
+
+  /* --- Phone: truth banner wraps; critical-path stepper goes vertical; cal/sprint reflow --- */
+  @media (max-width: 700px) {
+    .fc-truth { padding: 10px 14px; font-size: 11.5px; line-height: 1.6; }
+    .fc-truth .sep { display: inline; margin: 0 6px; }
+    .fc-cp-rail { grid-template-columns: 1fr; gap: 8px; padding: 14px 0 0; }
+    .fc-cp-rail::before { display: none; }
+    .fc-cp-step { flex-direction: row; text-align: left; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--hairline-soft); }
+    .fc-cp-step:last-child { border-bottom: 0; }
+    .fc-cp-dot { flex: 0 0 28px; }
+    .fc-cp-label { margin-top: 0; font-size: 12px; }
+    .fc-cp-detail { margin-top: 0; font-size: 11px; margin-left: auto; }
+    .fc-sprint-row { grid-template-columns: 1fr 60px; gap: 10px; }
+    .fc-sprint-pct { display: none; }
+    .fc-cal-row { grid-template-columns: 1fr; gap: 4px; padding: 10px 0; }
+    .fc-cal-time { font-size: 11.5px; }
+  }
+  @media (max-width: 480px) {
+    .fc-pri-row { grid-template-columns: 24px 1fr; gap: 10px; padding: 10px 0; }
+  }
   .fc-cp-label { margin-top: 10px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-hi); }
   .fc-cp-detail { margin-top: 3px; font-size: 11px; color: var(--ink-low); font-feature-settings: 'tnum'; }
   .fc-sprint-row { display: grid; grid-template-columns: 1fr 90px 60px; gap: 14px; align-items: center; }
@@ -65,7 +85,7 @@
   </form>
 </div>
 
-<div class="fc-truth">T-76 launch · TMW-151 T-2 · Phase 3 25% · ₹0 cash / ₹87,862 receivable · 5 priorities · 0 overdue · last sync 1m ago</div>
+<div class="fc-truth">T-76 launch · TMW-151 T-2 · Phase 3 25% · ₹0 cash / ₹87,862 receivable · 5 priorities · 0 overdue · last sync 9m ago</div>
 
 <div class="ds-wrap">
   <header class="ds-top">
@@ -102,7 +122,7 @@
       </div>
       <div class="ds-metric">
         <div class="ds-metric-lbl">Opus output, TMW · this month</div>
-        <div class="ds-metric-val num">21.27M</div>
+        <div class="ds-metric-val num">21.34M</div>
         <div class="ds-metric-sub">Scoped to TrackMyWings project. Raw output tokens, no ceiling.</div>
       </div>
       <div class="ds-metric ">
@@ -254,7 +274,7 @@
         <div class="fc-sprint-pct num">25%</div>
       </div>
       <div class="fc-sprint-sub">
-        TMW Opus output this month: 21.27M (raw).
+        TMW Opus output this month: 21.34M (raw).
         TMW-143 head task · S081 in flight.
       </div>
     </section>
@@ -349,7 +369,7 @@
       <div class="ds-metrics ds-metrics-3">
         <div class="ds-metric ds-metric-lead">
           <div class="ds-metric-lbl">Claude burn (Opus output)</div>
-          <div class="ds-metric-val num">10.65M</div>
+          <div class="ds-metric-val num">10.72M</div>
           <div class="ds-metric-sub">154 sessions · last 0.0h ago.</div>
         </div>
         <div class="ds-metric">
@@ -442,40 +462,40 @@
         <tbody>
         <tr>
           <td><code>tasks</code></td>
-          <td class="num">2026-04-30 02:17</td>
-          <td>1m ago</td>
+          <td class="num">2026-04-30 02:28</td>
+          <td>0m ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
         
         <tr>
           <td><code>founder-control-panel</code></td>
-          <td class="num">2026-04-30 02:17</td>
-          <td>1m ago</td>
+          <td class="num">2026-04-30 02:19</td>
+          <td>9m ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
         
         <tr>
           <td><code>claude-usage</code></td>
-          <td class="num">2026-04-30 02:17</td>
-          <td>1m ago</td>
+          <td class="num">2026-04-30 02:29</td>
+          <td>0m ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
         
         <tr>
           <td><code>finance-mis</code></td>
-          <td class="num">2026-04-30 02:17</td>
-          <td>1m ago</td>
+          <td class="num">2026-04-30 02:29</td>
+          <td>0m ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
         
         <tr>
           <td><code>folder-map-generator</code></td>
-          <td class="num">2026-04-30 02:17</td>
-          <td>1m ago</td>
+          <td class="num">2026-04-30 02:29</td>
+          <td>0m ago</td>
           <td><span class="ds-badge ds-badge-pri-medium">◉ stale</span></td>
           <td class="num"><span class="num">2</span></td>
         </tr>
@@ -483,7 +503,7 @@
         <tr>
           <td><code>file-watcher</code></td>
           <td class="num">2026-04-30 02:15</td>
-          <td>4m ago</td>
+          <td>14m ago</td>
           <td><span class="ds-badge ds-badge-pri-medium">◉ stale</span></td>
           <td class="num"><span class="num">108</span></td>
         </tr>
@@ -517,7 +537,7 @@
   </div>
 
   <div class="ds-meta">
-    <span>Generated <span id="generatedAt">2026-04-30T02:19:37</span></span>
+    <span>Generated <span id="generatedAt">2026-04-30T02:29:31</span></span>
     <span>Founder Control v1 · launchd hourly</span>
   </div>
 </div>
@@ -549,7 +569,7 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
 });
 
 // --- Stale banner: warn if >150 min old (hourly @ :15 schedule) ---
-const GENERATED_EPOCH = 1777495777;
+const GENERATED_EPOCH = 1777496371;
 (function(){
   const ageMin = (Date.now()/1000 - GENERATED_EPOCH) / 60;
   if (ageMin > 150) {

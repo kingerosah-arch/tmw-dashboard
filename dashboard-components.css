@@ -1,0 +1,809 @@
+/* ============================================================
+ * TrackMyWings Internal Dashboards — Component Library
+ * Concatenated from 12 partials in /components/
+ * Built: 2026-04-30T00:44:05
+ * Edit individual partials, then re-run build_dashboard_assets.py.
+ * ============================================================ */
+
+/* === Component: App Shell ============================================
+ * Page-level wrap, top bar, nav, meta footer.
+ * Used by every dashboard.
+ * =================================================================== */
+
+.ds-wrap {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: var(--sp-xl) var(--sp-xl) var(--sp-xxxl);
+}
+
+@media (max-width: 700px) {
+  .ds-wrap { padding: var(--sp-lg) var(--sp-md) var(--sp-xxl); }
+}
+
+/* --- Top bar --- */
+.ds-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--sp-lg);
+  padding-bottom: var(--sp-lg);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: var(--sp-xxl);
+}
+
+.ds-top-brand { display: flex; align-items: center; gap: var(--sp-md); }
+
+.ds-top-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--r-md);
+  object-fit: cover;
+  border: 1px solid var(--line-soft);
+  background: var(--bg-card);
+}
+
+.ds-top h1 { /* uses .ds-display via class composition */ }
+.ds-top .ds-lede { color: var(--ink-mid); font-size: 13px; margin-top: var(--sp-xs); }
+
+/* --- Nav (cross-dashboard) --- */
+.ds-nav { display: flex; gap: var(--sp-xs); flex-wrap: wrap; }
+
+.ds-nav a, .ds-nav button {
+  background: transparent;
+  color: var(--ink-mid);
+  border: 1px solid var(--line);
+  padding: 8px 14px;
+  border-radius: var(--r-md);
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+  font-weight: 400;
+  line-height: 1;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.ds-nav a:hover, .ds-nav button:hover { color: var(--gold); border-color: var(--gold); }
+.ds-nav a.ds-nav-active { color: var(--ink-hi); border-color: var(--gold); background: var(--gold-tint-soft); }
+
+/* --- Meta footer --- */
+.ds-meta {
+  margin-top: var(--sp-xl);
+  font-size: 11px;
+  color: var(--ink-low);
+  display: flex;
+  gap: var(--sp-lg);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 700px) {
+  .ds-top { flex-direction: column; align-items: flex-start; }
+  .ds-nav { width: 100%; }
+}
+
+/* === Component: Buttons =============================================
+ * Primary (gold solid) and Ghost (border-only).
+ * Hover via color/border shifts only. No transforms, no shadows.
+ * =================================================================== */
+
+.ds-btn-primary {
+  background: var(--gold);
+  color: var(--bg-base);
+  border: none;
+  border-radius: var(--r-md);
+  padding: 12px 18px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.005em;
+  cursor: pointer;
+  transition: filter var(--t-fast) var(--ease);
+}
+.ds-btn-primary:hover { filter: brightness(1.06); }
+.ds-btn-primary:active { filter: brightness(0.96); }
+.ds-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ds-btn-ghost {
+  background: transparent;
+  color: var(--ink-mid);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 8px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.ds-btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
+
+/* === Component: Metric Tile + Asymmetric Grid ======================
+ * The signature primitive. Lead variant for the single most important
+ * number per page (one per page maximum).
+ * =================================================================== */
+
+/* --- Asymmetric grid (1.6fr lead + N×1fr secondary) --- */
+.ds-metrics {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: var(--sp-md);
+  margin-bottom: var(--sp-xxl);
+}
+.ds-metrics-3 { grid-template-columns: 1.6fr 1fr 1fr; }
+.ds-metrics-5 { grid-template-columns: 1.6fr 1fr 1fr 1fr 1fr; }
+
+@media (max-width: 900px) {
+  .ds-metrics, .ds-metrics-3, .ds-metrics-5 { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .ds-metrics, .ds-metrics-3, .ds-metrics-5 { grid-template-columns: 1fr; }
+}
+
+/* --- Metric tile --- */
+.ds-metric {
+  background: var(--bg-card);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg) var(--sp-xl);
+  color: var(--ink-hi);
+  display: flex;
+  flex-direction: column;
+}
+
+.ds-metric-lead {
+  background: linear-gradient(140deg, var(--bg-card) 0%, var(--bg-elev) 100%);
+  border-color: var(--line);
+}
+
+.ds-metric-lbl {
+  color: var(--ink-low);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ds-metric-val {
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  margin-top: var(--sp-md);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-hi);
+}
+
+.ds-metric-lead .ds-metric-val { font-size: 40px; }
+
+.ds-metric-sub {
+  color: var(--ink-mid);
+  font-size: 12px;
+  line-height: 1.45;
+  margin-top: var(--sp-xs);
+}
+
+/* --- Tone variants for state-coded tiles --- */
+.ds-metric.tone-warn { border-color: var(--warn); }
+.ds-metric.tone-warn .ds-metric-val { color: var(--warn); }
+.ds-metric.tone-danger { border-color: var(--danger); background: var(--danger-tint); }
+.ds-metric.tone-danger .ds-metric-val { color: var(--danger); }
+.ds-metric.tone-gold .ds-metric-val { color: var(--gold); }
+
+/* === Component: Section Head + Chart Frame =========================
+ * Section heads sit directly on the page (no card wrapping).
+ * Chart frames wrap content where containment helps readability.
+ * =================================================================== */
+
+.ds-section { margin-bottom: var(--sp-xxxl); }
+
+.ds-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-md);
+  margin-bottom: var(--sp-md);
+}
+
+.ds-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink-mid);
+  text-transform: uppercase;
+}
+
+.ds-section-aside {
+  font-size: 12px;
+  color: var(--ink-low);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-frame {
+  background: var(--bg-card);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  padding: var(--sp-lg);
+}
+
+.ds-frame.ds-frame-flush { padding: 0; }
+
+.ds-cols-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-lg);
+}
+.ds-cols-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: var(--sp-lg);
+}
+
+@media (max-width: 900px) {
+  .ds-cols-2, .ds-cols-3 { grid-template-columns: 1fr; }
+}
+
+canvas { max-height: 320px; }
+
+/* === Component: Sortable Table =====================================
+ * Dense data row. Body Strong text, tabular numerics, soft dividers.
+ * Hover lifts row to bg-elev. No transforms, no shadows.
+ * =================================================================== */
+
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: inherit;
+  color: var(--ink-hi);
+}
+
+.ds-table thead th {
+  text-align: left;
+  padding: 12px 14px;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  white-space: nowrap;
+}
+
+.ds-table thead th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: color var(--t-fast) var(--ease);
+}
+.ds-table thead th.sortable:hover,
+.ds-table thead th.sortable.active { color: var(--gold); }
+
+.ds-table tbody td {
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  border-bottom: 1px solid var(--line-soft);
+  vertical-align: middle;
+}
+
+.ds-table tbody tr:last-child td { border-bottom: none; }
+
+.ds-table tbody tr.clickable {
+  cursor: pointer;
+  transition: background var(--t-mid) var(--ease);
+}
+.ds-table tbody tr.clickable:hover td { background: var(--bg-elev); }
+
+.ds-table .num,
+.ds-table .ds-num,
+.ds-table th.num,
+.ds-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Row state: replaces the forbidden side-stripe pattern.
+ *     Use full-row background tint + leading icon/badge instead. --- */
+.ds-table tr.row-overdue td { background: var(--danger-tint); }
+.ds-table tr.row-overdue td:first-child { color: var(--danger); font-weight: 600; }
+
+.ds-table tr.row-due-soon td { background: var(--warn-tint); }
+.ds-table tr.row-due-soon td:first-child { color: var(--warn); font-weight: 600; }
+
+.ds-table tr.row-stale td { background: var(--bg-elev); color: var(--ink-mid); }
+
+/* --- Empty state --- */
+.ds-table-empty {
+  padding: 36px 14px;
+  text-align: center;
+  color: var(--ink-mid);
+  font-size: 13px;
+}
+
+/* === Component: Badge ==============================================
+ * Inline metadata pill. Used for model family, dept, status.
+ * Color carries semantic role; text is the primary signal.
+ * =================================================================== */
+
+.ds-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: var(--r-xs);
+  font-family: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+/* --- Model family --- */
+.ds-badge-opus   { background: var(--gold-tint); color: var(--gold); }
+.ds-badge-sonnet { background: var(--plum-tint); color: var(--plum); }
+.ds-badge-haiku  { background: var(--rose-tint); color: var(--rose); }
+.ds-badge-other  { background: oklch(55% 0.04 295 / 0.18); color: var(--ink-low); }
+
+/* --- Dept (collapsed from 12-color rainbow to 3 roles per One-Hue-One-Job Rule) --- */
+.ds-badge-dept           { background: var(--plum-tint); color: var(--plum); }
+.ds-badge-dept-finance   { background: var(--gold-tint); color: var(--gold); }
+.ds-badge-dept-legal     { background: var(--danger-tint); color: var(--danger); }
+.ds-badge-dept-other     { background: oklch(55% 0.04 295 / 0.18); color: var(--ink-low); }
+
+/* --- Status --- */
+.ds-badge-warn   { background: var(--warn-tint); color: var(--warn); }
+.ds-badge-danger { background: var(--danger-tint); color: var(--danger); }
+.ds-badge-ok     { background: oklch(70% 0.10 140 / 0.18); color: oklch(75% 0.10 140); }
+
+/* --- Priority (replaces side-stripe pattern) --- */
+.ds-badge-pri-critical { background: var(--danger-tint); color: var(--danger); }
+.ds-badge-pri-high     { background: var(--warn-tint); color: var(--warn); }
+.ds-badge-pri-medium   { background: var(--gold-tint); color: var(--gold); }
+.ds-badge-pri-low      { background: oklch(55% 0.04 295 / 0.18); color: var(--ink-low); }
+
+/* === Component: Filter Inputs ======================================
+ * Text and select fields. Border shifts to gold on focus.
+ * No glow, no transform. WCAG-compliant focus ring.
+ * =================================================================== */
+
+.ds-filters {
+  display: flex;
+  gap: var(--sp-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--sp-md);
+}
+
+.ds-filter {
+  background: var(--bg-card);
+  color: var(--ink-hi);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  padding: 9px 13px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 400;
+  min-width: 160px;
+  transition: border-color var(--t-fast) var(--ease);
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: none;
+}
+
+.ds-filter:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.ds-filter::placeholder { color: var(--ink-low); }
+
+.ds-filter-search {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* --- Custom select chevron (no native UA arrow) --- */
+select.ds-filter {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path fill='%23978cb5' d='M1 3l4 4 4-4'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+  cursor: pointer;
+}
+
+.ds-filter-clear {
+  background: transparent;
+  color: var(--ink-low);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-md);
+  padding: 9px 13px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.ds-filter-clear:hover { color: var(--gold); border-color: var(--gold); }
+
+/* === Component: Modal ==============================================
+ * Scrim, not lift. Modal sits on the page; backdrop is a flat tint.
+ * No backdrop-filter, no box-shadow on the surface.
+ * =================================================================== */
+
+.ds-scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--scrim);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 50;
+  animation: ds-scrim-in var(--t-mid) var(--ease);
+}
+.ds-scrim.show { display: flex; }
+
+@keyframes ds-scrim-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.ds-modal {
+  position: relative;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: var(--sp-xl) var(--sp-xxl);
+  max-width: 720px;
+  width: 100%;
+  max-height: 86vh;
+  overflow-y: auto;
+  color: var(--ink-hi);
+}
+
+.ds-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  background: transparent;
+  border: none;
+  color: var(--ink-mid);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease);
+  padding: 4px 8px;
+}
+.ds-modal-close:hover { color: var(--ink-hi); }
+
+.ds-modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin-bottom: var(--sp-xs);
+}
+
+.ds-modal-sub {
+  color: var(--ink-mid);
+  font-size: 12px;
+  margin-bottom: var(--sp-xl);
+}
+
+.ds-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--sp-md);
+  margin-bottom: var(--sp-xl);
+}
+
+.ds-modal-stat {}
+.ds-modal-stat .lbl {
+  color: var(--ink-low);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.ds-modal-stat .val {
+  color: var(--ink-hi);
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* === Component: Login Card =========================================
+ * First surface every fresh session sees. Logo lockup centerpiece.
+ * No glassmorphism, no drop shadow, no transform.
+ * =================================================================== */
+
+.ds-login-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 999;
+}
+
+.ds-login-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-xl);
+  padding: var(--sp-xxl) 40px;
+  min-width: 320px;
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  font-family: inherit;
+  color: var(--ink-hi);
+}
+
+.ds-login-logo {
+  width: 88px;
+  height: 88px;
+  border-radius: var(--r-lg);
+  object-fit: cover;
+  margin: 0 auto var(--sp-lg);
+  display: block;
+  border: 1px solid var(--line-soft);
+}
+
+.ds-login-title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--ink-hi);
+  margin-bottom: 6px;
+}
+
+.ds-login-sub {
+  color: var(--ink-mid);
+  font-size: 12px;
+  margin-bottom: var(--sp-lg);
+}
+
+.ds-login-card .ds-filter {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 14px;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.ds-login-card .ds-btn-primary {
+  width: 100%;
+  margin-top: var(--sp-sm);
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ds-login-err {
+  color: var(--danger);
+  font-size: 12px;
+  margin-top: var(--sp-sm);
+  display: none;
+  min-height: 18px;
+}
+.ds-login-err.show { display: block; }
+
+/* === Component: Tool Row (Signature Primitive) =====================
+ * Ranked list with proportional bar viz. Used for tool leaderboards,
+ * top-projects in modals, dept-task counts. Per Signal Gold Rule, only
+ * the rank-1 row uses gold for the count; others use ink-hi.
+ * =================================================================== */
+
+.ds-tool-list {
+  background: var(--bg-card);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  padding: 8px 0;
+  font-family: inherit;
+}
+
+.ds-tool-row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: var(--sp-md);
+  padding: 10px var(--sp-lg);
+  border-bottom: 1px solid var(--line-soft);
+}
+.ds-tool-row:last-child { border-bottom: none; }
+
+.ds-tool-rank {
+  color: var(--ink-low);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-tool-name {
+  color: var(--ink-hi);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.ds-tool-count {
+  color: var(--ink-hi);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Only the rank-1 row gets gold count (Signal Gold Rule) */
+.ds-tool-row.rank-1 .ds-tool-count { color: var(--gold); }
+
+.ds-tool-bar {
+  grid-column: 2 / 4;
+  height: 4px;
+  margin-top: 6px;
+  background: var(--gold-tint-soft);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ds-tool-bar i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--gold);
+  border-radius: 2px;
+  transition: width var(--t-slow) var(--ease);
+}
+
+/* === Component: Milestone Strip (Hero) =============================
+ * 5 major journey wins, horizontal rail with a thin gold path. Logo
+ * marks the keystone (incorporation). Designed for motivation at glance.
+ * =================================================================== */
+
+.ds-milestones {
+  position: relative;
+  padding: var(--sp-xl) 0 var(--sp-md);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+
+.ds-milestones::-webkit-scrollbar { height: 6px; }
+.ds-milestones::-webkit-scrollbar-track { background: transparent; }
+.ds-milestones::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+
+.ds-milestone-rail {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(220px, 1fr));
+  gap: 0;
+  position: relative;
+  min-width: max-content;
+  padding-bottom: var(--sp-md);
+}
+
+/* The connecting gold path */
+.ds-milestone-rail::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  background: linear-gradient(90deg,
+    var(--gold-tint) 0%,
+    var(--gold) 25%,
+    var(--gold) 75%,
+    var(--gold-tint) 100%);
+  z-index: 0;
+}
+
+.ds-milestone {
+  position: relative;
+  z-index: 1;
+  padding: 0 var(--sp-sm);
+  text-align: center;
+}
+
+.ds-milestone-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg-base);
+  border: 2px solid var(--gold);
+  margin: 0 auto var(--sp-sm);
+  position: relative;
+  z-index: 2;
+  transition: transform var(--t-mid) var(--ease);
+}
+
+.ds-milestone:hover .ds-milestone-dot { transform: scale(1.15); }
+
+.ds-milestone-dot::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+/* Keystone (incorporation) variant — bigger, with logo */
+.ds-milestone.keystone .ds-milestone-dot {
+  width: 56px;
+  height: 56px;
+  border-width: 2px;
+  margin-top: -20px;
+  background: var(--bg-card);
+  overflow: hidden;
+}
+.ds-milestone.keystone .ds-milestone-dot::after { display: none; }
+.ds-milestone.keystone .ds-milestone-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ds-milestone-date {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-low);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 4px;
+}
+
+.ds-milestone-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-hi);
+  line-height: 1.3;
+  margin-bottom: 3px;
+}
+
+.ds-milestone.keystone .ds-milestone-title {
+  color: var(--gold);
+  font-size: 14px;
+}
+
+.ds-milestone-note {
+  font-size: 11.5px;
+  color: var(--ink-mid);
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  .ds-milestone-rail { grid-template-columns: repeat(5, 200px); }
+}
+
+/* === Component: Stale-Data Banner ==================================
+ * Fires when the snapshot is older than 150 min (launchd is hourly +90 grace).
+ * Catches silent launchd failures.
+ * =================================================================== */
+
+.ds-stale {
+  display: none;
+  background: var(--danger-tint);
+  border: 1px solid var(--danger);
+  color: var(--ink-hi);
+  padding: 12px 18px;
+  border-radius: var(--r-lg);
+  margin-bottom: var(--sp-lg);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.ds-stale.show { display: block; }
+.ds-stale b { color: var(--danger); }
+.ds-stale code {
+  background: var(--bg-base);
+  padding: 1px 6px;
+  border-radius: var(--r-xs);
+  font-size: 11px;
+}
+

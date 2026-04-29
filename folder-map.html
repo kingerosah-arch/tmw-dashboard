@@ -59,7 +59,17 @@
     cursor: pointer;
     transition: filter var(--t-fast) var(--ease);
   }
-  .fm-breadcrumb button:hover { filter: brightness(1.15); }
+  .fm-breadcrumb button:hover { background: var(--gold); color: var(--bg-base); }
+  .fm-bc-close {
+    background: transparent !important;
+    color: var(--ink-low) !important;
+    border: 1px solid var(--line) !important;
+    margin-left: 4px;
+    padding: 4px 9px !important;
+    font-size: 13px !important;
+    line-height: 1 !important;
+  }
+  .fm-bc-close:hover { color: var(--ink-hi) !important; border-color: var(--gold) !important; background: transparent !important; }
 
   .fm-tree {
     background: var(--bg-card);
@@ -215,12 +225,13 @@
     <span style="color:var(--ink-low);">Selected:</span>
     <span class="fm-bc-path" id="bcPath"></span>
     <button onclick="copyPath()" id="copyBtn">Copy path</button>
+    <button onclick="dismissBreadcrumb()" class="fm-bc-close" aria-label="Dismiss selection">&times;</button>
   </div>
 
   <div class="fm-tree" id="folderTree"></div>
 
   <div class="ds-meta">
-    <span>Generated 2026-04-30 01:55</span>
+    <span>Generated 2026-04-30 02:17</span>
     <span>287 folders</span>
     <span>306 files</span>
   </div>
@@ -1095,12 +1106,44 @@ function onNodeClick(e, id) {
 
 function copyPath() {
   if (!selectedPath) return;
-  navigator.clipboard.writeText(selectedPath).then(() => {
-    const btn = document.getElementById('copyBtn');
-    const orig = btn.textContent;
-    btn.textContent = 'Copied';
-    setTimeout(() => { btn.textContent = orig; }, 1500);
-  });
+  const btn = document.getElementById('copyBtn');
+  const orig = btn.textContent;
+  const restore = () => setTimeout(() => { btn.textContent = orig; btn.style.color = ''; btn.style.background = ''; }, 1500);
+
+  // Try the modern clipboard API first; fall back gracefully.
+  const onSuccess = () => { btn.textContent = 'Copied'; restore(); };
+  const onFail = (err) => {
+    btn.textContent = 'Copy failed';
+    btn.style.color = 'var(--danger)';
+    btn.style.background = 'var(--danger-tint)';
+    console.error('Clipboard write failed:', err);
+    restore();
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(selectedPath).then(onSuccess).catch(onFail);
+  } else {
+    // Legacy fallback: temporary textarea + execCommand
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = selectedPath;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      ok ? onSuccess() : onFail(new Error('execCommand returned false'));
+    } catch (err) {
+      onFail(err);
+    }
+  }
+}
+
+function dismissBreadcrumb() {
+  document.querySelectorAll('.fm-node.fm-selected').forEach(n => n.classList.remove('fm-selected'));
+  selectedPath = '';
+  document.getElementById('breadcrumb').classList.remove('show');
 }
 
 // --- Search + dept filter ---
@@ -1176,9 +1219,15 @@ document.addEventListener('keydown', e => {
     document.getElementById('treeSearch').focus();
   }
   if (e.key === 'Escape') {
-    document.getElementById('treeSearch').value = '';
-    document.getElementById('deptFilter').value = '';
-    applyFilter();
+    // Esc behaves contextually: dismiss breadcrumb if visible, else clear filters.
+    const bc = document.getElementById('breadcrumb');
+    if (bc.classList.contains('show')) {
+      dismissBreadcrumb();
+    } else {
+      document.getElementById('treeSearch').value = '';
+      document.getElementById('deptFilter').value = '';
+      applyFilter();
+    }
   }
 });
 </script>

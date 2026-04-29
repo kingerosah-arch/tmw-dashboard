@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TrackMyWings · Finance MIS</title>
+<link rel="icon" type="image/jpeg" href="logo.jpeg">
+<link rel="stylesheet" href="dashboard-tokens.css">
+<link rel="stylesheet" href="dashboard-components.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  /* page-specific tweaks (≤30 lines) */
+  .fm-truth { padding: 10px 28px; border-bottom: 1px solid var(--hairline-soft); background: var(--bg-elev); color: var(--ink-mid); font-size: 12.5px; font-feature-settings: 'tnum'; }
+  .fm-truth b { color: var(--ink-hi); font-weight: 600; }
+  .ds-metrics-equal { grid-template-columns: repeat(4, 1fr) !important; }
+  .ds-metrics-5 { grid-template-columns: repeat(5, 1fr) !important; gap: 10px; }
+  .ds-metrics-5 .ds-metric { padding: 14px 16px; }
+  .ds-metrics-5 .ds-metric-val { font-size: 22px; }
+  .fm-cap-band .ds-metric-val { font-size: 22px; }
+  .fm-pnl-band .ds-metric-lbl { font-size: 10.5px; letter-spacing: .1em; }
+  .fm-runway-row { display: grid; grid-template-columns: 1fr 2fr; gap: 18px; align-items: center; padding: 18px 22px; }
+  .fm-runway-num { font-size: 38px; font-weight: 700; color: var(--ink-hi); font-feature-settings: 'tnum'; letter-spacing: -.025em; }
+  .fm-runway-sub { color: var(--ink-mid); font-size: 13px; line-height: 1.55; }
+  .fm-clamp { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; max-width: 380px; color: var(--ink-mid); }
+  .fm-callouts { padding: 8px 22px 0; color: var(--ink-mid); font-size: 12.5px; font-feature-settings: 'tnum'; }
+  .fm-callouts b { color: var(--ink-hi); font-weight: 600; }
+  .fm-foot-links { display: flex; gap: 18px; padding: 14px 0; border-top: 1px solid var(--hairline-soft); margin-top: 22px; }
+  .fm-foot-links a { color: var(--ink-mid); font-size: 12.5px; text-decoration: none; }
+  .fm-foot-links a:hover { color: var(--signal-gold); }
+  .fm-chart-wrap { height: 260px; padding: 10px 4px; }
+  .fm-chart-tall { height: 320px; padding: 10px 4px; }
+  .tone-danger { color: var(--danger); }
+</style>
+</head>
+<body>
+
+<div class="ds-login-overlay" id="loginOverlay">
+  <form class="ds-login-card" id="loginForm">
+    <img class="ds-login-logo" src="logo.jpeg" alt="TrackMyWings">
+    <div class="ds-login-title">TrackMyWings</div>
+    <div class="ds-login-sub">Finance MIS</div>
+    <input type="password" id="password" class="ds-filter" placeholder="Password" autofocus autocomplete="current-password">
+    <button type="submit" class="ds-btn-primary">Unlock</button>
+    <div class="ds-login-err" id="loginError">Incorrect password</div>
+  </form>
+</div>
+
+<div class="fm-truth">Truth at 2026-04-30 02:01 IST · Cash ₹0 · YTD spend ₹87,862 · Receivable ₹87,862 · Burn rate ₹60,800/mo · Runway: pre-launch (no revenue yet)</div>
+
+<div class="ds-wrap">
+  <header class="ds-top">
+    <div class="ds-top-brand">
+      <img class="ds-top-logo" src="logo.jpeg" alt="TrackMyWings">
+      <div>
+        <h1 class="ds-display">Finance MIS</h1>
+        <div class="ds-lede">MIS xlsx truth, refreshed twice daily. Forecast from 60-month plan.</div>
+      </div>
+    </div>
+    <nav class="ds-nav">
+      <a href="index.html">Founder</a>
+      <a href="finance-mis.html" class="ds-nav-active">Finance MIS</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="claude-usage.html">Claude</a>
+      <a href="folder-map.html">Files</a>
+      <button onclick="location.reload(true)" title="Hard refresh">Refresh</button>
+    </nav>
+  </header>
+
+  <div class="ds-stale" id="staleBanner"></div>
+  
+  
+
+  
+    <div class="ds-metrics">
+      <div class="ds-metric ds-metric-lead tone-warn">
+        <div class="ds-metric-lbl">Cash on hand</div>
+        <div class="ds-metric-val num">₹0</div>
+        <div class="ds-metric-sub">Company bank balance. Pre-bank — becomes ₹1,00,000 after TMW-151 deposit (T-2d).</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">YTD spend</div>
+        <div class="ds-metric-val num">₹87,862</div>
+        <div class="ds-metric-sub">Sum of Expenses Net (INR). USD rows × ₹95.</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">Founder receivable</div>
+        <div class="ds-metric-val num">₹87,862</div>
+        <div class="ds-metric-sub">Owed to Rohan. No reimbursements logged yet.</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">Pending capital</div>
+        <div class="ds-metric-val num">₹1,00,000</div>
+        <div class="ds-metric-sub">Bank visit unblocks ₹62K + ₹38K paid-up.</div>
+      </div>
+    </div>
+    
+
+  <section class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-title">Capital structure</div>
+      <div class="ds-section-aside">From Cap Table sheet · MoU v6</div>
+    </div>
+    
+    <div class="ds-metrics ds-metrics-equal fm-cap-band">
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">Equity split</div>
+        <div class="ds-metric-val num">62 / 38 / 0</div>
+        <div class="ds-metric-sub">Rohan / Amol / ESOP. MoU v6, post-incorporation.</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">Paid-up capital</div>
+        <div class="ds-metric-val num">₹0 / ₹1,00,000</div>
+        <div class="ds-metric-sub">Today vs promised. Bank visit T-2d unlocks deposit.</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">Founder bank balance</div>
+        <div class="ds-metric-val num">TBD</div>
+        <div class="ds-metric-sub">No company bank account yet. Gated on TMW-151.</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">Authorized capital</div>
+        <div class="ds-metric-val num">₹1,00,000</div>
+        <div class="ds-metric-sub">MoA filing. Can amend post-funding.</div>
+      </div>
+    </div>
+    
+  </section>
+
+  <section class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-title">YTD spend by category</div>
+      <div class="ds-section-aside">From Expenses sheet · USD × ₹95</div>
+    </div>
+    <div class="ds-frame">
+      <div class="fm-chart-wrap"><canvas id="catChart"></canvas></div>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-title">Monthly burn trend</div>
+      <div class="ds-section-aside">Stacked by category · gold line = cumulative</div>
+    </div>
+    <div class="ds-frame">
+      <div class="fm-chart-wrap"><canvas id="burnChart"></canvas></div>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-title">Subscriptions</div>
+      <div class="ds-section-aside">Monthly: <b>₹15,556</b> · Annual: <b>₹1,86,672</b></div>
+    </div>
+    <div class="ds-frame ds-frame-flush">
+      <table class="ds-table">
+        <thead><tr><th>Vendor</th><th>Plan</th><th>Frequency</th><th class="num">Monthly INR</th><th class="num">Renewal</th><th>Status</th></tr></thead>
+        <tbody>
+        <tr>
+          <td>Claude Max (Anthropic)</td>
+          <td>Max 5x</td>
+          <td>Monthly</td>
+          <td class="num">₹9,500</td>
+          <td class="num">2026-04-16</td>
+          <td><span class="ds-badge ds-badge-pri-low">Active</span></td>
+        </tr>
+        
+        <tr>
+          <td>GoDaddy</td>
+          <td>Domain + Protection</td>
+          <td>Annual</td>
+          <td class="num">₹1,906</td>
+          <td class="num">2027-03-05</td>
+          <td><span class="ds-badge ds-badge-pri-low">Active</span></td>
+        </tr>
+        
+        <tr>
+          <td>Cursor Pro</td>
+          <td>Pro</td>
+          <td>Monthly</td>
+          <td class="num">₹1,900</td>
+          <td class="num">2026-04-16</td>
+          <td><span class="ds-badge ds-badge-pri-low">Active</span></td>
+        </tr>
+        
+        <tr>
+          <td>Figma</td>
+          <td>Professional plan, 1 Editor seat</td>
+          <td>Monthly</td>
+          <td class="num">₹1,900</td>
+          <td class="num">—</td>
+          <td><span class="ds-badge ds-badge-pri-low">Active</span></td>
+        </tr>
+        
+        <tr>
+          <td>Google Workspace</td>
+          <td>Business Base (3 users)</td>
+          <td>Monthly</td>
+          <td class="num">₹350</td>
+          <td class="num">—</td>
+          <td><span class="ds-badge ds-badge-pri-low">Active</span></td>
+        </tr>
+        
+        <tr>
+          <td>AWS (Activate Credits)</td>
+          <td>Credits ($1,000 pool)</td>
+          <td>Monthly</td>
+          <td class="num">₹0</td>
+          <td class="num">2027-03-31</td>
+          <td><span class="ds-badge ds-badge-pri-low">Active (Credits)</span></td>
+        </tr>
+        
+        <tr>
+          <td>Mapbox Premium</td>
+          <td>Premium Tier</td>
+          <td>Monthly</td>
+          <td class="num">₹0</td>
+          <td class="num">Pricing TBD — added S047</td>
+          <td>TBD</td>
+        </tr>
+        
+        <tr>
+          <td>Firebase</td>
+          <td>Free Tier (at launch)</td>
+          <td>Monthly</td>
+          <td class="num">₹0</td>
+          <td class="num">Likely free at launch — added S047</td>
+          <td>Free Tier</td>
+        </tr>
+        
+        <tr>
+          <td>Nano Banana 2 Pro</td>
+          <td>Pro Tier</td>
+          <td>Monthly</td>
+          <td class="num">₹0</td>
+          <td class="num">Pricing TBD — added S047</td>
+          <td>TBD</td>
+        </tr>
+        
+        <tr>
+          <td>Google Flow</td>
+          <td>Standard</td>
+          <td>Monthly</td>
+          <td class="num">₹0</td>
+          <td class="num">Pricing TBD — added S047</td>
+          <td>TBD</td>
+        </tr>
+        
+        <tr>
+          <td>Eleven Labs (Paid Tier)</td>
+          <td>Paid Tier</td>
+          <td>Monthly</td>
+          <td class="num">₹0</td>
+          <td class="num">Pricing TBD — added S047</td>
+          <td>TBD</td>
+        </tr>
+        
+        <tr>
+          <td>Capcut Pro</td>
+          <td>Pro Annual</td>
+          <td>Annual</td>
+          <td class="num">₹0</td>
+          <td class="num">Pricing TBD — added S047</td>
+          <td>TBD</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-title">Recent expenses</div>
+      <div class="ds-section-aside">Last 15 transactions, newest first</div>
+    </div>
+    <div class="ds-frame ds-frame-flush">
+      <table class="ds-table">
+        <thead><tr><th>Date</th><th>Category</th><th>Vendor</th><th>Description</th><th class="num">Amount INR</th></tr></thead>
+        <tbody>
+        <tr>
+          <td class="num">2026-04-29</td>
+          <td><span class="ds-badge ds-badge-dept-tech">SaaS &amp; Tools</span></td>
+          <td>Anthropic</td>
+          <td class="fm-clamp">Claude Max 20x upgrade (Apr 29 – May 29, 2026). Net $143.24 after Max…</td>
+          <td class="num">₹16,057</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-04-26</td>
+          <td><span class="ds-badge ds-badge-dept-legal">Legal &amp; Compliance</span></td>
+          <td>Real Craft Tech (E Sahayak)</td>
+          <td class="fm-clamp">Karnataka stamp paper ₹500 + conv fee ₹87.92 + delivery ₹101.69 (excl…</td>
+          <td class="num">₹724</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-04-22</td>
+          <td><span class="ds-badge ds-badge-dept-legal">Legal &amp; Compliance</span></td>
+          <td>Ministry of Corporate Affairs</td>
+          <td class="fm-clamp">MCA SPICE+ Part B — Form submission (SRN AC3116194) [reimbursable to …</td>
+          <td class="num">₹143</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-04-22</td>
+          <td><span class="ds-badge ds-badge-dept-legal">Legal &amp; Compliance</span></td>
+          <td>Ministry of Corporate Affairs</td>
+          <td class="fm-clamp">MCA Stamp Duty for Trackmywings Technologies Pvt. Ltd. (SRN EE0516418…</td>
+          <td class="num">₹10,020</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-04-16</td>
+          <td><span class="ds-badge ds-badge-dept-tech">SaaS &amp; Tools</span></td>
+          <td>Anthropic</td>
+          <td class="fm-clamp">Claude Max 5x subscription (Apr 16 – May 16, 2026)</td>
+          <td class="num">₹11,210</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-04-16</td>
+          <td><span class="ds-badge ds-badge-dept-tech">SaaS &amp; Tools</span></td>
+          <td>Cursor (Anysphere)</td>
+          <td class="fm-clamp">Cursor Pro subscription (Apr 16 – May 16, 2026)</td>
+          <td class="num">₹2,242</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-04-09</td>
+          <td><span class="ds-badge ds-badge-dept-tech">SaaS &amp; Tools</span></td>
+          <td>Figma, Inc.</td>
+          <td class="fm-clamp">Figma Professional Full seat (Apr 9 – May 9, 2026)</td>
+          <td class="num">₹2,242</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-04-06</td>
+          <td><span class="ds-badge ds-badge-dept-legal">Legal &amp; Compliance</span></td>
+          <td>Ministry of Corporate Affairs</td>
+          <td class="fm-clamp">MCA SPICE+ Part A — Name application (SRN AC2903649) [reimbursable to…</td>
+          <td class="num">₹1,000</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-04-02</td>
+          <td><span class="ds-badge ds-badge-dept-legal">Legal &amp; Compliance</span></td>
+          <td>League HR Solutions Pvt Ltd (Anubha P. Bhatia)</td>
+          <td class="fm-clamp">Pvt Ltd incorporation professional fee — Trackmywings Technologies Pv…</td>
+          <td class="num">₹15,000</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-03-31</td>
+          <td><span class="ds-badge ds-badge-dept-tech">SaaS &amp; Tools</span></td>
+          <td>Google India Pvt Ltd</td>
+          <td class="fm-clamp">Google Workspace Business Base — 3 users prorated (Mar 20 – 31, 2026,…</td>
+          <td class="num">₹136</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-03-31</td>
+          <td><span class="ds-badge ds-badge-dept-ops">Cloud &amp; Infra</span></td>
+          <td>AWS (Amazon Web Services India Pvt Ltd)</td>
+          <td class="fm-clamp">AWS March 2026 — waived (covered by $1,000 Activate credits)</td>
+          <td class="num">₹0</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-03-16</td>
+          <td><span class="ds-badge ds-badge-dept-tech">SaaS &amp; Tools</span></td>
+          <td>Anthropic</td>
+          <td class="fm-clamp">Claude Max 5x subscription (Mar 16 – Apr 16, 2026)</td>
+          <td class="num">₹11,210</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-03-16</td>
+          <td><span class="ds-badge ds-badge-dept-tech">SaaS &amp; Tools</span></td>
+          <td>Cursor (Anysphere)</td>
+          <td class="fm-clamp">Cursor Pro subscription (Mar 16 – Apr 16, 2026)</td>
+          <td class="num">₹2,242</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-03-16</td>
+          <td><span class="ds-badge ds-badge-dept-tech">SaaS &amp; Tools</span></td>
+          <td>Typora (FastSpring)</td>
+          <td class="fm-clamp">Typora markdown editor — lifetime license</td>
+          <td class="num">₹1,729</td>
+        </tr>
+        
+        <tr>
+          <td class="num">2026-03-09</td>
+          <td><span class="ds-badge ds-badge-dept-tech">SaaS &amp; Tools</span></td>
+          <td>Cursor (Anysphere)</td>
+          <td class="fm-clamp">Cursor Pro trial (Mar 9 – Mar 16, 2026) — free trial, no charge</td>
+          <td class="num">₹0</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-title">P&amp;L this month</div>
+      <div class="ds-section-aside">Apr-26 · honest snapshot</div>
+    </div>
+    
+    <div class="ds-metrics ds-metrics-5 fm-pnl-band">
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">Revenue</div>
+        <div class="ds-metric-val num">₹0</div>
+        <div class="ds-metric-sub">Pre-launch — no revenue yet.</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">Direct costs</div>
+        <div class="ds-metric-val num">₹0</div>
+        <div class="ds-metric-sub">AWS + APIs + payment processing.</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">Gross profit</div>
+        <div class="ds-metric-val num">₹0</div>
+        <div class="ds-metric-sub">Revenue − COGS.</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">OpEx</div>
+        <div class="ds-metric-val num">₹42,443</div>
+        <div class="ds-metric-sub">SaaS + legal + marketing + people.</div>
+      </div>
+      <div class="ds-metric tone-danger">
+        <div class="ds-metric-lbl">EBITDA</div>
+        <div class="ds-metric-val num">₹-42,443</div>
+        <div class="ds-metric-sub">Apr-26 · burn-and-build phase.</div>
+      </div>
+    </div>
+    
+  </section>
+
+  <section class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-title">60-month forecast</div>
+      <div class="ds-section-aside">Plan: May 2026 → Apr 2031</div>
+    </div>
+    <div class="fm-callouts">Breakeven: <b>26May</b> · Peak EBITDA: <b>₹1,09,79,604</b> at 31Apr · Y5 end EBITDA: <b>₹1,09,79,604</b></div>
+    <div class="ds-frame">
+      <div class="fm-chart-tall"><canvas id="forecastChart"></canvas></div>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-title">Year-by-year forecast</div>
+      <div class="ds-section-aside">From Summary Dashboard sheet</div>
+    </div>
+    <div class="ds-frame ds-frame-flush">
+      <table class="ds-table">
+        <thead><tr><th>Year</th><th class="num">Net Revenue</th><th class="num">Gross Profit</th><th class="num">OpEx</th><th class="num">EBITDA</th><th class="num">PAT (Pvt Ltd)</th></tr></thead>
+        <tbody>
+        <tr>
+          <td>Y1</td>
+          <td class="num">₹8,81,204</td>
+          <td class="num">₹8,81,204</td>
+          <td class="num">₹2,36,592</td>
+          <td class="num ">₹6,44,611</td>
+          <td class="num">₹4,77,012</td>
+        </tr>
+        
+        <tr>
+          <td>Y2</td>
+          <td class="num">₹34,32,987</td>
+          <td class="num">₹34,32,987</td>
+          <td class="num">₹7,81,528</td>
+          <td class="num ">₹26,51,460</td>
+          <td class="num">₹19,62,080</td>
+        </tr>
+        
+        <tr>
+          <td>Y3</td>
+          <td class="num">₹1,07,98,574</td>
+          <td class="num">₹1,07,98,574</td>
+          <td class="num">₹23,82,356</td>
+          <td class="num ">₹84,16,219</td>
+          <td class="num">₹62,28,002</td>
+        </tr>
+        
+        <tr>
+          <td>Y4</td>
+          <td class="num">₹3,37,02,680</td>
+          <td class="num">₹3,37,02,680</td>
+          <td class="num">₹73,99,030</td>
+          <td class="num ">₹2,63,03,649</td>
+          <td class="num">₹1,94,64,700</td>
+        </tr>
+        
+        <tr>
+          <td>Y5</td>
+          <td class="num">₹10,54,86,843</td>
+          <td class="num">₹10,54,86,843</td>
+          <td class="num">₹2,31,42,995</td>
+          <td class="num ">₹8,23,43,848</td>
+          <td class="num">₹5,94,35,790</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-title">Cash runway projection</div>
+      <div class="ds-section-aside">From observed burn · live</div>
+    </div>
+    <div class="ds-frame">
+      <div class="fm-runway-row">
+        <div>
+          <div class="ds-metric-lbl">Months of runway</div>
+          <div class="fm-runway-num">1.6 months</div>
+        </div>
+        <div class="fm-runway-sub">Given current cash ₹0 + pending capital ₹1,00,000, at observed burn ₹60,800/mo. Bank visit T-2d unlocks ₹1L paid-up.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ds-section" id="heroSection">
+    <div class="ds-section-head">
+      <div class="ds-section-title">Hero milestones</div>
+      <div class="ds-section-aside">5 major wins</div>
+    </div>
+    
+    <div class="ds-milestones">
+      <div class="ds-milestone-rail" style="grid-template-columns:repeat(5, minmax(180px, 1fr));">
+        
+        <div class="ds-milestone">
+          <div class="ds-milestone-dot"></div>
+          <div class="ds-milestone-date">Genesis</div>
+          <div class="ds-milestone-title">Co-founders + equity locked</div>
+          <div class="ds-milestone-note">Rohan 62 / Amol 38, MoU v6 finalized.</div>
+        </div>
+        
+        <div class="ds-milestone">
+          <div class="ds-milestone-dot"></div>
+          <div class="ds-milestone-date">North Star</div>
+          <div class="ds-milestone-title">1M downloads / 6 months</div>
+          <div class="ds-milestone-note">Mihir sir advisor confirmed (3-hr session).</div>
+        </div>
+        
+        <div class="ds-milestone">
+          <div class="ds-milestone-dot"></div>
+          <div class="ds-milestone-date">Sprint Approved</div>
+          <div class="ds-milestone-title">Plan v11 — 142 screens</div>
+          <div class="ds-milestone-note">Multi-model Figma sprint committed.</div>
+        </div>
+        
+        <div class="ds-milestone keystone">
+          <div class="ds-milestone-dot"><img src="logo.jpeg" class="ds-milestone-logo" alt="TMW"></div>
+          <div class="ds-milestone-date">Incorporated</div>
+          <div class="ds-milestone-title">Trackmywings Technologies Pvt. Ltd.</div>
+          <div class="ds-milestone-note">Cert + PAN + TAN received. The keystone.</div>
+        </div>
+        
+        <div class="ds-milestone">
+          <div class="ds-milestone-dot"></div>
+          <div class="ds-milestone-date">Production Proof</div>
+          <div class="ds-milestone-title">Wave 2 HM-apex shipped</div>
+          <div class="ds-milestone-note">15/15 PASS, reviewer avg 8.49.</div>
+        </div>
+        
+      </div>
+    </div>
+    
+  </section>
+
+  <section class="ds-section">
+    <div class="ds-section-head">
+      <div class="ds-section-title">System health</div>
+      <div class="ds-section-aside">Source files + parser</div>
+    </div>
+    
+    <div class="ds-metrics ds-metrics-equal fm-health">
+      <div class="ds-metric ">
+        <div class="ds-metric-lbl">MIS xlsx</div>
+        <div class="ds-metric-val num">2026-04-30 01:05</div>
+        <div class="ds-metric-sub">0.0d old</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">60-month plan xlsx</div>
+        <div class="ds-metric-val num">2026-03-08 16:17</div>
+        <div class="ds-metric-sub">Forecast model. Lock until financials test.</div>
+      </div>
+      <div class="ds-metric">
+        <div class="ds-metric-lbl">Generator last run</div>
+        <div class="ds-metric-val num">2026-04-30 02:01</div>
+        <div class="ds-metric-sub">launchd · twice daily.</div>
+      </div>
+      <div class="ds-metric ">
+        <div class="ds-metric-lbl">Parse errors</div>
+        <div class="ds-metric-val num">0</div>
+        <div class="ds-metric-sub">Across 11 sheet/section reads.</div>
+      </div>
+    </div>
+    
+  </section>
+
+  <div class="fm-foot-links">
+    <a href="index.html">Founder</a>
+    <a href="finance-mis.html">Finance MIS</a>
+    <a href="tasks.html">Tasks</a>
+    <a href="claude-usage.html">Claude</a>
+    <a href="folder-map.html">Files</a>
+  </div>
+
+  <div class="ds-meta">
+    <span>Generated <span id="generatedAt">2026-04-30T02:01:46</span></span>
+    <span>Finance MIS v1 · launchd twice daily</span>
+  </div>
+</div>
+
+<script>
+// --- Auth gate ---
+const PASSWORD_HASH = '22900e4738455f5c92593a95b6e0c5d228698a80385e4f1f2d272e8f8f49aec6';
+async function sha256(msg) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function unlock() {
+  document.body.classList.add('unlocked');
+  document.querySelector('#loginOverlay').style.display = 'none';
+}
+if (sessionStorage.getItem('tmw_auth') === 'true') unlock();
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const hash = await sha256(document.getElementById('password').value);
+  if (hash === PASSWORD_HASH) {
+    sessionStorage.setItem('tmw_auth', 'true');
+    unlock();
+  } else {
+    const err = document.getElementById('loginError');
+    err.classList.add('show');
+    setTimeout(() => err.classList.remove('show'), 2000);
+    document.getElementById('password').value = '';
+  }
+});
+
+// --- Stale banner: warn if generator >150 min old ---
+const GENERATED_EPOCH = 1777494706;
+(function(){
+  const ageMin = (Date.now()/1000 - GENERATED_EPOCH) / 60;
+  if (ageMin > 150) {
+    const b = document.getElementById('staleBanner');
+    b.innerHTML = `<b>Snapshot is ${Math.round(ageMin)} min old.</b> The launchd job may have failed. Check <code>~/Library/Logs/TrackMyWings/finance-mis.error.log</code>.`;
+    b.classList.add('show');
+  }
+})();
+
+// --- Charts ---
+const PAYLOAD = {"cat_labels": ["SaaS & Tools", "Legal & Compliance", "Cloud & Infra"], "cat_values": [60975.46, 26886.75, 0.0], "months": ["2026-02", "2026-03", "2026-04"], "month_values": [12001.35, 17223.21, 58637.65], "month_cumulative": [12001.35, 29224.56, 87862.21], "top_cats": ["SaaS & Tools", "Legal & Compliance", "Cloud & Infra"], "cat_month_matrix": {"SaaS & Tools": [12001.35, 17223.21, 31750.9], "Legal & Compliance": [0.0, 0.0, 26886.75], "Cloud & Infra": [0.0, 0.0, 0.0], "__other__": [0.0, 0.0, 0.0]}, "forecast_labels": ["26May", "26Jun", "26Jul", "26Aug", "26Sep", "26Oct", "26Nov", "26Dec", "27Jan", "27Feb", "27Mar", "27Apr", "27May", "27Jun", "27Jul", "27Aug", "27Sep", "27Oct", "27Nov", "27Dec", "28Jan", "28Feb", "28Mar", "28Apr", "28May", "28Jun", "28Jul", "28Aug", "28Sep", "28Oct", "28Nov", "28Dec", "29Jan", "29Feb", "29Mar", "29Apr", "29May", "29Jun", "29Jul", "29Aug", "29Sep", "29Oct", "29Nov", "29Dec", "30Jan", "30Feb", "30Mar", "30Apr", "30May", "30Jun", "30Jul", "30Aug", "30Sep", "30Oct", "30Nov", "30Dec", "31Jan", "31Feb", "31Mar", "31Apr"], "forecast_revenue": [10734.1, 23585.67, 34502.76, 45128.35, 55637.83, 66181.12, 76888.79, 88182.37, 100149.77, 112873.31, 126432.6, 140906.94, 156682.62, 173825.97, 192409.69, 212514.34, 234534.96, 258553.66, 284970.94, 313878.19, 345689.08, 380512.15, 418782.26, 460633.5, 506530.8, 556948.33, 612372.72, 673306.5, 740271.62, 813813.35, 894809.59, 983846.44, 1081852.86, 1189476.88, 1307720.98, 1437624.35, 1580575.67, 1737692.34, 1910458.88, 2100412.67, 2309460.13, 2539259.74, 2792169.83, 3070309.69, 3376205.23, 3712787.4, 4083087.79, 4490260.25, 4938214.46, 5430993.52, 5973108.01, 6569243.2, 7224903.54, 7946107.3, 8739409.57, 9611929.37, 10571686.21, 11627312.57, 12788401.24, 14065534.45], "forecast_opex": [5585.25, 8825.25, 11346.38, 13730.81, 16042.65, 18336.85, 20661.39, 23059.14, 25569.27, 28228.48, 31072.08, 34134.8, 37451.62, 41058.37, 44992.4, 49293.11, 54002.52, 59165.77, 64831.66, 71053.2, 77888.14, 85399.57, 93656.54, 102734.73, 112717.15, 123694.94, 135768.21, 149046.98, 163652.15, 179716.66, 197386.69, 216822.97, 238202.27, 261719.02, 287587.07, 316041.6, 347341.35, 381770.87, 419643.19, 461302.62, 507127.88, 557535.59, 612984.01, 673977.22, 741069.71, 814871.41, 896053.26, 985353.27, 1083583.26, 1191636.24, 1310494.51, 1441238.59, 1585057.08, 1743257.41, 1917277.77, 2108700.16, 2319264.79, 2550885.88, 2805669.07, 3085930.58], "forecast_ebitda": [5148.85, 14760.42, 23156.39, 31397.53, 39595.18, 47844.27, 56227.39, 65123.23, 74580.5, 84644.83, 95360.53, 106772.14, 119231.0, 132767.6, 147417.3, 163221.24, 180532.44, 199387.89, 220139.27, 242824.99, 267800.94, 295112.57, 325125.72, 357898.77, 393813.65, 433253.39, 476604.51, 524259.52, 576619.47, 634096.69, 697422.9, 767023.47, 843650.59, 927757.86, 1020133.91, 1121582.74, 1233234.32, 1355921.46, 1490815.69, 1639110.05, 1802332.24, 1981724.15, 2179185.82, 2396332.47, 2635135.52, 2897915.99, 3187034.53, 3504906.99, 3854631.2, 4239357.28, 4662613.5, 5128004.6, 5639846.46, 6202849.89, 6822131.8, 7503229.21, 8252421.42, 9076426.7, 9982732.17, 10979603.87], "breakeven_idx": 0, "peak_idx": 59};
+
+const COLORS = {
+  gold:       'oklch(78% 0.13 75)',
+  goldTint:   'oklch(78% 0.13 75 / 0.18)',
+  plum:       'oklch(75% 0.06 320)',
+  plumTint:   'oklch(75% 0.06 320 / 0.18)',
+  rose:       'oklch(70% 0.10 350)',
+  inkLow:     'oklch(55% 0.04 295)',
+  hairline:   'oklch(35% 0.04 300 / 0.18)',
+  danger:     'oklch(62% 0.22 25)',
+};
+
+const fmtInr = v => {
+  const a = Math.abs(v);
+  const sign = v < 0 ? '-' : '';
+  if (a >= 1e7) return '₹' + sign + (a/1e7).toFixed(1) + 'Cr';
+  if (a >= 1e5) return '₹' + sign + (a/1e5).toFixed(1) + 'L';
+  if (a >= 1e3) return '₹' + sign + (a/1e3).toFixed(0) + 'K';
+  return '₹' + sign + a.toFixed(0);
+};
+
+const baseTickStyle = { color: COLORS.inkLow, font: { size: 10 } };
+const baseGrid = { color: COLORS.hairline };
+
+const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const animation = reduceMotion ? false : { duration: 400, easing: 'easeOutQuart' };
+
+// L6 — YTD spend by category (horizontal bar)
+if (PAYLOAD.cat_labels.length > 0) {
+  new Chart(document.getElementById('catChart'), {
+    type: 'bar',
+    data: {
+      labels: PAYLOAD.cat_labels,
+      datasets: [{
+        label: 'YTD spend',
+        data: PAYLOAD.cat_values,
+        backgroundColor: COLORS.gold,
+        borderWidth: 0,
+        borderRadius: 2,
+      }],
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true, maintainAspectRatio: false,
+      animation,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: c => fmtInr(c.parsed.x) }
+        }
+      },
+      scales: {
+        x: { ticks: { ...baseTickStyle, callback: v => fmtInr(v) }, grid: baseGrid },
+        y: { ticks: { ...baseTickStyle, font: { size: 11 } }, grid: { display: false } },
+      }
+    }
+  });
+}
+
+// L7 — Monthly burn trend (stacked bar, by category) + cumulative line in gold
+if (PAYLOAD.months.length > 0) {
+  const stackPalette = [COLORS.gold, COLORS.plum, COLORS.rose, 'oklch(78% 0.13 75 / 0.55)', 'oklch(75% 0.06 320 / 0.55)', 'oklch(70% 0.10 350 / 0.55)'];
+  const datasets = PAYLOAD.top_cats.map((c, i) => ({
+    type: 'bar', label: c,
+    data: PAYLOAD.cat_month_matrix[c] || [],
+    backgroundColor: stackPalette[i % stackPalette.length],
+    borderWidth: 0, stack: 's', yAxisID: 'y',
+  }));
+  if (PAYLOAD.cat_month_matrix['__other__']) {
+    datasets.push({
+      type: 'bar', label: 'other',
+      data: PAYLOAD.cat_month_matrix['__other__'],
+      backgroundColor: COLORS.inkLow, borderWidth: 0, stack: 's', yAxisID: 'y',
+    });
+  }
+  datasets.push({
+    type: 'line', label: 'cumulative',
+    data: PAYLOAD.month_cumulative,
+    borderColor: COLORS.gold, backgroundColor: 'transparent',
+    borderWidth: 2, tension: 0.32, pointRadius: 3, pointBackgroundColor: COLORS.gold,
+    yAxisID: 'y',
+  });
+  new Chart(document.getElementById('burnChart'), {
+    data: { labels: PAYLOAD.months, datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation,
+      plugins: {
+        legend: { labels: { color: COLORS.inkLow, font: { size: 11 } } },
+        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtInr(c.parsed.y) } }
+      },
+      scales: {
+        x: { stacked: true, ticks: baseTickStyle, grid: { display: false } },
+        y: { stacked: true, ticks: { ...baseTickStyle, callback: v => fmtInr(v) }, grid: baseGrid },
+      }
+    }
+  });
+}
+
+// L11 — 60-month forecast (3 lines, dual Y-axis)
+if (PAYLOAD.forecast_labels.length > 0) {
+  // Sample every 2nd month for tick density, but keep all data.
+  new Chart(document.getElementById('forecastChart'), {
+    type: 'line',
+    data: {
+      labels: PAYLOAD.forecast_labels,
+      datasets: [
+        {
+          label: 'Net Revenue', data: PAYLOAD.forecast_revenue,
+          borderColor: COLORS.gold, backgroundColor: 'transparent',
+          borderWidth: 2, tension: 0.25, pointRadius: 0, yAxisID: 'y',
+        },
+        {
+          label: 'OpEx', data: PAYLOAD.forecast_opex,
+          borderColor: COLORS.plum, backgroundColor: 'transparent',
+          borderWidth: 2, tension: 0.25, pointRadius: 0, yAxisID: 'y',
+        },
+        {
+          label: 'EBITDA', data: PAYLOAD.forecast_ebitda,
+          borderColor: COLORS.rose, backgroundColor: 'transparent',
+          borderWidth: 2, tension: 0.25, pointRadius: 0, yAxisID: 'y',
+          borderDash: [4, 3],
+        },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: COLORS.inkLow, font: { size: 11 } } },
+        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmtInr(c.parsed.y) } }
+      },
+      scales: {
+        x: {
+          ticks: { ...baseTickStyle, maxTicksLimit: 12, autoSkip: true, maxRotation: 0 },
+          grid: { display: false },
+        },
+        y: {
+          ticks: { ...baseTickStyle, callback: v => fmtInr(v) }, grid: baseGrid,
+        },
+      }
+    }
+  });
+}
+
+// Keyboard: 'r' reloads
+document.addEventListener('keydown', e => {
+  if (!document.body.classList.contains('unlocked')) return;
+  if (e.key === 'r' && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
+    location.reload(true);
+  }
+});
+</script>
+</body>
+</html>

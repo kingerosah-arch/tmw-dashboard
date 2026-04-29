@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TrackMyWings — Claude Usage</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #0e132f 0%, #1a1f3d 100%);
+    color: #ffefc2;
+    min-height: 100vh;
+    padding: 24px;
+  }
+  .container { max-width: 1280px; margin: 0 auto; }
+  .header {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(26, 31, 61, 0.95);
+    padding: 20px 28px; border-radius: 14px; margin-bottom: 24px;
+    border: 1px solid rgba(160, 110, 155, 0.3);
+  }
+  h1 {
+    background: linear-gradient(135deg, #f2b95f 0%, #ceabca 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 28px; letter-spacing: -0.5px;
+  }
+  .subtitle { color: #978cb5; font-size: 13px; margin-top: 4px; }
+  .nav-actions { display: flex; gap: 10px; }
+  .nav-btn {
+    background: rgba(14, 19, 47, 0.7); color: #ffefc2;
+    border: 1px solid rgba(160, 110, 155, 0.4);
+    padding: 9px 16px; border-radius: 8px;
+    font-size: 13px; cursor: pointer; text-decoration: none;
+    transition: all 0.15s;
+  }
+  .nav-btn:hover { border-color: #a06e9b; background: rgba(14, 19, 47, 0.9); }
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px; margin-bottom: 24px;
+  }
+  .stat-card {
+    background: rgba(14, 19, 47, 0.7);
+    border: 1px solid rgba(160, 110, 155, 0.3);
+    padding: 18px 20px; border-radius: 12px;
+  }
+  .stat-label { color: #978cb5; font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px; }
+  .stat-value { color: #ffefc2; font-size: 26px; font-weight: 600; letter-spacing: -0.5px; }
+  .stat-sub { color: #ceabca; font-size: 12px; margin-top: 4px; }
+  .panel {
+    background: rgba(14, 19, 47, 0.7);
+    border: 1px solid rgba(160, 110, 155, 0.3);
+    padding: 22px; border-radius: 12px; margin-bottom: 20px;
+  }
+  .panel-title { color: #f2b95f; font-size: 15px; font-weight: 600; margin-bottom: 16px; letter-spacing: 0.3px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 800px) { .grid-2 { grid-template-columns: 1fr; } }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(160, 110, 155, 0.15); }
+  th { color: #978cb5; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; font-weight: 600; }
+  td { color: #ffefc2; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-opus { background: rgba(242, 185, 95, 0.2); color: #f2b95f; }
+  .badge-sonnet { background: rgba(206, 171, 202, 0.2); color: #ceabca; }
+  .badge-haiku { background: rgba(160, 110, 155, 0.2); color: #a06e9b; }
+  .badge-other { background: rgba(151, 140, 181, 0.2); color: #978cb5; }
+  .progress-bar {
+    width: 100%; height: 10px; background: rgba(14, 19, 47, 0.9);
+    border-radius: 5px; overflow: hidden; margin-top: 10px;
+    border: 1px solid rgba(160, 110, 155, 0.3);
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, #f2b95f 0%, #ceabca 100%);
+    transition: width 0.5s;
+  }
+  .progress-fill.warn { background: linear-gradient(90deg, #f2b95f 0%, #f97316 100%); }
+  .progress-fill.danger { background: linear-gradient(90deg, #f97316 0%, #dc2626 100%); }
+  .meta-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; color: #978cb5; font-size: 11px; }
+  canvas { max-height: 320px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <h1>Claude Usage</h1>
+      <div class="subtitle">Snapshot of <code>~/.claude/</code> · refreshed hourly · token-only (Max 20x sub, USD = list-price reference)</div>
+    </div>
+    <div class="nav-actions">
+      <a class="nav-btn" href="task-dashboard.html">📊 Tasks</a>
+      <a class="nav-btn" href="folder-map.html">📂 Folder Map</a>
+      <button class="nav-btn" onclick="location.reload(true)">🔄</button>
+    </div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-card">
+      <div class="stat-label">Total Tokens (all time)</div>
+      <div class="stat-value" id="totalTokens">2456.19M</div>
+      <div class="stat-sub">25,992 assistant messages</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Cost — list-price ref</div>
+      <div class="stat-value">$8,067.21</div>
+      <div class="stat-sub">illustrative · actual = Max 20x flat fee</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Sessions</div>
+      <div class="stat-value">416</div>
+      <div class="stat-sub">23 active days</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Sprint Opus This Month</div>
+      <div class="stat-value">102.1%</div>
+      <div class="stat-sub">20.41M of 20.00M output</div>
+      <div class="progress-bar">
+        <div class="progress-fill danger" style="width: 100%"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Daily Token Burn — last 30 days</div>
+    <canvas id="dailyChart"></canvas>
+  </div>
+
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">By Model Family</div>
+      <canvas id="modelChart"></canvas>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Top Projects (by tokens)</div>
+      <canvas id="projectChart"></canvas>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Model Breakdown</div>
+    <table>
+      <thead><tr>
+        <th>Model</th><th class="num">Input</th><th class="num">Output</th>
+        <th class="num">Cache Read</th><th class="num">Cache Write</th>
+        <th class="num">Messages</th><th class="num">Cost (ref)</th>
+      </tr></thead>
+      <tbody id="modelTable"></tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Top Sessions — last 30 days</div>
+    <table>
+      <thead><tr>
+        <th>Session</th><th>Started</th><th>Project</th><th>Models</th>
+        <th class="num">Messages</th><th class="num">Tokens</th><th class="num">Cost (ref)</th>
+      </tr></thead>
+      <tbody id="sessionTable"></tbody>
+    </table>
+  </div>
+
+  <div class="meta-row">
+    <span>Generated: <span id="generatedAt"></span></span>
+    <span>Files scanned: <span id="fileCount"></span></span>
+    <span>Lines parsed: <span id="lineCount"></span></span>
+  </div>
+</div>
+
+<script>
+const DATA = {"generated_at": "2026-04-29T23:26:45", "file_count": 1068, "line_count": 52055, "totals": {"cost_usd": 8067.21, "messages": 25992, "tokens": 2456187980, "sessions": 416, "active_days": 23}, "sprint_opus": {"output_tokens_this_month": 20410197, "ceiling": 20000000, "pct": 102.1}, "daily_30d": {"days": ["2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-03", "2026-04-04", "2026-04-05", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-11", "2026-04-12", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-18", "2026-04-19", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-25", "2026-04-26", "2026-04-27", "2026-04-28", "2026-04-29"], "series": {"opus": [0, 0, 0, 0, 0, 0, 0, 0, 82058, 29331215, 145593027, 319372101, 240683778, 0, 0, 0, 0, 0, 0, 0, 0, 22695740, 40941299, 18945321, 112288859, 62532813, 4953046, 197479352, 145638753, 130564631, 193309011], "sonnet": [0, 0, 0, 0, 0, 0, 0, 0, 31549963, 63868293, 71071093, 9169853, 158476674, 10084291, 2295120, 330417, 664279, 532069, 1984348, 0, 3994463, 1552168, 2816161, 1255142, 59901371, 157511685, 7640660, 69917784, 36126362, 44351657, 31970554], "haiku": [0, 0, 0, 0, 0, 0, 0, 0, 4856499, 0, 3121489, 722489, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6098317, 0, 0, 9589401, 0, 0, 0], "other": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}}, "model_breakdown": [{"model": "claude-opus-4-7", "family": "opus", "input": 137129, "output": 10453524, "cache_read": 786985529, "cache_write": 99511960, "messages": 7003, "cost_usd": 3832.4}, {"model": "claude-opus-4-6", "family": "opus", "input": 46983, "output": 9961922, "cache_read": 659387340, "cache_write": 98250991, "messages": 3194, "cost_usd": 3579.14}, {"model": "claude-sonnet-4-6", "family": "sonnet", "input": 1462745, "output": 5550389, "cache_read": 663220476, "cache_write": 96830797, "messages": 15335, "cost_usd": 649.73}, {"model": "claude-haiku-4-5-20251001", "family": "haiku", "input": 25372, "output": 58674, "cache_read": 21525214, "cache_write": 2778935, "messages": 312, "cost_usd": 5.94}, {"model": "<synthetic>", "family": "other", "input": 0, "output": 0, "cache_read": 0, "cache_write": 0, "messages": 148, "cost_usd": 0.0}], "top_projects": [{"project": "TrackMyWings", "tokens": 1452829273, "messages": 15635, "cost_usd": 4187.07, "sessions": 415}, {"project": "TMW_App_Screens_V1", "tokens": 601116064, "messages": 7141, "cost_usd": 2961.66, "sessions": 5}, {"project": "V0_NextJS", "tokens": 141676133, "messages": 1318, "cost_usd": 282.65, "sessions": 1}, {"project": "flag-icons-repo", "tokens": 92043120, "messages": 886, "cost_usd": 269.22, "sessions": 1}, {"project": "Dashboard", "tokens": 70343676, "messages": 632, "cost_usd": 73.36, "sessions": 4}, {"project": "batch-runner", "tokens": 64708458, "messages": 241, "cost_usd": 216.8, "sessions": 3}, {"project": "audits", "tokens": 21063033, "messages": 46, "cost_usd": 49.05, "sessions": 1}, {"project": "AI System", "tokens": 4405342, "messages": 46, "cost_usd": 10.45, "sessions": 1}, {"project": "lucide", "tokens": 3963636, "messages": 26, "cost_usd": 6.07, "sessions": 2}, {"project": "logo_variants", "tokens": 1476558, "messages": 5, "cost_usd": 2.96, "sessions": 1}], "recent_sessions": [{"id": "7c5ad09a", "start": "2026-04-11T10:21:37.338Z", "project": "TrackMyWings", "messages": 4872, "tokens": 330058573, "cost_usd": 2119.82, "models": ["opus", "other", "sonnet"]}, {"id": "8e362c66", "start": "2026-04-24T06:14:26.657Z", "project": "TrackMyWings", "messages": 2531, "tokens": 216538637, "cost_usd": 510.18, "models": ["opus", "other", "sonnet"]}, {"id": "ef9923d9", "start": "2026-04-28T05:14:51.314Z", "project": "TrackMyWings", "messages": 1800, "tokens": 173557744, "cost_usd": 428.11, "models": ["opus", "other", "sonnet"]}, {"id": "d44a4a63", "start": "2026-04-09T09:30:46.382Z", "project": "TrackMyWings", "messages": 1556, "tokens": 170698659, "cost_usd": 367.8, "models": ["haiku", "opus", "sonnet"]}, {"id": "abd90035", "start": "2026-04-10T12:01:55.454Z", "project": "TrackMyWings", "messages": 459, "tokens": 167673910, "cost_usd": 357.72, "models": ["opus"]}, {"id": "65865302", "start": "2026-04-26T17:41:50.802Z", "project": "TrackMyWings", "messages": 1213, "tokens": 164167774, "cost_usd": 477.64, "models": ["opus", "other", "sonnet"]}, {"id": "a55f85af", "start": "2026-04-26T11:31:05.104Z", "project": "TrackMyWings", "messages": 1057, "tokens": 121414006, "cost_usd": 281.83, "models": ["haiku", "opus", "other", "sonnet"]}, {"id": "4c952a66", "start": "2026-04-10T19:13:14.218Z", "project": "TrackMyWings", "messages": 691, "tokens": 113534772, "cost_usd": 350.1, "models": ["opus", "other", "sonnet"]}, {"id": "cfefaded", "start": "2026-04-23T06:07:24.093Z", "project": "TrackMyWings", "messages": 1156, "tokens": 109587431, "cost_usd": 500.79, "models": ["opus", "other", "sonnet"]}, {"id": "0c84eba9", "start": "2026-04-27T06:30:55.860Z", "project": "TrackMyWings", "messages": 993, "tokens": 100438623, "cost_usd": 278.97, "models": ["opus", "other", "sonnet"]}, {"id": "d787e0db", "start": "2026-04-29T04:28:54.292Z", "project": "TrackMyWings", "messages": 818, "tokens": 97728447, "cost_usd": 257.44, "models": ["opus", "other", "sonnet"]}, {"id": "cc6f91eb", "start": "2026-04-20T04:30:42.255Z", "project": "TrackMyWings", "messages": 651, "tokens": 82582360, "cost_usd": 422.91, "models": ["opus"]}, {"id": "78f0b8fc", "start": "2026-04-23T18:11:57.648Z", "project": "TrackMyWings", "messages": 926, "tokens": 67134191, "cost_usd": 126.76, "models": ["haiku", "opus", "sonnet"]}, {"id": "5aa0445c", "start": "2026-04-26T07:59:06.471Z", "project": "TrackMyWings", "messages": 448, "tokens": 62404737, "cost_usd": 235.59, "models": ["opus", "sonnet"]}, {"id": "9959371a", "start": "2026-04-10T03:16:34.626Z", "project": "TrackMyWings", "messages": 190, "tokens": 60858079, "cost_usd": 215.07, "models": ["opus", "sonnet"]}, {"id": "52bd8f6e", "start": "2026-04-29T15:58:32.402Z", "project": "TrackMyWings", "messages": 749, "tokens": 59656621, "cost_usd": 190.37, "models": ["opus", "other", "sonnet"]}, {"id": "2d9d0274", "start": "2026-04-08T08:50:47.905Z", "project": "TrackMyWings", "messages": 550, "tokens": 55606862, "cost_usd": 67.15, "models": ["opus", "other", "sonnet"]}, {"id": "8036adbe", "start": "2026-04-10T14:36:47.775Z", "project": "TrackMyWings", "messages": 273, "tokens": 52193962, "cost_usd": 172.2, "models": ["haiku", "opus", "sonnet"]}, {"id": "48a28e13", "start": "2026-04-29T17:19:53.568Z", "project": "TrackMyWings", "messages": 768, "tokens": 45089243, "cost_usd": 225.83, "models": ["opus", "other"]}, {"id": "030171da", "start": "2026-04-07T19:07:18.861Z", "project": "TrackMyWings", "messages": 254, "tokens": 19174177, "cost_usd": 8.92, "models": ["haiku", "sonnet"]}, {"id": "38d7ccd2", "start": "2026-04-09T08:03:54.026Z", "project": "TrackMyWings", "messages": 270, "tokens": 18649396, "cost_usd": 10.25, "models": ["other", "sonnet"]}, {"id": "654d2a5b", "start": "2026-04-29T16:56:56.150Z", "project": "TrackMyWings", "messages": 243, "tokens": 15341624, "cost_usd": 183.51, "models": ["opus", "other"]}, {"id": "796485f1", "start": "2026-04-24T15:23:16.938Z", "project": "TrackMyWings", "messages": 108, "tokens": 12875936, "cost_usd": 21.15, "models": ["opus", "sonnet"]}, {"id": "a11d27db", "start": "2026-04-08T02:41:02.980Z", "project": "TrackMyWings", "messages": 117, "tokens": 8455921, "cost_usd": 3.99, "models": ["sonnet"]}, {"id": "036edbb7", "start": "2026-04-09T06:31:47.422Z", "project": "TrackMyWings", "messages": 108, "tokens": 8180791, "cost_usd": 4.3, "models": ["sonnet"]}]};
+
+const COLORS = {
+  opus:   '#f2b95f',
+  sonnet: '#ceabca',
+  haiku:  '#a06e9b',
+  other:  '#978cb5',
+};
+
+const fmtTokens = n => n >= 1e6 ? (n/1e6).toFixed(2)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'K' : String(n);
+const fmtInt = n => n.toLocaleString();
+
+document.getElementById('generatedAt').textContent = DATA.generated_at;
+document.getElementById('fileCount').textContent = fmtInt(DATA.file_count);
+document.getElementById('lineCount').textContent = fmtInt(DATA.line_count);
+
+// Daily chart — stacked bar
+new Chart(document.getElementById('dailyChart'), {
+  type: 'bar',
+  data: {
+    labels: DATA.daily_30d.days.map(d => d.slice(5)),
+    datasets: ['opus','sonnet','haiku','other'].map(fam => ({
+      label: fam,
+      data: DATA.daily_30d.series[fam],
+      backgroundColor: COLORS[fam],
+      borderWidth: 0,
+    })),
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#ffefc2' } }, tooltip: { callbacks: { label: c => c.dataset.label+': '+fmtTokens(c.parsed.y) } } },
+    scales: {
+      x: { stacked: true, ticks: { color: '#978cb5', maxRotation: 60, minRotation: 60 }, grid: { display: false } },
+      y: { stacked: true, ticks: { color: '#978cb5', callback: fmtTokens }, grid: { color: 'rgba(160,110,155,0.1)' } },
+    },
+  },
+});
+
+// Model family pie
+const familyTotals = { opus:0, sonnet:0, haiku:0, other:0 };
+DATA.model_breakdown.forEach(m => {
+  familyTotals[m.family] = (familyTotals[m.family] || 0) + m.input + m.output + m.cache_read + m.cache_write;
+});
+new Chart(document.getElementById('modelChart'), {
+  type: 'doughnut',
+  data: {
+    labels: Object.keys(familyTotals),
+    datasets: [{ data: Object.values(familyTotals), backgroundColor: Object.keys(familyTotals).map(k => COLORS[k]), borderWidth: 0 }],
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#ffefc2' } }, tooltip: { callbacks: { label: c => c.label+': '+fmtTokens(c.parsed) } } },
+  },
+});
+
+// Top projects bar
+new Chart(document.getElementById('projectChart'), {
+  type: 'bar',
+  data: {
+    labels: DATA.top_projects.map(p => p.project),
+    datasets: [{ label: 'Tokens', data: DATA.top_projects.map(p => p.tokens), backgroundColor: '#f2b95f', borderWidth: 0 }],
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmtTokens(c.parsed.x) } } },
+    scales: {
+      x: { ticks: { color: '#978cb5', callback: fmtTokens }, grid: { color: 'rgba(160,110,155,0.1)' } },
+      y: { ticks: { color: '#ffefc2' }, grid: { display: false } },
+    },
+  },
+});
+
+// Model breakdown table
+document.getElementById('modelTable').innerHTML = DATA.model_breakdown.map(m => `
+  <tr>
+    <td><span class="badge badge-${m.family}">${m.family}</span> ${m.model}</td>
+    <td class="num">${fmtTokens(m.input)}</td>
+    <td class="num">${fmtTokens(m.output)}</td>
+    <td class="num">${fmtTokens(m.cache_read)}</td>
+    <td class="num">${fmtTokens(m.cache_write)}</td>
+    <td class="num">${fmtInt(m.messages)}</td>
+    <td class="num">$${m.cost_usd.toFixed(2)}</td>
+  </tr>
+`).join('');
+
+// Sessions table
+document.getElementById('sessionTable').innerHTML = DATA.recent_sessions.map(s => `
+  <tr>
+    <td><code>${s.id}</code></td>
+    <td>${s.start.slice(0,16).replace('T',' ')}</td>
+    <td>${s.project}</td>
+    <td>${s.models.map(f => '<span class="badge badge-'+f+'">'+f+'</span>').join(' ')}</td>
+    <td class="num">${fmtInt(s.messages)}</td>
+    <td class="num">${fmtTokens(s.tokens)}</td>
+    <td class="num">$${s.cost_usd.toFixed(2)}</td>
+  </tr>
+`).join('');
+</script>
+</body>
+</html>

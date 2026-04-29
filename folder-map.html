@@ -1,289 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrackMyWings - Folder Map</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrackMyWings · Files</title>
+<link rel="icon" type="image/jpeg" href="logo.jpeg">
+<link rel="stylesheet" href="dashboard-tokens.css">
+<link rel="stylesheet" href="dashboard-components.css">
+<style>
+  .fm-summary {
+    font-size: 13px;
+    color: var(--ink-mid);
+    padding: var(--sp-md) 0 var(--sp-lg);
+    border-bottom: 1px solid var(--line-soft);
+    margin-bottom: var(--sp-lg);
+  }
+  .fm-summary strong { color: var(--ink-hi); font-weight: 600; }
+  .fm-summary .fm-summary-num { font-variant-numeric: tabular-nums; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #0e132f 0%, #1a1f3d 100%);
-            color: #ffefc2;
-            line-height: 1.6;
-            min-height: 100vh;
-            padding: 20px;
-        }
+  .fm-controls {
+    display: flex;
+    gap: var(--sp-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--sp-md);
+  }
+  .fm-controls .ds-filter { min-width: 200px; flex: 1; }
 
-        /* ===== LOGIN SCREEN ===== */
-        .login-screen {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0e132f 0%, #1a1f3d 100%);
-        }
+  .fm-breadcrumb {
+    display: none;
+    background: var(--bg-card);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--r-md);
+    padding: 10px var(--sp-md);
+    margin-bottom: var(--sp-md);
+    font-size: 12px;
+    color: var(--ink-mid);
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .fm-breadcrumb.show { display: flex; }
+  .fm-breadcrumb .fm-bc-path {
+    flex: 1;
+    color: var(--ink-hi);
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 12px;
+    word-break: break-all;
+  }
+  .fm-breadcrumb .fm-bc-sep { color: var(--ink-low); margin: 0 4px; }
+  .fm-breadcrumb button {
+    background: var(--gold-tint);
+    color: var(--gold);
+    border: none;
+    padding: 5px 10px;
+    border-radius: var(--r-sm);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: filter var(--t-fast) var(--ease);
+  }
+  .fm-breadcrumb button:hover { filter: brightness(1.15); }
 
-        .login-container {
-            background: rgba(26, 31, 61, 0.95);
-            border: 1px solid rgba(160, 110, 155, 0.2);
-            border-radius: 16px;
-            padding: 48px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-        }
+  .fm-tree {
+    background: var(--bg-card);
+    border: 1px solid var(--line-soft);
+    border-radius: var(--r-lg);
+    padding: var(--sp-md) 0;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    max-height: 75vh;
+    overflow-y: auto;
+  }
 
-        .login-header { text-align: center; margin-bottom: 40px; }
-        .login-icon { font-size: 48px; margin-bottom: 16px; }
-        .login-header h1 {
-            font-size: 28px; font-weight: 700;
-            background: linear-gradient(135deg, #f2b95f 0%, #ceabca 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-            margin-bottom: 8px;
-        }
-        .login-header p { font-size: 14px; color: #978cb5; }
-        .login-form { display: flex; flex-direction: column; gap: 20px; }
-        .password-field label {
-            display: block; font-size: 12px; font-weight: 600; color: #ceabca;
-            margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .password-field input {
-            width: 100%; padding: 12px 16px;
-            background: rgba(14, 19, 47, 0.7); border: 1px solid rgba(160, 110, 155, 0.3);
-            border-radius: 8px; color: #ffefc2; font-size: 14px; transition: all 0.3s ease;
-        }
-        .password-field input:focus {
-            outline: none; border-color: #a06e9b;
-            background: rgba(14, 19, 47, 0.9); box-shadow: 0 0 0 3px rgba(160, 110, 155, 0.1);
-        }
-        .login-btn {
-            padding: 12px 24px; background: #f2b95f; color: #0e132f; border: none;
-            border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px;
-        }
-        .login-btn:hover { transform: translateY(-2px); background: #b28134; box-shadow: 0 8px 20px rgba(242, 185, 95, 0.4); }
-        .login-error {
-            display: none; padding: 12px; background: rgba(220, 38, 38, 0.1);
-            border: 1px solid rgba(220, 38, 38, 0.3); border-radius: 6px;
-            color: #fca5a5; font-size: 13px; text-align: center;
-        }
-        .login-error.show { display: block; }
+  .fm-node {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 16px 2px 8px;
+    cursor: default;
+    user-select: none;
+    border-radius: 0;
+  }
+  .fm-node.fm-clickable { cursor: pointer; }
+  .fm-node.fm-clickable:hover { background: var(--bg-elev); }
+  .fm-node.fm-folder { color: var(--ink-hi); font-weight: 500; }
+  .fm-node.fm-file   { color: var(--ink-mid); }
+  .fm-node.fm-match  { background: var(--gold-tint-soft); }
+  .fm-node.fm-match .fm-name { color: var(--gold); font-weight: 600; }
+  .fm-node.fm-selected { background: var(--gold-tint); }
+  .fm-node.fm-selected .fm-name { color: var(--gold); font-weight: 600; }
 
-        /* ===== FOLDER MAP SCREEN ===== */
-        .folder-map-screen { display: none; }
+  .fm-node.fm-depth-1 { font-size: 13.5px; font-weight: 600; }
+  .fm-node.fm-depth-2 { font-size: 13px; }
+  .fm-node.fm-depth-3 { font-size: 12.5px; }
+  .fm-node.fm-depth-4 { font-size: 12px; color: var(--ink-mid); }
+  .fm-node.fm-depth-5,
+  .fm-node.fm-depth-6,
+  .fm-node.fm-depth-7 { font-size: 11.5px; color: var(--ink-low); }
 
-        .fm-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 24px; background: rgba(26, 31, 61, 0.95);
-            border: 1px solid rgba(160, 110, 155, 0.2); border-radius: 12px;
-            margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
-        }
-        .fm-header-left { display: flex; align-items: center; gap: 12px; }
-        .fm-header-left h1 {
-            font-size: 22px; font-weight: 700;
-            background: linear-gradient(135deg, #f2b95f 0%, #ceabca 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-        }
-        .fm-header-right { display: flex; gap: 8px; flex-wrap: wrap; }
-        .fm-btn {
-            padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(160, 110, 155, 0.3);
-            background: rgba(14, 19, 47, 0.5); color: #ceabca; font-size: 13px;
-            cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block;
-        }
-        .fm-btn:hover { background: rgba(160, 110, 155, 0.2); color: #ffefc2; }
+  .fm-toggle {
+    width: 14px;
+    color: var(--ink-low);
+    display: inline-block;
+    text-align: center;
+    transition: transform var(--t-fast) var(--ease);
+    flex-shrink: 0;
+  }
+  .fm-toggle.fm-open { transform: rotate(90deg); }
+  .fm-toggle.fm-leaf { visibility: hidden; }
 
-        /* Stats bar */
-        .fm-stats {
-            display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
-        }
-        .fm-stat {
-            padding: 10px 16px; background: rgba(26, 31, 61, 0.8);
-            border: 1px solid rgba(160, 110, 155, 0.15); border-radius: 8px;
-            font-size: 13px; color: #978cb5;
-        }
-        .fm-stat strong { color: #f2b95f; font-size: 16px; margin-right: 4px; }
+  .fm-icon {
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
+    color: var(--ink-low);
+  }
+  .fm-folder .fm-icon { color: var(--gold); }
 
-        /* Search */
-        .fm-search {
-            width: 100%; padding: 12px 16px; margin-bottom: 20px;
-            background: rgba(14, 19, 47, 0.7); border: 1px solid rgba(160, 110, 155, 0.3);
-            border-radius: 8px; color: #ffefc2; font-size: 14px;
-        }
-        .fm-search:focus { outline: none; border-color: #a06e9b; }
-        .fm-search::placeholder { color: #666; }
+  .fm-name { flex-shrink: 1; }
+  .fm-meta { margin-left: auto; display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
 
-        /* Auto-update badge */
-        .fm-auto-badge {
-            font-size: 11px; color: #666; padding: 4px 10px;
-            background: rgba(14, 19, 47, 0.5); border-radius: 4px;
-            border: 1px solid rgba(160, 110, 155, 0.1);
-        }
+  .fm-children {
+    margin-left: 24px;
+    border-left: 1px solid var(--line-soft);
+    padding-left: 0;
+  }
+  .fm-children.fm-collapsed { display: none; }
 
-        /* Tree */
-        .fm-tree {
-            background: rgba(26, 31, 61, 0.6); border: 1px solid rgba(160, 110, 155, 0.15);
-            border-radius: 12px; padding: 16px; overflow-x: auto;
-        }
-        .tree-node { margin-left: 20px; }
-        .tree-item {
-            display: flex; align-items: center; gap: 6px; padding: 4px 8px;
-            border-radius: 6px; cursor: default; transition: background 0.15s;
-        }
-        .tree-item:hover { background: rgba(160, 110, 155, 0.1); }
-        .tree-toggle {
-            width: 18px; height: 18px; display: flex; align-items: center;
-            justify-content: center; cursor: pointer; font-size: 10px;
-            color: #978cb5; transition: transform 0.2s; flex-shrink: 0;
-        }
-        .tree-toggle.hidden { visibility: hidden; }
-        .tree-toggle.open { transform: rotate(90deg); }
-        .tree-icon { font-size: 16px; flex-shrink: 0; }
-        .tree-name { font-size: 13px; color: #ceabca; }
-        .tree-name.folder { color: #f2b95f; font-weight: 600; }
-        .tree-children { display: none; }
-        .tree-children.visible { display: block; }
+  /* Empty / no-results state */
+  .fm-no-match {
+    padding: var(--sp-xl);
+    text-align: center;
+    color: var(--ink-mid);
+    font-family: inherit;
+    font-size: 13px;
+  }
 
-        /* Department badges */
-        .dept-badge {
-            font-size: 10px; padding: 1px 6px; border-radius: 4px;
-            font-weight: 600; margin-left: 8px; white-space: nowrap;
-        }
-        .dept-operations { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
-        .dept-product { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
-        .dept-engineering { background: rgba(249, 115, 22, 0.2); color: #fb923c; }
-        .dept-design { background: rgba(168, 85, 247, 0.2); color: #c084fc; }
-        .dept-finance { background: rgba(242, 185, 95, 0.2); color: #f2b95f; }
-        .dept-legal { background: rgba(239, 68, 68, 0.2); color: #f87171; }
-        .dept-marketing { background: rgba(20, 184, 166, 0.2); color: #2dd4bf; }
-        .dept-sales { background: rgba(236, 72, 153, 0.2); color: #f472b6; }
-        .dept-strategy { background: rgba(99, 102, 241, 0.2); color: #818cf8; }
-        .dept-people { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
-        .dept-archive { background: rgba(107, 114, 128, 0.2); color: #9ca3af; }
-        .dept-customer { background: rgba(6, 182, 212, 0.2); color: #22d3ee; }
-
-        /* Search highlight */
-        .search-match { background: rgba(242, 185, 95, 0.3); border-radius: 2px; }
-        .search-hidden { display: none !important; }
-
-        /* Expand/Collapse all buttons */
-        .fm-tree-controls {
-            display: flex; gap: 8px; margin-bottom: 12px;
-        }
-        .fm-tree-ctrl {
-            padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(160, 110, 155, 0.2);
-            background: transparent; color: #978cb5; font-size: 12px;
-            cursor: pointer; transition: all 0.2s;
-        }
-        .fm-tree-ctrl:hover { background: rgba(160, 110, 155, 0.15); color: #ffefc2; }
-
-        /* Mobile responsive */
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            .fm-header { padding: 12px 16px; }
-            .fm-header-left h1 { font-size: 18px; }
-            .tree-node { margin-left: 14px; }
-            .fm-stats { gap: 8px; }
-            .fm-stat { padding: 8px 12px; font-size: 12px; }
-        }
-    </style>
+  /* Tree controls extras */
+  .fm-ctrl-btn {
+    background: transparent;
+    color: var(--ink-mid);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 9px 13px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  }
+  .fm-ctrl-btn:hover { color: var(--gold); border-color: var(--gold); }
+</style>
 </head>
 <body>
-    <!-- LOGIN -->
-    <div class="login-screen" id="loginScreen">
-        <div class="login-container">
-            <div class="login-header">
-                <div class="login-icon">📂</div>
-                <h1>TrackMyWings</h1>
-                <p>Folder Map</p>
-            </div>
-            <form class="login-form" id="loginForm">
-                <div class="password-field">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter password" autofocus>
-                </div>
-                <button type="submit" class="login-btn">Enter</button>
-                <div class="login-error" id="loginError">Incorrect password</div>
-            </form>
-        </div>
+
+<div class="ds-login-overlay" id="loginOverlay">
+  <form class="ds-login-card" id="loginForm">
+    <img class="ds-login-logo" src="logo.jpeg" alt="TrackMyWings">
+    <div class="ds-login-title">TrackMyWings</div>
+    <div class="ds-login-sub">File Map</div>
+    <input type="password" id="password" class="ds-filter" placeholder="Password" autofocus autocomplete="current-password">
+    <button type="submit" class="ds-btn-primary">Unlock</button>
+    <div class="ds-login-err" id="loginError">Incorrect password</div>
+  </form>
+</div>
+
+<div class="ds-wrap">
+  <header class="ds-top">
+    <div class="ds-top-brand">
+      <img class="ds-top-logo" src="logo.jpeg" alt="TrackMyWings">
+      <div>
+        <h1 class="ds-display">Files</h1>
+        <div class="ds-lede">Project file system, auto-updated hourly.</div>
+      </div>
     </div>
+    <nav class="ds-nav">
+      <a href="index.html">Founder</a>
+      <a href="finance-mis.html">Finance MIS</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="claude-usage.html">Claude</a>
+      <a href="folder-map.html" class="ds-nav-active">Files</a>
+      <button onclick="location.reload(true)" title="Hard refresh">Refresh</button>
+    </nav>
+  </header>
 
-    <!-- FOLDER MAP -->
-    <div class="folder-map-screen" id="folderMapScreen">
-        <div class="fm-header">
-            <div class="fm-header-left">
-                <span style="font-size: 24px;">📂</span>
-                <h1>TrackMyWings File Explorer</h1>
-            </div>
-            <div class="fm-header-right">
-                <button class="fm-btn" onclick="location.reload(true)" title="Hard refresh">🔄 Refresh</button>
-                <a class="fm-btn" href="index.html">📊 Dashboard</a>
-                <button class="fm-btn" id="logoutBtn">Logout</button>
-            </div>
-        </div>
+  <div class="fm-summary">
+    <strong class="fm-summary-num">287</strong> folders ·
+    <strong class="fm-summary-num">306</strong> files —
+    <span class="fm-summary-num">157 md, 51 xlsx, 12 pdf, 11 docx, 8 html, 2 images</span>
+  </div>
 
-        <div class="fm-stats">
-            <div class="fm-stat"><strong>287</strong> Folders</div>
-            <div class="fm-stat"><strong>306</strong> Files</div>
-            <div class="fm-stat"><strong>157</strong> Markdown</div>
-            <div class="fm-stat"><strong>51</strong> Excel</div>
-            <div class="fm-stat"><strong>11</strong> Word</div>
-            <div class="fm-stat"><strong>12</strong> PDF</div>
-            <div class="fm-stat"><strong>8</strong> HTML</div>
-            <div class="fm-stat"><strong>2</strong> Images</div>
-            <div class="fm-auto-badge">Auto-updated: 2026-04-28 22:55</div>
-        </div>
+  <div class="fm-controls">
+    <input type="text" id="treeSearch" class="ds-filter" placeholder="Search files / folders ( / to focus )">
+    <select id="deptFilter" class="ds-filter">
+      <option value="">All departments</option>
+      <option value="Operations">Operations</option>
+      <option value="Product">Product</option>
+      <option value="Engineering">Engineering</option>
+      <option value="Design">Design</option>
+      <option value="Finance">Finance</option>
+      <option value="Legal">Legal</option>
+      <option value="Marketing">Marketing</option>
+      <option value="Sales">Sales</option>
+      <option value="Strategy">Strategy</option>
+      <option value="People">People</option>
+      <option value="Customer Success">Customer Success</option>
+      <option value="Archive">Archive</option>
+    </select>
+    <button class="fm-ctrl-btn" onclick="expandAll()">Expand all</button>
+    <button class="fm-ctrl-btn" onclick="collapseAll()">Collapse all</button>
+  </div>
 
-        <input type="text" class="fm-search" id="searchInput" placeholder="🔍 Search files and folders..." oninput="filterTree(this.value)">
+  <div class="fm-breadcrumb" id="breadcrumb">
+    <span style="color:var(--ink-low);">Selected:</span>
+    <span class="fm-bc-path" id="bcPath"></span>
+    <button onclick="copyPath()" id="copyBtn">Copy path</button>
+  </div>
 
-        <div class="fm-tree-controls">
-            <button class="fm-tree-ctrl" onclick="expandAll()">➕ Expand All</button>
-            <button class="fm-tree-ctrl" onclick="collapseAll()">➖ Collapse All</button>
-        </div>
+  <div class="fm-tree" id="folderTree"></div>
 
-        <div class="fm-tree" id="folderTree">
-            <!-- JS rendered -->
-        </div>
-    </div>
+  <div class="ds-meta">
+    <span>Generated 2026-04-30 01:02</span>
+    <span>287 folders</span>
+    <span>306 files</span>
+  </div>
+</div>
 
-    <script>
-        // Password check
-        const PASSWORD_HASH = '22900e4738455f5c92593a95b6e0c5d228698a80385e4f1f2d272e8f8f49aec6';
+<script>
+// --- Auth gate ---
+const PASSWORD_HASH = '22900e4738455f5c92593a95b6e0c5d228698a80385e4f1f2d272e8f8f49aec6';
+async function sha256(msg) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+function unlock() { document.body.classList.add('unlocked'); document.getElementById('loginOverlay').style.display = 'none'; }
+if (sessionStorage.getItem('tmw_auth') === 'true') unlock();
+document.getElementById('loginForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const hash = await sha256(document.getElementById('password').value);
+  if (hash === PASSWORD_HASH) {
+    sessionStorage.setItem('tmw_auth', 'true');
+    unlock();
+  } else {
+    const err = document.getElementById('loginError');
+    err.classList.add('show');
+    setTimeout(() => err.classList.remove('show'), 2000);
+    document.getElementById('password').value = '';
+  }
+});
 
-        async function sha256(msg) {
-            const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
-            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const pw = document.getElementById('password').value;
-            const hash = await sha256(pw);
-            if (hash === PASSWORD_HASH) {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('folderMapScreen').style.display = 'block';
-                sessionStorage.setItem('tmw_auth', 'true');
-            } else {
-                document.getElementById('loginError').classList.add('show');
-                setTimeout(() => document.getElementById('loginError').classList.remove('show'), 2000);
-            }
-        });
-
-        // Auto-login if already authed this session
-        if (sessionStorage.getItem('tmw_auth') === 'true') {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('folderMapScreen').style.display = 'block';
-        }
-
-        document.getElementById('logoutBtn').addEventListener('click', function() {
-            sessionStorage.removeItem('tmw_auth');
-            location.reload();
-        });
-
-        // Folder structure data (auto-generated from FOLDER_MAP.md)
-        const folderStructure =             { name: 'TrackMyWings', type: 'folder', dept: 'root', children: [
+// --- Tree data ---
+const folderStructure =             { name: 'TrackMyWings', type: 'folder', dept: 'root', children: [
                 { name: '.claude', type: 'folder', dept: 'Operations', children: [
                     { name: 'agents', type: 'folder', dept: 'Operations', children: [
                         { name: 'research.md (Sonnet), writer.md (Opus), ops.md (Haiku)', type: 'file', dept: 'Operations' }
@@ -1026,141 +993,194 @@
                 { name: '~/tmw-rebuild.sh', type: 'file', dept: 'Operations' }
             ] };
 
-        // File icon mapping
-        function getFileIcon(name) {
-            const ext = name.split('.').pop().toLowerCase();
-            const icons = {
-                'md': '📄', 'txt': '📄',
-                'xlsx': '📊', 'xls': '📊', 'csv': '📊',
-                'docx': '📝', 'doc': '📝',
-                'pdf': '📋',
-                'html': '🌐', 'htm': '🌐',
-                'zip': '📦', 'gz': '📦', 'tar': '📦',
-                'png': '🖼️', 'jpg': '🖼️', 'jpeg': '🖼️', 'gif': '🖼️', 'svg': '🖼️',
-                'py': '🐍', 'js': '⚡', 'ts': '⚡', 'dart': '🎯',
-                'json': '📋', 'yaml': '📋', 'yml': '📋',
-            };
-            return icons[ext] || '📄';
+// --- Dept badge mapping (3 visual variants from 12 logical depts per One-Hue-One-Job) ---
+function deptBadgeClass(dept) {
+  if (dept === 'Finance') return 'ds-badge-dept-finance';
+  if (dept === 'Legal') return 'ds-badge-dept-legal';
+  if (['Archive','Customer Success','People','Sales'].includes(dept)) return 'ds-badge-dept-other';
+  return 'ds-badge-dept';
+}
+
+function fileIcon(name) {
+  const ext = (name.split('.').pop() || '').toLowerCase();
+  if (['md','txt'].includes(ext)) return '◫';
+  if (['xlsx','xls','csv'].includes(ext)) return '▦';
+  if (['docx','doc','rtf'].includes(ext)) return '▤';
+  if (['pdf'].includes(ext)) return '▥';
+  if (['html','htm'].includes(ext)) return '⌖';
+  if (['png','jpg','jpeg','gif','svg','webp'].includes(ext)) return '◇';
+  if (['py','js','mjs','ts','tsx','sh'].includes(ext)) return '⌬';
+  if (['json','yaml','yml','toml'].includes(ext)) return '⌗';
+  if (['zip','tar','gz'].includes(ext)) return '◰';
+  return '·';
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+let nodeIdCounter = 0;
+
+function renderNode(node, depth, parentPath) {
+  const myPath = parentPath ? parentPath + '/' + node.name : node.name;
+  const id = 'n' + (nodeIdCounter++);
+  const isFolder = node.type === 'folder';
+  const hasChildren = isFolder && node.children && node.children.length > 0;
+  const dept = node.dept || '';
+  const badgeClass = dept ? deptBadgeClass(dept) : '';
+  const icon = isFolder ? (hasChildren ? '▣' : '▢') : fileIcon(node.name);
+  const toggleClass = hasChildren ? 'fm-toggle' : 'fm-toggle fm-leaf';
+  const nodeClass = `fm-node fm-${isFolder ? 'folder' : 'file'} fm-clickable fm-depth-${Math.min(depth, 7)}`;
+
+  let html = `<div class="${nodeClass}" id="${id}" data-path="${escapeHtml(myPath)}" data-dept="${escapeHtml(dept)}" data-type="${escapeHtml(node.type)}" data-name="${escapeHtml(node.name.toLowerCase())}" onclick="onNodeClick(event, '${id}')">`;
+  html += `<span class="${toggleClass}" onclick="toggleNode(event, '${id}')">▸</span>`;
+  html += `<span class="fm-icon">${icon}</span>`;
+  html += `<span class="fm-name">${escapeHtml(node.name)}</span>`;
+  if (dept && depth <= 2) {
+    html += `<span class="fm-meta"><span class="ds-badge ${badgeClass}">${escapeHtml(dept)}</span></span>`;
+  }
+  html += `</div>`;
+
+  if (hasChildren) {
+    const collapsed = depth >= 2 ? ' fm-collapsed' : '';
+    html += `<div class="fm-children${collapsed}" id="${id}-c">`;
+    for (const child of node.children) {
+      html += renderNode(child, depth + 1, myPath);
+    }
+    html += '</div>';
+  }
+  return html;
+}
+
+document.getElementById('folderTree').innerHTML = renderNode(folderStructure, 0, '');
+
+// --- Toggle / expand / collapse ---
+function toggleNode(e, id) {
+  if (e) e.stopPropagation();
+  const toggle = document.querySelector('#' + id + ' .fm-toggle');
+  const children = document.getElementById(id + '-c');
+  if (!children) return;
+  const isCollapsed = children.classList.contains('fm-collapsed');
+  if (isCollapsed) {
+    children.classList.remove('fm-collapsed');
+    if (toggle) toggle.classList.add('fm-open');
+  } else {
+    children.classList.add('fm-collapsed');
+    if (toggle) toggle.classList.remove('fm-open');
+  }
+}
+
+function expandAll() {
+  document.querySelectorAll('.fm-children').forEach(c => c.classList.remove('fm-collapsed'));
+  document.querySelectorAll('.fm-toggle').forEach(t => { if (!t.classList.contains('fm-leaf')) t.classList.add('fm-open'); });
+}
+
+function collapseAll() {
+  document.querySelectorAll('.fm-children').forEach(c => c.classList.add('fm-collapsed'));
+  document.querySelectorAll('.fm-toggle').forEach(t => t.classList.remove('fm-open'));
+}
+
+// --- Click node → breadcrumb ---
+let selectedPath = '';
+function onNodeClick(e, id) {
+  document.querySelectorAll('.fm-node.fm-selected').forEach(n => n.classList.remove('fm-selected'));
+  const node = document.getElementById(id);
+  if (!node) return;
+  node.classList.add('fm-selected');
+  selectedPath = node.dataset.path;
+  const bc = document.getElementById('breadcrumb');
+  document.getElementById('bcPath').textContent = selectedPath;
+  bc.classList.add('show');
+}
+
+function copyPath() {
+  if (!selectedPath) return;
+  navigator.clipboard.writeText(selectedPath).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const orig = btn.textContent;
+    btn.textContent = 'Copied';
+    setTimeout(() => { btn.textContent = orig; }, 1500);
+  });
+}
+
+// --- Search + dept filter ---
+function applyFilter() {
+  const q = document.getElementById('treeSearch').value.toLowerCase().trim();
+  const dept = document.getElementById('deptFilter').value;
+
+  const allNodes = document.querySelectorAll('.fm-node');
+  let matches = 0;
+
+  allNodes.forEach(n => {
+    n.classList.remove('fm-match');
+  });
+
+  if (!q && !dept) {
+    allNodes.forEach(n => { n.style.display = ''; });
+    document.querySelectorAll('.fm-children').forEach((c, i) => {
+      // Restore default collapsed state (depth-2+)
+      if (c.dataset.defaultCollapsed === '1') c.classList.add('fm-collapsed');
+    });
+    return;
+  }
+
+  // Hide everything first
+  allNodes.forEach(n => { n.style.display = 'none'; });
+  document.querySelectorAll('.fm-children').forEach(c => c.style.display = 'none');
+
+  allNodes.forEach(n => {
+    const name = n.dataset.name || '';
+    const ndept = n.dataset.dept || '';
+    const nameMatch = !q || name.includes(q);
+    const deptMatch = !dept || ndept === dept;
+    if (nameMatch && deptMatch) {
+      matches++;
+      n.classList.add('fm-match');
+      // Show the matching node and all its ancestors
+      let el = n;
+      while (el && !el.classList.contains('fm-tree')) {
+        if (el.classList && el.classList.contains('fm-node')) el.style.display = '';
+        if (el.classList && el.classList.contains('fm-children')) {
+          el.style.display = '';
+          el.classList.remove('fm-collapsed');
         }
+        el = el.parentElement;
+      }
+    }
+  });
 
-        function getDeptClass(dept) {
-            const map = {
-                'Operations': 'dept-operations', 'Product': 'dept-product',
-                'Engineering': 'dept-engineering', 'Design': 'dept-design',
-                'Finance': 'dept-finance', 'Legal': 'dept-legal',
-                'Marketing': 'dept-marketing', 'Sales': 'dept-sales',
-                'Strategy': 'dept-strategy', 'People': 'dept-people',
-                'Archive': 'dept-archive', 'Customer Success': 'dept-customer',
-            };
-            return map[dept] || '';
-        }
+  // Show no-match state if zero
+  let existing = document.querySelector('.fm-no-match');
+  if (matches === 0) {
+    if (!existing) {
+      const div = document.createElement('div');
+      div.className = 'fm-no-match';
+      div.textContent = 'No files or folders match these filters.';
+      document.getElementById('folderTree').appendChild(div);
+    }
+  } else if (existing) {
+    existing.remove();
+  }
+}
 
-        function renderNode(node, depth, path) {
-            const isRoot = node.name === 'TrackMyWings';
-            const currentPath = isRoot ? node.name : path + '/' + node.name;
-            let html = '';
+document.getElementById('treeSearch').addEventListener('input', applyFilter);
+document.getElementById('deptFilter').addEventListener('change', applyFilter);
 
-            if (isRoot) {
-                html += '<div class="tree-children visible">';
-                node.children.forEach(child => { html += renderNode(child, depth + 1, currentPath); });
-                html += '</div>';
-            } else {
-                const id = 'node-' + Math.random().toString(36).substr(2, 9);
-                const hasChildren = node.children && node.children.length > 0;
+// Mark default-collapsed children for restoration after filter clear
+document.querySelectorAll('.fm-children.fm-collapsed').forEach(c => { c.dataset.defaultCollapsed = '1'; });
 
-                html += `<div class="tree-node" data-name="${node.name.toLowerCase()}" data-path="${currentPath.toLowerCase()}">
-                    <div class="tree-item">
-                        <div class="tree-toggle ${!hasChildren ? 'hidden' : ''}" onclick="toggleNode('${id}')">
-                            <span id="toggle-${id}">▶</span>
-                        </div>
-                        <div class="tree-icon">
-                            ${node.type === 'folder' ? '📁' : getFileIcon(node.name)}
-                        </div>
-                        <div class="tree-name ${node.type === 'folder' ? 'folder' : ''}">
-                            ${node.name}
-                        </div>
-                        ${node.dept && node.dept !== 'root' ? `<span class="dept-badge ${getDeptClass(node.dept)}">${node.dept}</span>` : ''}
-                    </div>
-                    ${hasChildren ? `<div class="tree-children" id="${id}">
-                        ${node.children.map(child => renderNode(child, depth + 1, currentPath)).join('')}
-                    </div>` : ''}
-                </div>`;
-            }
-            return html;
-        }
-
-        function toggleNode(nodeId) {
-            const el = document.getElementById(nodeId);
-            const toggle = document.getElementById('toggle-' + nodeId);
-            if (el.classList.contains('visible')) {
-                el.classList.remove('visible');
-                toggle.parentElement.classList.remove('open');
-            } else {
-                el.classList.add('visible');
-                toggle.parentElement.classList.add('open');
-            }
-        }
-
-        function expandAll() {
-            document.querySelectorAll('.tree-children').forEach(el => el.classList.add('visible'));
-            document.querySelectorAll('.tree-toggle').forEach(el => el.classList.add('open'));
-        }
-
-        function collapseAll() {
-            document.querySelectorAll('.tree-children').forEach(el => {
-                if (!el.parentElement.classList.contains('fm-tree')) el.classList.remove('visible');
-            });
-            document.querySelectorAll('.tree-toggle').forEach(el => el.classList.remove('open'));
-            // Keep top-level visible
-            document.querySelector('.fm-tree > .tree-children').classList.add('visible');
-        }
-
-        function filterTree(query) {
-            const q = query.toLowerCase().trim();
-            const allNodes = document.querySelectorAll('.tree-node');
-
-            if (!q) {
-                allNodes.forEach(n => n.classList.remove('search-hidden'));
-                collapseAll();
-                return;
-            }
-
-            allNodes.forEach(node => {
-                const name = node.getAttribute('data-name') || '';
-                const path = node.getAttribute('data-path') || '';
-                if (name.includes(q) || path.includes(q)) {
-                    node.classList.remove('search-hidden');
-                    // Expand parents
-                    let parent = node.parentElement;
-                    while (parent) {
-                        if (parent.classList.contains('tree-children')) {
-                            parent.classList.add('visible');
-                            const toggle = document.getElementById('toggle-' + parent.id);
-                            if (toggle) toggle.parentElement.classList.add('open');
-                        }
-                        parent = parent.parentElement;
-                    }
-                } else {
-                    // Hide only if no children match
-                    const childMatch = node.querySelector('.tree-node:not(.search-hidden)');
-                    if (!childMatch) node.classList.add('search-hidden');
-                }
-            });
-
-            // Second pass: unhide parents of visible nodes
-            allNodes.forEach(node => {
-                if (!node.classList.contains('search-hidden')) {
-                    let parent = node.parentElement.closest('.tree-node');
-                    while (parent) {
-                        parent.classList.remove('search-hidden');
-                        parent = parent.parentElement.closest('.tree-node');
-                    }
-                }
-            });
-        }
-
-        // Render on load
-        document.getElementById('folderTree').innerHTML = renderNode(folderStructure, 0, '');
-    </script>
+// "/" focuses search
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'SELECT' && document.body.classList.contains('unlocked')) {
+    e.preventDefault();
+    document.getElementById('treeSearch').focus();
+  }
+  if (e.key === 'Escape') {
+    document.getElementById('treeSearch').value = '';
+    document.getElementById('deptFilter').value = '';
+    applyFilter();
+  }
+});
+</script>
 </body>
 </html>

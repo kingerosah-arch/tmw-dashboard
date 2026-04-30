@@ -508,7 +508,7 @@ const activeTasks = [
             { id: 'TMW-123', task: 'File trademark application for "TrackMyWings" — coordinate with Anshul Bansal', owner: 'Rohan', department: 'Legal', priority: 'High', status: 'Not Started', deadline: 'Post TMW-152', created: '2026-03-30' },
             { id: 'TMW-128', task: 'Test content pipeline end-to-end — produce 1 real video through full Claude → Eleven Labs → Gemini → Nano Banana → Google Flow → Capcut flow (Path B)', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'High', status: 'Not Started', deadline: 'Pre-July 1', created: '2026-04-06' },
             { id: 'TMW-129', task: 'Set up accounts on content pipeline tools — Nano Banana 2 Pro, Google Flow, Eleven Labs paid tier', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Medium', status: 'Blocked', deadline: 'Post TMW-128', created: '2026-04-06' },
-            { id: 'TMW-151', task: 'Open ICICI bank account — paid-up capital Rohan ₹62K + Amol ₹38K (₹1L total). Unblocks UDHYAM/GST/MSME chain. Process update S084 (2026-04-30): Branch manager Sandesha is the point of contact at ICIC…', owner: 'Rohan + Amol + CA Raman', department: 'Finance / Legal', priority: 'High', status: 'WIP — letterhead packet prep + CA director-KYC meeting pending', deadline: 'TBD (was 2026-05-02)', created: '2026-04-23' },
+            { id: 'TMW-151', task: 'Open ICICI bank account — paid-up capital Rohan ₹62K + Amol ₹38K (₹1L total). Unblocks UDHYAM/GST/MSME chain. Status S084 (2026-04-30): Prep complete. ICICI doc list received from RM Subrahmanya Naik…', owner: 'Rohan + Amol + CA Raman', department: 'Finance / Legal', priority: 'High', status: 'Prep complete · awaiting Raman\'s letterhead docs OR Rohan calls ICICI to summon…', deadline: 'On-call (Rohan triggers)', created: '2026-04-23' },
             { id: 'TMW-152', task: 'Register for UDHYAM + GST + MSME certificates post bank account opening', owner: 'Rohan', department: 'Legal / Finance', priority: 'High', status: 'Not Started', deadline: 'Post TMW-151', created: '2026-04-23' },
             { id: 'TMW-153', task: 'File copyright application for TrackMyWings (app, content, brand) — coordinate with Anshul Bansal', owner: 'Rohan', department: 'Legal', priority: 'High', status: 'Not Started', deadline: 'Post TMW-152', created: '2026-04-23' },
             { id: 'TMW-154', task: 'Apply for startup funding — Startup India, grants, angel/seed — run in parallel post bank account', owner: 'Rohan', department: 'Finance / Strategy', priority: 'Medium', status: 'Not Started', deadline: 'Post TMW-151', created: '2026-04-23' },
@@ -519,6 +519,7 @@ const activeTasks = [
             { id: 'TMW-182', task: 'Founder action: send Anshul Bansal ADT-1 email within 72h. Draft at Legal/Compliance/Email_Drafts/Anshul_ADT1_2026-04-30.txt. ADT-1 (Auditor Appointment) statutory deadline 2026-05-23 (within 30d of…', owner: 'Rohan', department: 'Legal', priority: 'High', status: 'Not Started', deadline: '2026-05-04', created: '2026-04-30' }
         ];
 const completedTasks = [
+            { id: 'TMW-166', task: 'Tier 1 Figma optimizations SHIPPED. All 3 approved + executed S084: (1) Design/TMW_App_Screens_V1/foundation/LIBRARY_MANIFEST.json authored — 48 components, variant matrices for high-use, text-style…', owner: 'Rohan + Claude', department: 'Operations / Design', completed: '2026-04-30' },
             { id: 'TMW-169', task: 'Ops health tiles SHIPPED — 4 new FCP tiles live: Skills active (70 = 55 plugin + 15 user), Figma MCP today (0/200, daily reset), /start cold-start (~10.8K tokens raw + 7d history bootstrapped), Legal…', owner: 'Claude', department: 'Operations', completed: '2026-04-30' },
             { id: 'TMW-012', task: 'CANCELLED 2026-04-30 (S084) — Claude Project re-upload rhythm obsolete; ClaudeCode reads files directly from disk via /start. No weekly upload needed.', owner: 'Rohan', department: 'Operations', completed: '2026-04-30' },
             { id: '**TMW-165**', task: 'AI System grooming pass v14 EXECUTED — all 12 sweeps shipped. 47% cold-start drop (target ≥30%). CONTEXT split (369→157+207). SESSION_LOG archive (2918→1277). PROMPT dedup (246→177). 7 dead skills un…', owner: 'Rohan + Claude', department: 'Operations', completed: '2026-04-30' },
@@ -797,6 +798,13 @@ const activityFeed = [
                         "task_name": "**Ops health tiles SHIPPED** \u2014 4 new ..."
             },
             {
+                        "date": "2026-04-30",
+                        "task_id": "TMW-166",
+                        "event": "completed",
+                        "department": "Operations / Design",
+                        "task_name": "**Tier 1 Figma optimizations SHIPPED...."
+            },
+            {
                         "date": "2026-04-29",
                         "task_id": "TMW-113",
                         "event": "completed",
@@ -907,13 +915,6 @@ const activityFeed = [
                         "event": "completed",
                         "department": "Legal",
                         "task_name": "Address registration + incorporation ..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "**INC**",
-                        "event": "completed",
-                        "department": "Legal",
-                        "task_name": "\ud83c\udf89 **TrackMyWings Technologies Pvt. Lt..."
             }
 ];
 const calendarEvents = [
@@ -1035,8 +1036,8 @@ const analyticsData = {
                         },
                         {
                                     "date": "2026-04-30",
-                                    "completed": 4,
-                                    "added": 244
+                                    "completed": 5,
+                                    "added": 245
                         }
             ],
             "weeklyVelocity": [
@@ -1057,8 +1058,8 @@ const analyticsData = {
                         },
                         {
                                     "week": "2026-04-27",
-                                    "completed": 13,
-                                    "added": 244
+                                    "completed": 14,
+                                    "added": 245
                         }
             ],
             "statusDistribution": [
@@ -1087,7 +1088,7 @@ const analyticsData = {
                                     "count": 1
                         },
                         {
-                                    "status": "**WIP \u2014 letterhead packet prep + CA director-KYC meeting pending**",
+                                    "status": "**Prep complete \u00b7 awaiting Raman's letterhead docs OR Rohan calls ICICI to summon team**",
                                     "count": 1
                         }
             ],
@@ -1422,8 +1423,8 @@ const analyticsData = {
                         }
             ],
             "velocity": {
-                        "today": 4,
-                        "this_week": 13,
+                        "today": 5,
+                        "this_week": 14,
                         "overdue": 0,
                         "stale": 15
             }

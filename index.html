@@ -1,591 +1,2173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>TrackMyWings · Founder Control</title>
-<link rel="icon" type="image/jpeg" href="logo.jpeg">
-<link rel="stylesheet" href="dashboard-tokens.css">
-<link rel="stylesheet" href="dashboard-components.css">
-<style>
-  /* page-specific tweaks (≤30 lines) */
-  .fc-truth { padding: 10px 28px; border-bottom: 1px solid var(--hairline-soft); background: var(--bg-elev); color: var(--ink-mid); font-size: 12.5px; font-feature-settings: 'tnum'; letter-spacing: 0; }
-  .fc-truth b { color: var(--ink-hi); font-weight: 600; }
-  .fc-truth .sep { color: var(--ink-low); margin: 0 10px; }
-  /* .ds-metrics-equal removed — pages now inherit the asymmetric 1.6/1/1/1 grid from
-     dashboard-tokens.css, with one tile carrying the .ds-metric-lead modifier. */
-  .fc-pri-row { display: grid; grid-template-columns: 36px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--hairline-soft); }
-  .fc-pri-row:last-child { border-bottom: 0; }
-  .fc-pri-num { font-family: 'JetBrains Mono', ui-monospace, monospace; color: var(--ink-low); font-size: 16px; font-weight: 600; padding-top: 2px; }
-  .fc-pri-task { color: var(--ink-hi); font-weight: 500; font-size: 13.5px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .fc-pri-meta { display: flex; gap: 16px; margin-top: 6px; font-size: 12px; color: var(--ink-mid); align-items: center; }
-  .fc-pri-deadline.tone-warn { color: var(--warn); }
-  .fc-pri-deadline.tone-danger { color: var(--danger); }
-  .fc-cp-rail { display: grid; grid-template-columns: repeat(7, 1fr); gap: 12px; align-items: start; padding: 22px 0 8px; position: relative; }
-  .fc-cp-rail::before { content: ''; position: absolute; top: 38px; left: 7%; right: 7%; height: 1px; background: var(--hairline-soft); z-index: 0; }
-  .fc-cp-step { display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
-  .fc-cp-dot { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 600; background: var(--bg-elev); border: 1px solid var(--hairline); }
-  .fc-cp-dot.done { background: var(--signal-gold); border-color: var(--signal-gold); color: var(--bg); }
-  .fc-cp-dot.inflight { background: transparent; border: 2px solid var(--signal-gold); color: var(--signal-gold); outline: 4px solid var(--signal-gold-tint); outline-offset: 0; animation: fcPulse 2.4s ease-in-out infinite; }
-  .fc-cp-dot.pending { color: var(--ink-low); }
-  @keyframes fcPulse { 0%,100% { outline-width: 4px; opacity: 1; } 50% { outline-width: 8px; opacity: 0.85; } }
-  @media (prefers-reduced-motion: reduce) { .fc-cp-dot.inflight { animation: none; } }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="1800">
+  <title>TMW — Tasks</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="dashboard-tokens.css">
+  <link rel="stylesheet" href="dashboard-components.css">
+  <style>
+    /* Page-specific tweaks — shared components carry all structural styling */
+    .ds-top { position: sticky; top: 0; z-index: 40; background: var(--bg-base); }
+    .ds-filters { position: sticky; top: 73px; z-index: 30; background: var(--bg-base);
+      padding: var(--sp-sm) 0; border-bottom: 1px solid var(--line-soft); margin-bottom: var(--sp-lg); }
+    .view-toggle { display: flex; gap: var(--sp-xs); margin-bottom: var(--sp-md); }
+    .view-btn { }
+    .view-btn.active { color: var(--ink-hi); border-color: var(--gold); background: var(--gold-tint-soft); }
+    .kanban-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-md); }
+    @media (max-width: 900px) { .kanban-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .kanban-grid { grid-template-columns: 1fr; } }
+    .kanban-col-head { display: flex; justify-content: space-between; align-items: center;
+      padding: var(--sp-sm) var(--sp-md); border-bottom: 1px solid var(--line-soft);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-mid); }
+    .kanban-col-count { font-variant-numeric: tabular-nums; color: var(--ink-low); }
+    .kanban-cards { padding: var(--sp-sm); display: flex; flex-direction: column; gap: var(--sp-xs); }
+    .kanban-card { background: var(--bg-base); border: 1px solid var(--line-soft); border-radius: var(--r-sm);
+      padding: var(--sp-sm) var(--sp-md); }
+    .kanban-card:hover { background: var(--bg-elev); }
+    .kanban-card-id { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: var(--ink-low);
+      font-variant-numeric: tabular-nums; margin-bottom: 3px; }
+    .kanban-card-title { font-size: 12px; font-weight: 500; color: var(--ink-hi); line-height: 1.4;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .kanban-card-foot { margin-top: var(--sp-xs); display: flex; gap: var(--sp-xs); align-items: center; flex-wrap: wrap; }
+    .dep-item { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-xs);
+      padding: var(--sp-sm) var(--sp-md); border-bottom: 1px solid var(--line-soft); font-size: 13px; }
+    .dep-item:last-child { border-bottom: none; }
+    .dep-arrow { color: var(--ink-low); font-size: 11px; }
+    .dep-reason { color: var(--ink-mid); font-size: 11.5px; }
+    .feed-item { display: grid; grid-template-columns: 1fr auto; gap: var(--sp-sm);
+      padding: var(--sp-sm) var(--sp-md); border-bottom: 1px solid var(--line-soft); font-size: 12.5px; }
+    .feed-item:last-child { border-bottom: none; }
+    .feed-event { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; margin-right: 4px; }
+    .feed-event.ev-completed { color: var(--plum); }
+    .feed-event.ev-created { color: var(--gold); }
+    .feed-event.ev-other { color: var(--ink-low); }
+    .feed-time { color: var(--ink-low); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .cal-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); border-radius: var(--r-md); overflow: hidden; }
+    .cal-day { background: var(--bg-card); padding: var(--sp-sm); min-height: 90px; }
+    .cal-day.today { background: var(--bg-elev); }
+    .cal-day-label { font-size: 10.5px; font-weight: 600; color: var(--ink-low); letter-spacing: 0.06em; margin-bottom: 4px; }
+    .cal-day.today .cal-day-label { color: var(--gold); }
+    .cal-event { background: var(--plum-tint); color: var(--plum); border-radius: var(--r-xs);
+      padding: 2px 5px; font-size: 10.5px; margin-bottom: 2px; line-height: 1.3; }
+    @media (max-width: 700px) { .cal-week { grid-template-columns: 1fr; } }
+    .section-head-btn { background: transparent; border: none; cursor: pointer; padding: 0;
+      text-align: left; width: 100%; display: flex; justify-content: space-between; align-items: baseline; }
+    .section-caret { color: var(--ink-low); font-size: 10px; transition: transform var(--t-fast) var(--ease); }
+    .section-caret.open { transform: rotate(180deg); }
+    .section-body { display: none; }
+    .section-body.open { display: block; }
+    .owner-badge { display: inline-block; padding: 2px 7px; background: var(--plum-tint);
+      color: var(--plum); border-radius: var(--r-xs); font-size: 10.5px; font-weight: 600; white-space: nowrap; }
+    .owner-badge.owner-rohan { background: var(--gold-tint); color: var(--gold); }
+    .ds-top-brand { display: flex; align-items: center; gap: var(--sp-md); }
+    .ds-top-text .ds-lede { margin-top: 0; }
+    .ds-top-right { display: flex; gap: var(--sp-sm); align-items: center; flex-wrap: wrap; }
 
-  /* --- Phone: truth banner wraps; critical-path stepper goes vertical; cal/sprint reflow --- */
-  @media (max-width: 700px) {
-    .fc-truth { padding: 10px 14px; font-size: 11.5px; line-height: 1.6; }
-    .fc-truth .sep { display: inline; margin: 0 6px; }
-    .fc-cp-rail { grid-template-columns: 1fr; gap: 8px; padding: 14px 0 0; }
-    .fc-cp-rail::before { display: none; }
-    .fc-cp-step { flex-direction: row; text-align: left; gap: 12px; padding: 6px 0; border-bottom: 1px solid var(--hairline-soft); }
-    .fc-cp-step:last-child { border-bottom: 0; }
-    .fc-cp-dot { flex: 0 0 28px; }
-    .fc-cp-label { margin-top: 0; font-size: 12px; }
-    .fc-cp-detail { margin-top: 0; font-size: 11px; margin-left: auto; }
-    .fc-sprint-row { grid-template-columns: 1fr 60px; gap: 10px; }
-    .fc-sprint-pct { display: none; }
-    .fc-cal-row { grid-template-columns: 1fr; gap: 4px; padding: 10px 0; }
-    .fc-cal-time { font-size: 11.5px; }
-  }
-  @media (max-width: 480px) {
-    .fc-pri-row { grid-template-columns: 24px 1fr; gap: 10px; padding: 10px 0; }
-  }
-  .fc-cp-label { margin-top: 10px; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-hi); }
-  .fc-cp-detail { margin-top: 3px; font-size: 11px; color: var(--ink-low); font-feature-settings: 'tnum'; }
-  .fc-sprint-row { display: grid; grid-template-columns: 1fr 90px 60px; gap: 14px; align-items: center; }
-  .fc-sprint-bar { height: 6px; background: var(--signal-gold-tint); border-radius: 3px; overflow: hidden; }
-  .fc-sprint-bar i { display: block; height: 100%; background: var(--signal-gold); }
-  .fc-sprint-num { font-size: 18px; font-weight: 700; color: var(--ink-hi); text-align: right; }
-  .fc-sprint-pct { font-size: 14px; color: var(--ink-mid); text-align: right; }
-  .fc-sprint-sub { margin-top: 8px; color: var(--ink-mid); font-size: 12.5px; }
-  .fc-cal-row { display: grid; grid-template-columns: 180px 1fr; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--hairline-soft); }
-  .fc-cal-row:last-child { border-bottom: 0; }
-  .fc-cal-time { color: var(--ink-mid); }
-  .fc-cal-title { color: var(--ink-hi); font-weight: 500; }
-  .fc-cal-loc { color: var(--ink-low); font-size: 12px; }
-  .fc-empty { padding: 18px 4px; color: var(--ink-mid); font-size: 13px; }
-  .fc-empty.tone-warn { color: var(--warn); }
-  .fc-empty-sub { color: var(--ink-low); margin-left: 6px; }
-  .fc-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; max-width: 520px; }
-  .fc-foot-links { display: flex; gap: 18px; padding: 14px 0; border-top: 1px solid var(--hairline-soft); margin-top: 22px; }
-  .fc-foot-links a { color: var(--ink-mid); font-size: 12.5px; text-decoration: none; }
-  .fc-foot-links a:hover { color: var(--signal-gold); }
-</style>
+    /* --- Phone: tables scroll horizontally (auto-set on .ds-frame-flush in tokens.css)
+       so we don't need to hide columns. Just shrink owner badges + kanban meta on phone. --- */
+    @media (max-width: 700px) {
+      .owner-badge { font-size: 9.5px; padding: 1px 5px; }
+      .kanban-card { padding: 10px; }
+      .kanban-card-meta { font-size: 10.5px; }
+    }
+  </style>
 </head>
 <body>
 
+<!-- ===== LOGIN OVERLAY ===== -->
 <div class="ds-login-overlay" id="loginOverlay">
-  <form class="ds-login-card" id="loginForm">
-    <img class="ds-login-logo" src="logo.jpeg" alt="TrackMyWings">
-    <div class="ds-login-title">TrackMyWings</div>
-    <div class="ds-login-sub">Founder Control</div>
-    <input type="password" id="password" class="ds-filter" placeholder="Password" autofocus autocomplete="current-password">
-    <button type="submit" class="ds-btn-primary">Unlock</button>
-    <div class="ds-login-err" id="loginError">Incorrect password</div>
+  <form class="ds-login-card" id="loginForm" onsubmit="handleLogin(event)">
+    <img src="logo.jpeg" class="ds-login-logo" alt="TrackMyWings">
+    <h2 class="ds-login-title">TrackMyWings</h2>
+    <p class="ds-login-sub">Tasks</p>
+    <input class="ds-filter" type="password" id="password" placeholder="Password" autocomplete="current-password">
+    <button class="ds-btn-primary" type="submit">Unlock</button>
+    <div class="ds-login-err" id="loginErr">Incorrect password.</div>
   </form>
 </div>
 
-<div class="fc-truth">T-76 launch · TMW-151 T-2 · Phase 3 42% · ₹0 cash / ₹87,862 receivable · 6 priorities · 0 overdue · last sync 59m ago</div>
+<!-- ===== MAIN SHELL ===== -->
+<div class="ds-wrap" id="mainShell" style="display:none;">
 
-<div class="ds-wrap">
+  <!-- Stale data banner -->
+  <div class="ds-stale" id="staleBanner">
+    <b>Data may be stale</b> — last rebuild was over 150 min ago. The hourly launchd job may have failed.
+    <code id="staleAge"></code>
+  </div>
+
+  <!-- TOP BAR -->
   <header class="ds-top">
     <div class="ds-top-brand">
-      <img class="ds-top-logo" src="logo.jpeg" alt="TrackMyWings">
-      <div>
-        <h1 class="ds-display">Founder Control</h1>
-        <div class="ds-lede">Your operating cockpit. Refreshed hourly.</div>
+      <img src="logo.jpeg" class="ds-top-logo" alt="TMW">
+      <div class="ds-top-text">
+        <h1 class="ds-display" style="color:var(--ink-hi);letter-spacing:-0.02em;">Tasks</h1>
+        <p class="ds-lede">Operating cockpit. Hourly refresh.</p>
       </div>
     </div>
-    <nav class="ds-nav">
-      <a href="index.html" class="ds-nav-active">Founder</a>
-      <a href="finance-mis.html">Finance MIS</a>
-      <a href="tasks.html">Tasks</a>
-      <a href="claude-usage.html">Claude</a>
-      <a href="folder-map.html">Files</a>
-      <button onclick="location.reload(true)" title="Hard refresh">Refresh</button>
-    </nav>
+    <div class="ds-top-right">
+      <nav class="ds-nav">
+        <a href="index.html">Founder</a>
+        <a href="finance-mis.html">Finance MIS</a>
+        <a href="tasks.html" class="ds-nav-active">Tasks</a>
+        <a href="claude-usage.html">Claude</a>
+        <a href="folder-map.html">Files</a>
+        <button class="ds-btn-ghost" onclick="location.reload()">Refresh</button>
+      </nav>
+    </div>
   </header>
 
-  <div class="ds-stale" id="staleBanner"></div>
-
-  
-    <div class="ds-metrics">
-      <div class="ds-metric ds-metric-lead tone-gold">
-        <div class="ds-metric-lbl">Days to launch</div>
-        <div class="ds-metric-val num">T-76</div>
-        <div class="ds-metric-sub">Target 2026-07-15 (DEC-092). Phase 3 42% · Wave 3 in flight.</div>
-      </div>
-      <div class="ds-metric">
-        <div class="ds-metric-lbl">Critical path</div>
-        <div class="ds-metric-val num">2 of 7 — Bank account</div>
-        <div class="ds-metric-sub">Bank visit Sat 2026-05-02 (T-2). Unlocks UDHYAM → TM → funding.</div>
-      </div>
-      <div class="ds-metric">
-        <div class="ds-metric-lbl">Opus output, TMW · this month</div>
-        <div class="ds-metric-val num">23.58M</div>
-        <div class="ds-metric-sub">Scoped to TrackMyWings project. Raw output tokens, no ceiling.</div>
-      </div>
-      <div class="ds-metric ">
-        <div class="ds-metric-lbl">Tasks overdue</div>
-        <div class="ds-metric-val num">0</div>
-        <div class="ds-metric-sub">From 34 active. Sweep when above zero.</div>
-      </div>
-    </div>
-    
-
-  <section class="ds-section">
-    <div class="ds-section-head"><div class="ds-section-title">Cash position</div></div>
-    
-        <div class="ds-metrics">
-          <div class="ds-metric ds-metric-lead">
-            <div class="ds-metric-lbl">Cash on hand</div>
-            <div class="ds-metric-val num">₹0</div>
-            <div class="ds-metric-sub">Pre-bank. Becomes ₹1,00,000 after TMW-151 capital deposit.</div>
-          </div>
-          <div class="ds-metric">
-            <div class="ds-metric-lbl">Founder receivable</div>
-            <div class="ds-metric-val num">₹87,862</div>
-            <div class="ds-metric-sub">YTD founder-funded bills.</div>
-          </div>
-          <div class="ds-metric">
-            <div class="ds-metric-lbl">YTD burn</div>
-            <div class="ds-metric-val num">₹87,862</div>
-            <div class="ds-metric-sub">Equal to receivable today.</div>
-          </div>
-          <div class="ds-metric">
-            <div class="ds-metric-lbl">Pending capital</div>
-            <div class="ds-metric-val num">₹100,000</div>
-            <div class="ds-metric-sub">₹62K + ₹38K at bank visit.</div>
-          </div>
-        </div>
-        
-  </section>
-
-  <section class="ds-section">
-    <div class="ds-section-head">
-      <div class="ds-section-title">Top priorities — now</div>
-      <div class="ds-section-aside">6 active</div>
-    </div>
-    <div class="ds-frame ds-frame-flush" style="padding:6px 22px;">
-      
-    <div class="fc-pri-row">
-      <div class="fc-pri-num">1</div>
-      <div class="fc-pri-body">
-        <div class="fc-pri-task">TMW-151 ICICI bank visit — KEYSTONE. TODAY (Sat 2026-05-02, T-0). All CA deliverables in hand. Single highest-leverage unblock — opens entire downstream chain (UDHYAM → Copyright → TM → Stealth exit → Funding).</div>
-        <div class="fc-pri-meta">
-          <span class="fc-pri-owner">Rohan + Amol</span>
-          <span class="fc-pri-deadline tone-warn"><span class="num">2026-05-02 · T-2d</span></span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="fc-pri-row">
-      <div class="fc-pri-num">2</div>
-      <div class="fc-pri-body">
-        <div class="fc-pri-task">TMW-167 Sprint resume Sunday: re-dispatch 8 halted Wave 4 builders. S082 close — 8 screens (4.4, 4.5, 4.7, 4.8, 7.1, 7.3, 7.4, 7.5) halted on Figma MCP 200/day cap. All have cached plans + composition + library bindings — re-dispatch is ~6…</div>
-        <div class="fc-pri-meta">
-          <span class="fc-pri-owner">Claude (post-bank, post-S082)</span>
-          <span class="fc-pri-deadline "></span>
-        </div>
-      </div>
-    </div>
-    
-    <div class="fc-pri-row">
-      <div class="fc-pri-num">3</div>
-      <div class="fc-pri-body">
-        <div class="fc-pri-task">TMW-166 Tier 1 Figma optimizations — pending Rohan decision. 3 actions to ship before sprint resume: (1) author LIBRARY_MANIFEST.json (saves ~40-80 calls/batch); (2) move Block H self-check from builder to reviewer (saves ~8/batch); (3) re…</div>
-        <div class="fc-pri-meta">
-          <span class="fc-pri-owner">Claude</span>
-          <span class="fc-pri-deadline "></span>
-        </div>
-      </div>
-    </div>
-    
-    </div>
-  </section>
-
-  <section class="ds-section">
-    <div class="ds-section-head">
-      <div class="ds-section-title">Critical path</div>
-      <div class="ds-section-aside">7 steps · bank visit unlocks 5</div>
-    </div>
-    <div class="ds-frame">
-      
-    <div class="fc-cp-rail">
-      
-        <div class="fc-cp-step">
-          <div class="fc-cp-dot done"><span>✓</span></div>
-          <div class="fc-cp-label">Incorporation</div>
-          <div class="fc-cp-detail">2026-04-23</div>
-        </div>
-        
-        <div class="fc-cp-step">
-          <div class="fc-cp-dot inflight"><span>◉</span></div>
-          <div class="fc-cp-label">Bank account</div>
-          <div class="fc-cp-detail">T-2d · 2026-05-02</div>
-        </div>
-        
-        <div class="fc-cp-step">
-          <div class="fc-cp-dot pending"><span>○</span></div>
-          <div class="fc-cp-label">UDHYAM/GST</div>
-          <div class="fc-cp-detail">TMW-152</div>
-        </div>
-        
-        <div class="fc-cp-step">
-          <div class="fc-cp-dot pending"><span>○</span></div>
-          <div class="fc-cp-label">Copyright</div>
-          <div class="fc-cp-detail">TMW-153</div>
-        </div>
-        
-        <div class="fc-cp-step">
-          <div class="fc-cp-dot pending"><span>○</span></div>
-          <div class="fc-cp-label">Trademark</div>
-          <div class="fc-cp-detail">TMW-123</div>
-        </div>
-        
-        <div class="fc-cp-step">
-          <div class="fc-cp-dot pending"><span>○</span></div>
-          <div class="fc-cp-label">Stealth exit</div>
-          <div class="fc-cp-detail">gated on TM</div>
-        </div>
-        
-        <div class="fc-cp-step">
-          <div class="fc-cp-dot pending"><span>○</span></div>
-          <div class="fc-cp-label">Funding</div>
-          <div class="fc-cp-detail">TMW-154</div>
-        </div>
-        
-    </div>
-    
-    </div>
-  </section>
-
-  
-    <section class="ds-section">
-      <div class="ds-section-head">
-        <div class="ds-section-title">Design sprint — Phase 3 mid-fi</div>
-        <div class="ds-section-aside">Wave 3 Batch 7</div>
-      </div>
-      <div class="fc-sprint-row">
-        <div class="fc-sprint-bar">
-          <i style="width:42%"></i>
-        </div>
-        <div class="fc-sprint-num num">59/142</div>
-        <div class="fc-sprint-pct num">42%</div>
-      </div>
-      <div class="fc-sprint-sub">
-        TMW Opus output this month: 23.58M (raw).
-        TMW-143 head task · S081 in flight.
-      </div>
-    </section>
-    
-
-  <section class="ds-section">
-    <div class="ds-section-head">
-      <div class="ds-section-title">Calendar — next 3</div>
-      <div class="ds-section-aside">Google Calendar · TMW</div>
-    </div>
-    <div class="ds-frame ds-frame-flush" style="padding:8px 22px;">
-      
-        <div class="fc-cal-row">
-          <div class="fc-cal-time num">Sat May 02 · 16:00</div>
-          <div class="fc-cal-body">
-            <div class="fc-cal-title">Weekly Sync with Amol</div>
-            <div class="fc-cal-loc"></div>
-          </div>
-        </div>
-        
-        <div class="fc-cal-row">
-          <div class="fc-cal-time num">Sat May 09 · 16:00</div>
-          <div class="fc-cal-body">
-            <div class="fc-cal-title">Weekly Sync with Amol</div>
-            <div class="fc-cal-loc"></div>
-          </div>
-        </div>
-        
-        <div class="fc-cal-row">
-          <div class="fc-cal-time num">Sat May 16 · 16:00</div>
-          <div class="fc-cal-body">
-            <div class="fc-cal-title">Weekly Sync with Amol</div>
-            <div class="fc-cal-loc"></div>
-          </div>
-        </div>
-        
-    </div>
-  </section>
-
+  <!-- HERO MILESTONE STRIP -->
   <section class="ds-section" id="heroSection">
     <div class="ds-section-head">
-      <div class="ds-section-title">Hero milestones</div>
-      <div class="ds-section-aside">5 major wins</div>
+      <span class="ds-section-title">The journey so far</span>
     </div>
-    
     <div class="ds-milestones">
-      <div class="ds-milestone-rail" style="grid-template-columns:repeat(5, minmax(180px, 1fr));">
-        
-        <div class="ds-milestone">
-          <div class="ds-milestone-dot"></div>
-          <div class="ds-milestone-date">Genesis</div>
-          <div class="ds-milestone-title">Co-founders + equity locked</div>
-          <div class="ds-milestone-note">Rohan 62 / Amol 38, MoU v6 finalized.</div>
-        </div>
-        
-        <div class="ds-milestone">
-          <div class="ds-milestone-dot"></div>
-          <div class="ds-milestone-date">North Star</div>
-          <div class="ds-milestone-title">1M downloads / 6 months</div>
-          <div class="ds-milestone-note">Mihir sir advisor confirmed (3-hr session).</div>
-        </div>
-        
-        <div class="ds-milestone">
-          <div class="ds-milestone-dot"></div>
-          <div class="ds-milestone-date">Sprint Approved</div>
-          <div class="ds-milestone-title">Plan v11 — 142 screens</div>
-          <div class="ds-milestone-note">Multi-model Figma sprint committed.</div>
-        </div>
-        
-        <div class="ds-milestone keystone">
-          <div class="ds-milestone-dot"><img src="logo.jpeg" class="ds-milestone-logo" alt="TMW"></div>
-          <div class="ds-milestone-date">Incorporated</div>
-          <div class="ds-milestone-title">Trackmywings Technologies Pvt. Ltd.</div>
-          <div class="ds-milestone-note">Cert + PAN + TAN received. The keystone.</div>
-        </div>
-        
-        <div class="ds-milestone">
-          <div class="ds-milestone-dot"></div>
-          <div class="ds-milestone-date">Production Proof</div>
-          <div class="ds-milestone-title">Wave 2 HM-apex shipped</div>
-          <div class="ds-milestone-note">15/15 PASS, reviewer avg 8.49.</div>
-        </div>
-        
-      </div>
+      <div class="ds-milestone-rail" id="heroRail"></div>
     </div>
-    
   </section>
 
-  
-    <section class="ds-section">
-      <div class="ds-section-head"><div class="ds-section-title">This week</div></div>
-      <div class="ds-metrics ds-metrics-3">
-        <div class="ds-metric ds-metric-lead">
-          <div class="ds-metric-lbl">Claude burn (Opus output)</div>
-          <div class="ds-metric-val num">12.95M</div>
-          <div class="ds-metric-sub">169 sessions · last 0.2h ago.</div>
-        </div>
-        <div class="ds-metric">
-          <div class="ds-metric-lbl">Tasks completed</div>
-          <div class="ds-metric-val num">18</div>
-          <div class="ds-metric-sub">From TASKS.md — last 7 days.</div>
-        </div>
-        <div class="ds-metric">
-          <div class="ds-metric-lbl">Decisions logged</div>
-          <div class="ds-metric-val num">12</div>
-          <div class="ds-metric-sub">Last: DEC-103.</div>
+  <!-- ASYMMETRIC STAT BAND — urgency-first -->
+  <div class="ds-metrics ds-metrics-3" id="statBand" style="grid-template-columns:1.6fr 1fr 1fr 1fr;">
+    <div class="ds-metric ds-metric-lead" id="tileOverdue" onclick="scrollToActive()" style="cursor:pointer;">
+      <div class="ds-metric-lbl">Overdue</div>
+      <div class="ds-metric-val" id="metricOverdue">—</div>
+      <div class="ds-metric-sub">Active tasks past deadline</div>
+    </div>
+    <div class="ds-metric" onclick="scrollToActive()" style="cursor:pointer;">
+      <div class="ds-metric-lbl">Active Tasks</div>
+      <div class="ds-metric-val" id="metricActive">—</div>
+      <div class="ds-metric-sub">In flight now</div>
+    </div>
+    <div class="ds-metric" onclick="scrollToActive(); setFilter('priority','High')" style="cursor:pointer;">
+      <div class="ds-metric-lbl">High Priority</div>
+      <div class="ds-metric-val" id="metricHighPri">—</div>
+      <div class="ds-metric-sub">Critical + High</div>
+    </div>
+    <div class="ds-metric">
+      <div class="ds-metric-lbl">Completion Rate</div>
+      <div class="ds-metric-val" id="metricCompletion">—</div>
+      <div class="ds-metric-sub">All time</div>
+    </div>
+  </div>
+
+  <!-- VIEW TOGGLE -->
+  <div class="view-toggle">
+    <button class="ds-btn-ghost view-btn active" id="btnTable" onclick="toggleView('table')" tabindex="0">Table</button>
+    <button class="ds-btn-ghost view-btn" id="btnKanban" onclick="toggleView('kanban')" tabindex="0">Kanban</button>
+  </div>
+
+  <!-- FILTERS ROW (sticky) -->
+  <div class="ds-filters" id="filtersRow" role="search">
+    <input class="ds-filter ds-filter-search" type="search" id="searchInput"
+      placeholder="Search task ID, name, owner  ( / focuses )" autocomplete="off"
+      oninput="filterTasks()" aria-label="Search tasks">
+    <select class="ds-filter" id="departmentFilter" onchange="filterTasks()" aria-label="Department">
+      <option value="">All Depts</option>
+      <option>Engineering</option>
+      <option>Product</option>
+      <option>Design</option>
+      <option>Marketing</option>
+      <option>Finance</option>
+      <option>Legal</option>
+      <option>Operations</option>
+      <option>Sales</option>
+      <option>Strategy</option>
+      <option>People</option>
+      <option>Customer Success</option>
+      <option>Archive</option>
+    </select>
+    <select class="ds-filter" id="priorityFilter" onchange="filterTasks()" aria-label="Priority">
+      <option value="">All Priority</option>
+      <option>Critical</option>
+      <option>High</option>
+      <option>Medium</option>
+      <option>Low</option>
+    </select>
+    <select class="ds-filter" id="statusFilter" onchange="filterTasks()" aria-label="Status">
+      <option value="">All Status</option>
+      <option>Not Started</option>
+      <option>WIP</option>
+      <option>Draft Ready</option>
+      <option>Under Legal Review</option>
+      <option>Blocked</option>
+      <option>Parked</option>
+      <option>Scheduled</option>
+    </select>
+    <select class="ds-filter" id="ownerFilter" onchange="filterTasks()" aria-label="Owner">
+      <option value="">All Owners</option>
+      <option>Rohan</option>
+      <option>Amol</option>
+      <option>Adhi</option>
+      <option>Ruchi</option>
+      <option>Anshul Bansal</option>
+      <option>Anshul Attri</option>
+    </select>
+    <button class="ds-filter-clear" onclick="clearFilters()" id="clearFiltersBtn" aria-label="Clear all filters">Clear filters</button>
+  </div>
+
+  <!-- TABLE VIEW CONTAINER -->
+  <div id="tableViewContainer">
+
+    <!-- ACTIVE TASKS -->
+    <section class="ds-section" id="activeSection">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('activeBody','activeCaret')"
+          aria-expanded="true" aria-controls="activeBody" tabindex="0">
+          <span class="ds-section-title">Active Tasks <span id="activeCountLabel" style="color:var(--ink-low);font-weight:400;"></span></span>
+          <span class="section-caret open" id="activeCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body open" id="activeBody">
+        <div class="ds-frame ds-frame-flush" style="overflow-x:auto;">
+          <table class="ds-table" id="activeTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="id" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">ID</th>
+                <th class="sortable" data-sort="task" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Task</th>
+                <th class="sortable" data-sort="owner" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Owner</th>
+                <th class="sortable" data-sort="department" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Dept</th>
+                <th class="sortable" data-sort="priority" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Priority</th>
+                <th class="sortable" data-sort="status" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Status</th>
+                <th class="sortable" data-sort="deadline" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Deadline</th>
+                <th class="sortable ds-num" data-sort="created" data-table="active" tabindex="0"
+                  role="columnheader" aria-sort="none">Created</th>
+              </tr>
+            </thead>
+            <tbody id="activeTbody">
+              <tr><td colspan="8" class="ds-table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
-    
 
-  <section class="ds-section">
-    <div class="ds-section-head">
-      <div class="ds-section-title">Active risks</div>
-      <div class="ds-section-aside">Top 3 by severity</div>
-    </div>
-    <div class="ds-frame ds-frame-flush">
-      <table class="ds-table">
-        <thead><tr><th>Severity</th><th>Risk</th><th>Notes</th></tr></thead>
-        <tbody>
-        <tr>
-          <td><span class="ds-badge ds-badge-pri-critical">Critical</span></td>
-          <td>Incorporation timeline is CRITICAL PATH</td>
-          <td class="fc-clamp-1">All public activity blocked until incorporated + IP protected (DEC-067). ETA late Apr / early May. If slips → launch slips.</td>
-        </tr>
-        
-        <tr>
-          <td><span class="ds-badge ds-badge-pri-high">High</span></td>
-          <td>Trademark filing not yet started</td>
-          <td class="fc-clamp-1">Need to file TM application ASAP (TMW-123). Sequenced after UDHYAM/GST/MSME (TMW-152) per DEC-067 chain. Coordinate with Anshul Bansal.</td>
-        </tr>
-        
-        <tr>
-          <td><span class="ds-badge ds-badge-pri-medium">Medium</span></td>
-          <td>Org monthly Opus cap can hit mid-sprint</td>
-          <td class="fc-clamp-1">Hit during Wave 2 Batch 4 dispatch on 2026-04-28. Sonnet fallback (DEC-093 §17.5b) handled cleanly — Sonnet builders avg 8.53 vs Opus 8.40…</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+    <!-- CHARTS ROW (below active tasks) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('chartsBody','chartsCaret')"
+          aria-expanded="true" aria-controls="chartsBody" tabindex="0">
+          <span class="ds-section-title">Task Distribution</span>
+          <span class="section-caret open" id="chartsCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body open" id="chartsBody">
+        <div class="ds-cols-2">
+          <div class="ds-frame">
+            <div class="ds-section-head" style="margin-bottom:var(--sp-sm);">
+              <span class="ds-section-title" style="font-size:10.5px;">By Department</span>
+            </div>
+            <canvas id="deptChart"></canvas>
+          </div>
+          <div class="ds-frame">
+            <div class="ds-section-head" style="margin-bottom:var(--sp-sm);">
+              <span class="ds-section-title" style="font-size:10.5px;">By Priority</span>
+            </div>
+            <canvas id="priChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <section class="ds-section">
-    <div class="ds-section-head">
-      <div class="ds-section-title">Recent decisions</div>
-      <div class="ds-section-aside">Last 3</div>
-    </div>
-    <div class="ds-frame ds-frame-flush">
-      <table class="ds-table">
-        <thead><tr><th>ID</th><th>Date</th><th>Title</th><th>Summary</th></tr></thead>
-        <tbody>
-        <tr>
-          <td><code>DEC-103</code></td>
-          <td class="num">2026-04-30</td>
-          <td>`claude -p` delegation pattern adopted as canonical architecture for MCP-dependent automation</td>
-          <td class="fc-clamp-1">`claude -p` delegation pattern adopted as canonical architecture for MCP-dependent automation and heavy-parsing automation. Used for Google Calendar sync (Path C, twice daily) and MIS bills auto-syn…</td>
-        </tr>
-        
-        <tr>
-          <td><code>DEC-102</code></td>
-          <td class="num">2026-04-30</td>
-          <td>No self-imposed ceilings on usage metrics anywhere in dashboards</td>
-          <td class="fc-clamp-1">No self-imposed ceilings on usage metrics anywhere in dashboards. Show raw token counts, never &quot;% of 20M&quot; or &quot;% of any internal cap.&quot;</td>
-        </tr>
-        
-        <tr>
-          <td><code>DEC-101</code></td>
-          <td class="num">2026-04-30</td>
-          <td>USD/INR canonical rate fixed at ₹95/$ for all internal financial reporting</td>
-          <td class="fc-clamp-1">USD/INR canonical rate fixed at ₹95/$ for all internal financial reporting. Overrides MIS Config!B10 (₹84.5) and 60-Month Plan Assumptions row 5 (₹90).</td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+    <!-- COMPLETED TASKS (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('completedBody','completedCaret')"
+          aria-expanded="false" aria-controls="completedBody" tabindex="0">
+          <span class="ds-section-title">Completed Tasks <span id="completedCountLabel" style="color:var(--ink-low);font-weight:400;"></span></span>
+          <span class="section-caret" id="completedCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="completedBody">
+        <div class="ds-frame ds-frame-flush" style="overflow-x:auto;">
+          <table class="ds-table" id="completedTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="id" data-table="completed" tabindex="0">ID</th>
+                <th class="sortable" data-sort="task" data-table="completed" tabindex="0">Task</th>
+                <th class="sortable" data-sort="owner" data-table="completed" tabindex="0">Owner</th>
+                <th class="sortable" data-sort="department" data-table="completed" tabindex="0">Dept</th>
+                <th class="sortable ds-num" data-sort="completed" data-table="completed" tabindex="0">Completed</th>
+              </tr>
+            </thead>
+            <tbody id="completedTbody">
+              <tr><td colspan="5" class="ds-table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-  <section class="ds-section">
-    <div class="ds-section-head">
-      <div class="ds-section-title">System health</div>
-      <div class="ds-section-aside">launchd jobs · ~/Library/Logs/TrackMyWings</div>
-    </div>
-    <div class="ds-frame ds-frame-flush">
-      <table class="ds-table">
-        <thead><tr><th>Job</th><th>Last run</th><th>Age</th><th>Status</th><th>Errors</th></tr></thead>
-        <tbody>
-        <tr>
-          <td><code>tasks</code></td>
-          <td class="num">2026-04-30 13:05</td>
-          <td>4m ago</td>
-          <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
-          <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
-        </tr>
-        
-        <tr>
-          <td><code>founder-control-panel</code></td>
-          <td class="num">2026-04-30 12:10</td>
-          <td>59m ago</td>
-          <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
-          <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
-        </tr>
-        
-        <tr>
-          <td><code>claude-usage</code></td>
-          <td class="num">2026-04-30 12:15</td>
-          <td>54m ago</td>
-          <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
-          <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
-        </tr>
-        
-        <tr>
-          <td><code>finance-mis</code></td>
-          <td class="num">2026-04-30 12:20</td>
-          <td>50m ago</td>
-          <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
-          <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
-        </tr>
-        
-        <tr>
-          <td><code>folder-map-generator</code></td>
-          <td class="num">2026-04-30 12:55</td>
-          <td>15m ago</td>
-          <td><span class="ds-badge ds-badge-pri-medium">◉ stale</span></td>
-          <td class="num"><span class="num">2</span></td>
-        </tr>
-        
-        <tr>
-          <td><code>file-watcher</code></td>
-          <td class="num">2026-04-30 12:15</td>
-          <td>55m ago</td>
-          <td><span class="ds-badge ds-badge-pri-medium">◉ stale</span></td>
-          <td class="num"><span class="num">116</span></td>
-        </tr>
-        
-        <tr>
-          <td><code>calendar-sync</code></td>
-          <td class="num">2026-04-30 07:00</td>
-          <td>6.2h ago</td>
-          <td><span class="ds-badge ds-badge-pri-medium">◉ stale</span></td>
-          <td class="num"><span class="num">6</span></td>
-        </tr>
-        
-        <tr>
-          <td><code>weekly-digest</code></td>
-          <td class="num">2026-04-26 20:00</td>
-          <td>3d ago</td>
-          <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
-          <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+    <!-- BACKLOG (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('backlogBody','backlogCaret')"
+          aria-expanded="false" aria-controls="backlogBody" tabindex="0">
+          <span class="ds-section-title">Backlog <span id="backlogCountLabel" style="color:var(--ink-low);font-weight:400;"></span></span>
+          <span class="section-caret" id="backlogCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="backlogBody">
+        <div class="ds-frame ds-frame-flush" style="overflow-x:auto;">
+          <table class="ds-table" id="backlogTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="id" data-table="backlog" tabindex="0">ID</th>
+                <th class="sortable" data-sort="task" data-table="backlog" tabindex="0">Task</th>
+                <th class="sortable" data-sort="owner" data-table="backlog" tabindex="0">Owner</th>
+                <th class="sortable" data-sort="department" data-table="backlog" tabindex="0">Dept</th>
+                <th class="sortable" data-sort="priority" data-table="backlog" tabindex="0">Priority</th>
+              </tr>
+            </thead>
+            <tbody id="backlogTbody">
+              <tr><td colspan="5" class="ds-table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-  <div class="fc-foot-links">
-    <a href="index.html">Founder</a>
-    <a href="finance-mis.html">Finance MIS</a>
-    <a href="tasks.html">Tasks</a>
-    <a href="claude-usage.html">Claude</a>
-    <a href="folder-map.html">Files</a>
+    <!-- SELF LEARNING (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('selfLBody','selfLCaret')"
+          aria-expanded="false" aria-controls="selfLBody" tabindex="0">
+          <span class="ds-section-title">Self Learning <span id="selfLCountLabel" style="color:var(--ink-low);font-weight:400;"></span></span>
+          <span class="section-caret" id="selfLCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="selfLBody">
+        <div class="ds-frame ds-frame-flush" style="overflow-x:auto;">
+          <table class="ds-table" id="selfLTable">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="id" data-table="selfLearning" tabindex="0">ID</th>
+                <th class="sortable" data-sort="task" data-table="selfLearning" tabindex="0">Task</th>
+                <th class="sortable" data-sort="owner" data-table="selfLearning" tabindex="0">Owner</th>
+                <th class="sortable" data-sort="priority" data-table="selfLearning" tabindex="0">Priority</th>
+                <th class="sortable" data-sort="status" data-table="selfLearning" tabindex="0">Status</th>
+                <th class="sortable ds-num" data-sort="deadline" data-table="selfLearning" tabindex="0">Deadline</th>
+              </tr>
+            </thead>
+            <tbody id="selfLTbody">
+              <tr><td colspan="6" class="ds-table-empty">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- CALENDAR (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('calBody','calCaret')"
+          aria-expanded="false" aria-controls="calBody" tabindex="0">
+          <span class="ds-section-title">Calendar — This Week</span>
+          <span class="section-caret" id="calCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="calBody">
+        <div class="cal-week" id="calWeek"></div>
+      </div>
+    </section>
+
+    <!-- DEPENDENCIES (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('depsBody','depsCaret')"
+          aria-expanded="false" aria-controls="depsBody" tabindex="0">
+          <span class="ds-section-title">Task Dependencies</span>
+          <span class="section-caret" id="depsCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="depsBody">
+        <div class="ds-frame ds-frame-flush" id="depsContainer">
+          <div class="ds-table-empty" style="padding:36px 14px;text-align:center;color:var(--ink-mid);">No dependencies logged.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MILESTONE TIMELINE (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('msBody','msCaret')"
+          aria-expanded="false" aria-controls="msBody" tabindex="0">
+          <span class="ds-section-title">Milestone Timeline</span>
+          <span class="section-caret" id="msCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="msBody">
+        <div class="ds-milestones">
+          <div class="ds-milestone-rail" id="msRail" style="grid-template-columns:repeat(6,minmax(180px,1fr));"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACTIVITY FEED (collapsed) -->
+    <section class="ds-section">
+      <div class="ds-section-head">
+        <button class="section-head-btn" onclick="toggleSection('feedBody','feedCaret')"
+          aria-expanded="false" aria-controls="feedBody" tabindex="0">
+          <span class="ds-section-title">Activity Feed</span>
+          <span class="section-caret" id="feedCaret">▲</span>
+        </button>
+      </div>
+      <div class="section-body" id="feedBody">
+        <div class="ds-frame ds-frame-flush" id="feedContainer">
+          <div class="ds-table-empty">Loading…</div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /#tableViewContainer -->
+
+  <!-- KANBAN VIEW (hidden by default) -->
+  <div id="kanbanContainer" style="display:none;">
+    <div class="kanban-grid" id="kanbanGrid"></div>
   </div>
 
-  <div class="ds-meta">
-    <span>Generated <span id="generatedAt">2026-04-30T13:10:07</span></span>
-    <span>Founder Control v1 · launchd hourly</span>
-  </div>
-</div>
+  <!-- FOOTER -->
+  <footer class="ds-meta">
+    <span>Last updated: <time id="lastUpdated">—</time></span>
+    <span>TrackMyWings Technologies Pvt. Ltd.</span>
+  </footer>
+
+</div><!-- /#mainShell -->
 
 <script>
-// --- Auth gate ---
+/* =====================================================================
+ * DATA — replaced on every rebuild by rebuild_dashboard.py regex
+ * ===================================================================== */
+const heroMilestones = [
+            {
+                        "date": "2026-03-16",
+                        "label": "Genesis",
+                        "title": "Co-founders + equity locked",
+                        "note": "Rohan 62 / Amol 38, MoU v6 finalized."
+            },
+            {
+                        "date": "2026-03-29",
+                        "label": "North Star",
+                        "title": "1M downloads / 6 months",
+                        "note": "Mihir sir advisor confirmed (3-hr session)."
+            },
+            {
+                        "date": "2026-04-10",
+                        "label": "Sprint Approved",
+                        "title": "Plan v11 \u2014 142 screens",
+                        "note": "Multi-model Figma sprint committed."
+            },
+            {
+                        "date": "2026-04-23",
+                        "label": "Incorporated",
+                        "title": "Trackmywings Technologies Pvt. Ltd.",
+                        "note": "Cert + PAN + TAN received. The keystone.",
+                        "keystone": true
+            },
+            {
+                        "date": "2026-04-28",
+                        "label": "Production Proof",
+                        "title": "Wave 2 HM-apex shipped",
+                        "note": "15/15 PASS, reviewer avg 8.49."
+            }
+];
+const activeTasks = [
+            { id: 'TMW-007', task: 'Populate Marketing/Content folder with launch content', owner: 'Adhi', department: 'Marketing', priority: 'Medium', status: 'WIP', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-008', task: 'Populate Sales/Pipeline with CRM structure', owner: 'Rohan', department: 'Sales', priority: 'Low', status: 'Not Started', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-010', task: 'Review and update 60-Month Operating Plan', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'WIP', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-012', task: 'Re-upload updated system files to Claude Project weekly', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Not Started', deadline: '—', created: '2026-03-13' },
+            { id: 'TMW-038', task: 'Update website to new brand guidelines (staging site)', owner: 'Rohan + Ruchi', department: 'Design', priority: 'Medium', status: 'Blocked', deadline: 'Post-inc', created: '2026-03-17' },
+            { id: 'TMW-048', task: 'Submit TrackMyWings to startup directories (18 directories, kit ready)', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Blocked', deadline: 'Post-inc', created: '2026-03-18' },
+            { id: 'TMW-049', task: 'Add branded OG image to all website pages (staging)', owner: 'Rohan + Claude', department: 'Marketing', priority: 'Medium', status: 'WIP', deadline: 'Post-inc', created: '2026-03-18' },
+            { id: 'TMW-053', task: 'Set up Razorpay — signup, KYC, Subscriptions, plans, Flutter SDK', owner: 'Rohan + Amol', department: 'Finance', priority: 'High', status: 'Not Started', deadline: 'Post-inc', created: '2026-03-18' },
+            { id: 'TMW-054', task: 'Complete Stripe account activation + Stripe Billing for international web payments', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'Not Started', deadline: 'Post-inc', created: '2026-03-18' },
+            { id: 'TMW-055', task: 'Set up App Store billing — Google Play + Apple IAP + Google alt billing (Razorpay)', owner: 'Rohan + Amol', department: 'Finance', priority: 'Low', status: 'Not Started', deadline: 'Post-inc', created: '2026-03-18' },
+            { id: 'TMW-056', task: 'Define exact ad placements on Stitch UI screens', owner: 'Rohan + Claude', department: 'Product', priority: 'Medium', status: 'Not Started', deadline: 'Post UI finalisation', created: '2026-03-18' },
+            { id: 'TMW-060', task: 'Share SHA + Term Sheet drafts with legal team for review', owner: 'Rohan', department: 'Legal', priority: 'High', status: 'WIP', deadline: 'Post-inc', created: '2026-03-19' },
+            { id: 'TMW-137', task: 'Set up Loops.so — create account, API key, connect Go backend, build waitlist nurture sequence', owner: 'Rohan + Amol', department: 'Marketing / Eng', priority: 'Medium', status: 'Parked', deadline: '—', created: '2026-04-08' },
+            { id: 'TMW-090', task: 'Add og:image meta tag to all website pages (staging)', owner: 'Rohan + Amol', department: 'Marketing', priority: 'Medium', status: 'Not Started', deadline: 'Post-inc', created: '2026-03-23' },
+            { id: 'TMW-102', task: 'Set up X/Twitter account — create @TrackMyWings, upload branding, pin Thread 1', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Medium', status: 'Blocked', deadline: 'Post-inc', created: '2026-03-27' },
+            { id: 'TMW-107', task: 'Build dynamic flight status page spec for Amol (DEC-060)', owner: 'Rohan + Claude', department: 'Product / Eng', priority: 'High', status: 'Blocked', deadline: 'Post data sources', created: '2026-03-30' },
+            { id: 'TMW-109', task: 'Set up content creation pipeline — Claude + Eleven Labs + Gemini + Nano Banana 2 Pro + Google Flow + Capcut/PS (DEC-069). Stack locked at offsite.', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'High', status: 'WIP', deadline: 'Pre-July 1', created: '2026-03-30' },
+            { id: 'TMW-143', task: 'Execute TMW_App_Screens_V1 sprint — build 3 Figma files (low/mid/high-fi) for 142 app screens on iPhone 17 PM + Samsung S26 Ultra.', owner: 'Rohan + Claude', department: 'Design', priority: 'Critical', status: 'S080: Wave 3 Batch 6 SHIPPED (8/8 reviewed, reviewer avg 8.44, 7 PASS + 1 PASS_…', deadline: '2026-07-15', created: '2026-04-10' },
+            { id: 'TMW-145', task: 'Daily Opus burn monitoring during sprint. S080 close: Opus ~42-45% of 20M ceiling. Cumulative through Batch 6 of Wave 3. Plan upgraded mid-session 2026-04-29 (Sonnet org cap hit on first reviewer wav…', owner: 'Claude + Rohan', department: 'Operations', priority: 'Critical', status: 'S080 close GREEN at 42-45%. Patch v6 + Batches 7-8 + PG-4 forecast +18-25% = ~6…', deadline: '2026-07-15', created: '2026-04-10' },
+            { id: 'TMW-114', task: 'Build ManyChat DM automation via Claude', owner: 'Rohan + Claude', department: 'Marketing', priority: 'Low', status: 'Not Started', deadline: 'Post-inc', created: '2026-03-30' },
+            { id: 'TMW-139', task: 'Amol: deploy Website V0 to ECS — Dockerfile, CI/CD, CloudFront. Codebase ready at Engineering/Codebase/Website_v0/V0_NextJS/. Spec at Engineering/Architecture/Website_V0/Website_V0_Spec_Amol.md', owner: 'Amol', department: 'Engineering', priority: 'High', status: 'Parked', deadline: 'Post-trademarks', created: '2026-04-09' },
+            { id: 'TMW-140', task: 'Create PWA icons (192px, 512px, maskable) from TMW logo for Website V0', owner: 'Rohan', department: 'Design', priority: 'Medium', status: 'Not Started', deadline: 'Post-trademarks', created: '2026-04-09' },
+            { id: 'TMW-117', task: 'A/B test framework for social content', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Low', status: 'Not Started', deadline: 'Post-inc', created: '2026-03-30' },
+            { id: 'TMW-119', task: 'Set up accounts on new platforms: Snapchat, Threads, Discord, Quora, Pinterest (DEC-062)', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Medium', status: 'Blocked', deadline: 'Post-inc', created: '2026-03-30' },
+            { id: 'TMW-120', task: 'Create full T-15 to T+7 content backlog for all 12 platforms (stockpile)', owner: 'Rohan + Adhi + Claude', department: 'Marketing', priority: 'High', status: 'Not Started', deadline: '2026-06-25', created: '2026-03-30' },
+            { id: 'TMW-123', task: 'File trademark application for "TrackMyWings" — coordinate with Anshul Bansal', owner: 'Rohan', department: 'Legal', priority: 'High', status: 'Not Started', deadline: 'Post TMW-152', created: '2026-03-30' },
+            { id: 'TMW-126', task: 'Build data provider comparison matrix — 16 providers × coverage, fields, freshness, cost, rate limits. Template created, awaiting Amol\'s data.', owner: 'Rohan + Claude', department: 'Engineering / Product', priority: 'High', status: 'Blocked', deadline: 'Post Amol data', created: '2026-04-06' },
+            { id: 'TMW-128', task: 'Test content pipeline end-to-end — produce 1 real video through full Claude → Eleven Labs → Gemini → Nano Banana → Google Flow → Capcut flow (Path B)', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'High', status: 'Not Started', deadline: 'Pre-July 1', created: '2026-04-06' },
+            { id: 'TMW-129', task: 'Set up accounts on content pipeline tools — Nano Banana 2 Pro, Google Flow, Eleven Labs paid tier', owner: 'Rohan + Adhi', department: 'Marketing', priority: 'Medium', status: 'Blocked', deadline: 'Post TMW-128', created: '2026-04-06' },
+            { id: 'TMW-151', task: 'Open ICICI bank account — coordinate with wealth manager. Paid-up capital: Rohan ₹62K + Amol ₹38K (₹1L total). Unblocks UDHYAM/GST/MSME. Branch visit SCHEDULED Saturday 2026-05-02. Docs ready: Compan…', owner: 'Rohan + Amol', department: 'Finance / Legal', priority: 'High', status: 'Scheduled — branch visit 2026-05-02 (Sat)', deadline: '2026-05-02', created: '2026-04-23' },
+            { id: 'TMW-152', task: 'Register for UDHYAM + GST + MSME certificates post bank account opening', owner: 'Rohan', department: 'Legal / Finance', priority: 'High', status: 'Not Started', deadline: 'Post TMW-151', created: '2026-04-23' },
+            { id: 'TMW-153', task: 'File copyright application for TrackMyWings (app, content, brand) — coordinate with Anshul Bansal', owner: 'Rohan', department: 'Legal', priority: 'High', status: 'Not Started', deadline: 'Post TMW-152', created: '2026-04-23' },
+            { id: 'TMW-154', task: 'Apply for startup funding — Startup India, grants, angel/seed — run in parallel post bank account', owner: 'Rohan', department: 'Finance / Strategy', priority: 'Medium', status: 'Not Started', deadline: 'Post TMW-151', created: '2026-04-23' },
+            { id: 'TMW-165', task: 'AI System audit + optimization — S082 head task. Strategic upgrade after 81 sessions of accretion. Run BEFORE resuming Patch v6 → Wave 3 Batch 7 sprint work. 7 sweeps: (1) CLAUDE.md / OPERATING_PARTN…', owner: 'Rohan + Claude', department: 'Operations', priority: 'High', status: 'Not Started', deadline: 'S082 head', created: '2026-04-30' }
+        ];
+const completedTasks = [
+            { id: 'TMW-162', task: 'Wave 2 — HM apex 15 screens shipped. All 15 PASS, reviewer avg 8.49 (vs Wave 1 redo 8.52). Zero rebuilds. Mid-Fi 2.0 framework validated at production scale. Highest scores: 7.7 (8.86), 5.6 (8.83), 7…', owner: 'Claude (with Rohan)', department: 'Design', completed: '2026-04-28' },
+            { id: 'TMW-163', task: 'Patch v5 fully complete — Block A: 9 lucide icons re-fetched from unpkg (40-icon set 100% integrity restored). Block B: wing_mark_micro.svg + cabin_aperture_faithful.svg copied to /assets/. Block C (…', owner: 'Claude (with Rohan)', department: 'Design', completed: '2026-04-28' },
+            { id: 'TMW-158', task: 'CA chase fully closed — all remaining items received via email: TAN PIN, MCA portal credentials (company + Rohan), Director Stamp template, Letterhead template, SHA template, Share Certificates templ…', owner: 'Rohan', department: 'Legal', completed: '2026-04-28' },
+            { id: 'TMW-160', task: 'Fire Patch v4 (Blocks A–I) per PHASE_B_LOCKED §13.2. Asset library generated (40 lucide + 8 illustrations + 30 gradients + 3 avatars + 12 airline logos + 271 flags). 4 NEW Figma components (toggle-sw…', owner: 'Claude (with Rohan)', department: 'Design', completed: '2026-04-27' },
+            { id: 'TMW-157', task: 'Reimburse CA ₹11,433 for MCA govt filing fees (3 MCA receipts: name application ₹1,030, form submission ₹146, stamp duty ₹10,256). UPI/bank transfer done. CA service fee ₹15K is separate.', owner: 'Rohan', department: 'Finance / Legal', completed: '2026-04-28' },
+            { id: 'TMW-159', task: 'Collect Amol\'s PAN + Aadhaar scans for ICICI bank account — both received.', owner: 'Rohan + Amol', department: 'Finance / Legal', completed: '2026-04-26' },
+            { id: 'TMW-155', task: 'Review and verify airport + airlines data shared by Amol — Rohan agreed on call. Amol to share final list.', owner: 'Rohan', department: 'Engineering / Product', completed: '2026-04-27' },
+            { id: 'TMW-147', task: 'Drop nb2.png into sprint folder + confirm Logo Draft.jpeg as canonical final logo. Both done S072 (2026-04-25). LOGO_FOUNDATION.md updated.', owner: 'Rohan', department: 'Design', completed: '2026-04-25' },
+            { id: 'TMW-148', task: 'Grant /usr/bin/python3 Full Disk Access — python3 + python3.9 both confirmed ON via screenshot (S072). Fixes folder-map-generator intermittent TCC failures.', owner: 'Rohan', department: 'Operations', completed: '2026-04-25' },
+            { id: 'TMW-149', task: 'Stamp paper + NOC + rent agreement couriered to Kolkata — done, incorporation complete.', owner: 'Rohan', department: 'Legal', completed: '2026-04-23' },
+            { id: 'TMW-150', task: 'Address registration + incorporation forms — done, Certificate + PAN received.', owner: 'Rohan', department: 'Legal', completed: '2026-04-23' },
+            { id: '**INC**', task: '🎉 TrackMyWings Technologies Pvt. Ltd. INCORPORATED — Certificate of Incorporation + PAN + TAN received. Docs at Legal/Incorporation/.', owner: 'Rohan + Raman Bhatia', department: 'Legal', completed: '2026-04-23' },
+            { id: 'TMW-037', task: 'Brand Book — CANCELLED (S069). Sprint worked around via Brand Soul Agent inference. Brand Book no longer tracked separately.', owner: 'Rohan', department: 'Design', completed: '2026-04-23' },
+            { id: 'TMW-146', task: 'Post-sprint housekeeping — CANCELLED (S069). Items folded into individual tasks or no longer relevant. stitch-resume.plist already removed in S068.', owner: 'Rohan', department: 'Operations', completed: '2026-04-23' },
+            { id: 'TMW-B01', task: 'Brand guidelines document from Ruchi — CANCELLED (S069). Brand guidelines now derived from sprint artifacts (BRAND_SOUL.md + color_tokens.json).', owner: 'Rohan', department: 'Design', completed: '2026-04-23' },
+            { id: 'TMW-142', task: 'Rohan formally approved sprint plan v12.0.1. Unblocked TMW-143 Bootstrap. DEC-089 path locked.', owner: 'Rohan', department: 'Design / Product', completed: '2026-04-11' },
+            { id: 'TMW-144', task: 'Environment setup for DEC-089 multi-model sprint — all 8 items closed. Sprint ready to Bootstrap.', owner: 'Rohan + Claude', department: 'Operations / Design', completed: '2026-04-11' },
+            { id: 'TMW-036', task: 'Font / Typeface finalized — Raleway (headlines) + Merriweather (body) per DEC-091 (S068). Rohan direct confirmation closed the S064 inference workaround.', owner: 'Rohan', department: 'Design', completed: '2026-04-20' },
+            { id: 'TMW-136', task: 'Escalate to Ruchi — Font + Brand Book. CANCELLED 2026-04-29 (S079) — Rohan handled directly.', owner: 'Rohan', department: 'Design', completed: '2026-04-29' },
+            { id: 'TMW-113', task: 'UI design sprint via Stitch — CLOSED 2026-04-29 (S079). Rolled into TMW-143 (TMW_App_Screens_V1 sprint, currently mid-fi Phase 3). Stitch batch 142/142 done (TMW-132). DEC-074 pipeline now executing…', owner: 'Rohan + Claude', department: 'Design', completed: '2026-04-29' },
+            { id: 'TMW-156', task: 'Content calendar + Launch Playbook dates shifted for DEC-092 launch push. Content Plan xlsx (2,732 date cells, Weekly Themes 15 ranges, Cadence Rules 5 ranges) + Calendar Master.md (32 atomic substit…', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-04-29' },
+            { id: 'TMW-001', task: 'Update Privacy Policy to TrackMyWings branding (DRAFT for legal review)', owner: 'Rohan + Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-002', task: 'Update Terms of Service to TrackMyWings branding (DRAFT for legal review)', owner: 'Rohan + Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-004', task: 'Finalize Shareholders Agreement (DRAFT aligned with MoU v6)', owner: 'Rohan + Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-005', task: 'Finalize Term Sheet (DRAFT aligned with MoU v6)', owner: 'Rohan + Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-040', task: 'AWS $1000 credit received (Activate Founder Program)', owner: 'Rohan', department: 'Finance', completed: '2026-03-19' },
+            { id: 'TMW-050', task: 'India keyword pages + gap fill (IndiGo, Air India, SpiceJet, Air India Express, Emirates, TripIt, blog = 7 new pages)', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-052', task: 'Content freshness protocol (update_dates.py script built)', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-013', task: 'Share MVP_FEATURE_LIST.md + PRODUCT_ROADMAP.md with Amol', owner: 'Rohan', department: 'Product', completed: '2026-03-18' },
+            { id: 'TMW-015', task: 'Timeline decided — mobile apps in 2 months (May 2026), desktop/web TBD', owner: 'Rohan + Amol', department: 'Product', completed: '2026-03-18' },
+            { id: 'TMW-018', task: 'Validate Master Feature Breakdown (607 components) with Amol', owner: 'Rohan + Amol', department: 'Engineering', completed: '2026-03-18' },
+            { id: 'TMW-034', task: 'MoU Sign off — V5 agreed, V6 reviewed, no objections from either side', owner: 'Rohan + Amol', department: 'Legal', completed: '2026-03-18' },
+            { id: 'TMW-030', task: 'Decide on Payment Vendor — Razorpay primary, Stripe secondary (DEC-032)', owner: 'Rohan', department: 'Finance', completed: '2026-03-18' },
+            { id: 'TMW-031', task: 'Ad logic — strategy, geo-aware rules, progressive curve, compliance (DEC-033)', owner: 'Rohan', department: 'Product', completed: '2026-03-18' },
+            { id: 'TMW-044', task: 'Deploy V2 website to trackmywings.com', owner: 'Rohan', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-041', task: 'SEO skills for claude', owner: 'Rohan', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-024', task: 'Website experiment: Apply Lovable follow-up fixes', owner: 'Rohan', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-028', task: 'Use Lovable for follow-up changes on website when credits refresh', owner: 'Rohan', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-009', task: 'Run SEO audit on trackmywings.com (full SEO+AEO+GEO audit report)', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-042', task: 'SEO audit and improvements', owner: 'Rohan', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-043', task: 'Update website with tags using claude', owner: 'Rohan', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-045', task: 'Register + verify Google Search Console (DNS TXT in Route 53)', owner: 'Rohan', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-046', task: 'Submit sitemap + request indexing for top 5 pages in GSC', owner: 'Rohan', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S014-A', task: 'Full file system audit (7 issues found, 4 fixed, FOLDER_MAP rewritten)', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S014-B', task: 'Move session saves S008+S010 to correct location (Operations/AI System/)', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S014-C', task: 'Full SEO+AEO+GEO audit report (HTML, 10 sections, 23 keywords, 17 action items)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S014-D', task: 'GSC verification walkthrough + scheduled indexation check', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S014-E', task: 'Run session save — update all 7 system files for S014', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-029', task: 'Fill AWS form', owner: 'Rohan', department: 'Finance', completed: '2026-03-18' },
+            { id: 'TMW-003', task: 'Finalize Founders Agreement (MoU v3)', owner: 'Rohan + Legal', department: 'Legal', completed: '2026-03-17' },
+            { id: 'TMW-035', task: 'Finalize Colours', owner: 'Rohan + Ruchi', department: 'Design', completed: '2026-03-17' },
+            { id: 'TMW-011', task: 'Set up Claude Project at claude.ai with custom instructions and knowledge files', owner: 'Rohan', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-S003-A', task: 'Score all 118 features on 5 parameters (composite score + combined phase)', owner: 'Rohan + Amol', department: 'Product', completed: '2026-03-15' },
+            { id: 'TMW-S003-B', task: 'Map 118 features against 10 competitors (Y/PRO/P/N)', owner: 'Claude', department: 'Product', completed: '2026-03-15' },
+            { id: 'TMW-S003-C', task: 'Create Free vs Pro tier bifurcation for all 118 features', owner: 'Claude', department: 'Product', completed: '2026-03-15' },
+            { id: 'TMW-S003-D', task: 'Build Master Feature Breakdown (118 features → 607 components) with 16 categories', owner: 'Claude', department: 'Product', completed: '2026-03-15' },
+            { id: 'TMW-S003-E', task: 'Build UI/UX Screen Specs Excel (85 screens, 396 components, IA tree, design system)', owner: 'Claude', department: 'Design', completed: '2026-03-15' },
+            { id: 'TMW-S003-F', task: 'Build UI/UX Design Handoff Word doc (2,630 paragraphs, per-screen specs)', owner: 'Claude', department: 'Design', completed: '2026-03-15' },
+            { id: 'TMW-S003-G', task: 'Copy product files from Strategy/Product to Product/ with date suffix', owner: 'Claude', department: 'Operations', completed: '2026-03-15' },
+            { id: 'TMW-S003-H', task: 'Update FOLDER_MAP.md with reorganized Strategy/Product/Features structure', owner: 'Claude', department: 'Operations', completed: '2026-03-15' },
+            { id: 'TMW-S004-A', task: 'Update MIS pricing from 4 tiers to 6 tiers', owner: 'Claude', department: 'Finance', completed: '2026-03-16' },
+            { id: 'TMW-S004-B', task: 'Update MIS equity split from 50/50 to 62% Rohan / 38% Amol', owner: 'Claude', department: 'Finance', completed: '2026-03-16' },
+            { id: 'TMW-S004-C', task: 'Rebuild MIS workbook from scratch — 12 sheets, 1,126 formulas, 0 errors', owner: 'Claude', department: 'Finance', completed: '2026-03-16' },
+            { id: 'TMW-S004-D', task: 'Create Welcome & Guide sheet', owner: 'Claude', department: 'Finance', completed: '2026-03-16' },
+            { id: 'TMW-S004-E', task: 'Add Dashboard charts (Revenue vs Expenses, Net P/L, Expense distribution)', owner: 'Claude', department: 'Finance', completed: '2026-03-16' },
+            { id: 'TMW-S004-F', task: 'Apply visual polish across all 12 MIS sheets', owner: 'Claude', department: 'Design', completed: '2026-03-16' },
+            { id: 'TMW-S004-G', task: 'Run session save for S004', owner: 'Claude', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-S005-A', task: 'Design Frequent Flyer survey questionnaire (14 questions)', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S005-B', task: 'Write WhatsApp message for Operator Circle', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S005-C', task: 'Build Survey Results Tracker Excel (4 sheets, 68 formulas)', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S005-D', task: 'Create Survey Kit markdown', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S005-E', task: 'Run session save for S005', owner: 'Claude', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-021', task: 'Create Google Form from survey questionnaire', owner: 'Rohan', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-022', task: 'Send survey to Operator Circle + personal outreach', owner: 'Rohan', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S006-A', task: 'Write Lovable website prompt', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S006-B', task: 'Review Lovable-generated code (10 issues)', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S006-C', task: 'Write 10-item Lovable follow-up fix prompt', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S007-A', task: 'Expand Google Ads business description', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S007-B', task: 'Configure Google Ads campaign', owner: 'Claude + Rohan', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S007-C', task: 'Review GA4 analytics data', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S008-A', task: 'Build 3 daily iMessage task briefings', owner: 'Claude', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-S008-B', task: 'Build Apple Notes command processor', owner: 'Claude', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-S008-C', task: 'Build file watcher for TASKS.md', owner: 'Claude', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-S008-D', task: 'Build password-protected task dashboard HTML', owner: 'Claude', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-S008-E', task: 'Migrate dashboard Netlify → GitHub Pages', owner: 'Claude', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-S008-F', task: 'Connect Google Calendar MCP + create Amol sync event', owner: 'Claude', department: 'Operations', completed: '2026-03-16' },
+            { id: 'TMW-026', task: 'Weekly Sync with Amol — Saturdays 4–6 PM IST', owner: 'Rohan + Amol', department: 'Product', completed: '2026-03-16' },
+            { id: 'TMW-S009-A', task: 'Rebuild all Google Ads copy from scratch', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S009-B', task: 'Save Google Ads copy reference file', owner: 'Claude', department: 'Marketing', completed: '2026-03-16' },
+            { id: 'TMW-S011-A through S011-G', task: 'Brand color palette rollout across all docs (7 subtasks)', owner: 'Claude', department: 'Design', completed: '2026-03-18' },
+            { id: 'TMW-S012-A through S012-F', task: 'Website V2 SEO build (6 subtasks)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S013-A through S013-G', task: 'AEO/GEO optimization (7 subtasks)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S015-A through S015-I', task: 'V2 verify + operations overhaul (9 subtasks)', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S016-A through S016-F', task: 'Payment + Ad strategy (6 subtasks)', owner: 'Claude', department: 'Finance/Product', completed: '2026-03-18' },
+            { id: 'TMW-S017-A through S017-D', task: 'GA4 analytics + conversion tracking (4 subtasks)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S018-A through S018-D', task: 'Incorporation + personas + intern (4 subtasks)', owner: 'Claude', department: 'Legal/Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S019-A through S019-C', task: 'MoU finalized (3 subtasks)', owner: 'Claude', department: 'Legal', completed: '2026-03-18' },
+            { id: 'TMW-S020-A through S020-C', task: 'GSC redirect fix (3 subtasks)', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-S021-A through S021-J', task: '10-task batch (10 subtasks)', owner: 'Claude', department: 'Multi-dept', completed: '2026-03-19' },
+            { id: 'TMW-016', task: 'Write detailed feature specs for Track 1 + Track 2 (superseded by S031 Design Spec + Tech Spec)', owner: 'Rohan', department: 'Product', completed: '2026-03-28' },
+            { id: 'TMW-072', task: 'Share Phase 0 Engineering Spec with Amol (superseded by TMW-080)', owner: 'Rohan', department: 'Engineering', completed: '2026-03-28' },
+            { id: 'TMW-073', task: 'Share Phase 0 Scope doc with Amol (superseded by TMW-080)', owner: 'Rohan', department: 'Product', completed: '2026-03-28' },
+            { id: 'TMW-074', task: 'Update PRODUCT_ROADMAP.md to reflect new phase structure (rolled into TMW-081)', owner: 'Rohan + Claude', department: 'Product', completed: '2026-03-28' },
+            { id: 'TMW-099', task: 'Launch Playbook — T-60 countdown (Apr 1 → Jun 1)', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-27' },
+            { id: 'TMW-100', task: '110 content calendar topics pre-filled', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-27' },
+            { id: 'TMW-101', task: '10 Twitter/X threads written (75 tweets, copy-paste ready)', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-27' },
+            { id: 'TMW-098', task: 'Test task', owner: 'Rohan', department: 'Finance', completed: '2026-03-26' },
+            { id: 'TMW-023', task: 'Survey analysis — 18 responses analyzed', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-26' },
+            { id: 'TMW-027', task: 'Mihir sir discussion — confirmed Fri March 27', owner: 'Rohan', department: 'Strategy', completed: '2026-03-26' },
+            { id: 'TMW-039', task: 'Diya Mantri finalized + contract reviewed', owner: 'Rohan', department: 'Design', completed: '2026-03-26' },
+            { id: 'TMW-088', task: 'Social media accounts created (X, Instagram, TikTok, LinkedIn, Reddit, YouTube, Facebook)', owner: 'Rohan + Adhi', department: 'Marketing', completed: '2026-03-26' },
+            { id: 'TMW-089', task: 'Adhi briefed on content calendar + asset creation', owner: 'Rohan', department: 'Marketing', completed: '2026-03-26' },
+            { id: 'TMW-091', task: 'Expense entry sheet sent to Adhi', owner: 'Rohan', department: 'Finance', completed: '2026-03-26' },
+            { id: 'TMW-092', task: 'Invoices sent to Adhi', owner: 'Rohan', department: 'Finance', completed: '2026-03-26' },
+            { id: 'TMW-093', task: 'Folder link shared with Adhi', owner: 'Rohan', department: 'Finance', completed: '2026-03-26' },
+            { id: 'TMW-096', task: 'Diya contract — Anshul Bansal legal review done', owner: 'Rohan', department: 'Legal', completed: '2026-03-26' },
+            { id: 'TMW-094', task: 'Dashboard: Interactive Folder Map page + auto-generator + scheduled task', owner: 'Claude', department: 'Operations', completed: '2026-03-24' },
+            { id: 'TMW-095', task: 'Dashboard: Hard refresh button on all pages', owner: 'Claude', department: 'Operations', completed: '2026-03-24' },
+            { id: 'TMW-083', task: 'Customer Foundation v3 — 5 user groups, 6 ICPs, 8 subscriber profiles (MD + Excel)', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-23' },
+            { id: 'TMW-084', task: 'Marketing Strategy & Execution Plan — positioning, channels, 4-phase roadmap, RACI, KPIs', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-23' },
+            { id: 'TMW-085', task: 'Content Calendar Master — 949 slots, 7 platform playbooks, 6 pillars (MD + Excel)', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-23' },
+            { id: 'TMW-070', task: 'Logo Design Brief + Leonardo output shared with Ruchi for vectorization', owner: 'Rohan', department: 'Design', completed: '2026-03-23' },
+            { id: 'TMW-059', task: 'Share PP + ToS drafts with legal team', owner: 'Rohan', department: 'Legal', completed: '2026-03-23' },
+            { id: 'TMW-014', task: 'Share UX_DESIGN_DIRECTION.md with Ruchi, start Figma design system', owner: 'Rohan', department: 'Design', completed: '2026-03-23' },
+            { id: 'TMW-006', task: 'Build pre-launch email sequence for waitlist (7-email nurture sequence written)', owner: 'Adhi + Rohan', department: 'Marketing', completed: '2026-03-23' },
+            { id: 'TMW-080', task: 'Share Design Spec + Tech Spec with Amol and Ruchi', owner: 'Rohan', department: 'Product + Engineering', completed: '2026-03-22' },
+            { id: 'TMW-081', task: 'Update PRODUCT_ROADMAP.md — 3-phase structure (51/15/21)', owner: 'Rohan + Claude', department: 'Product', completed: '2026-03-22' },
+            { id: 'TMW-082', task: 'Define Free vs Premium feature gating — 24 Free / 10 Limited / 17 Premium (DEC-049)', owner: 'Rohan + Claude', department: 'Product + Finance', completed: '2026-03-22' },
+            { id: 'TMW-075', task: 'Product Reset: Market research — 50+ competitors, 200+ features mapped', owner: 'Rohan + Claude', department: 'Product', completed: '2026-03-21' },
+            { id: 'TMW-076', task: 'Product Reset: Competitor screenshots & data profiles', owner: 'Rohan + Claude', department: 'Product', completed: '2026-03-21' },
+            { id: 'TMW-077', task: 'Product Reset: Rebuild master feature list — 87 features from handwritten notes', owner: 'Rohan + Claude', department: 'Product', completed: '2026-03-22' },
+            { id: 'TMW-078', task: 'Product Reset: Re-scope phases — 51 MVP, 15 Phase 2, 21 Phase 3', owner: 'Rohan + Claude', department: 'Product', completed: '2026-03-22' },
+            { id: 'TMW-079', task: 'Product Reset: Design Spec (417 screens) + Tech Spec (248 APIs, 172 data models)', owner: 'Rohan + Claude', department: 'Engineering', completed: '2026-03-22' },
+            { id: 'TMW-071', task: 'Save Leonardo AI logo to Design/Brand/Logos/Drafts/', owner: 'Rohan', department: 'Design', completed: '2026-03-21' },
+            { id: 'TMW-066', task: 'Review Basu feedback — 87 features scored, Phase 0 scope finalized', owner: 'Rohan + Claude', department: 'Product', completed: '2026-03-21' },
+            { id: 'TMW-067', task: 'Merge Adhi\'s Customer Segments draft with v1 → Customer_Segments_v2.md', owner: 'Rohan + Claude', department: 'Product', completed: '2026-03-21' },
+            { id: 'TMW-047', task: 'Check GSC indexation status — confirmed indexed', owner: 'Rohan', department: 'Marketing', completed: '2026-03-21' },
+            { id: 'TMW-057', task: 'Email Raman (CA) — company objects, name options, partner details', owner: 'Rohan', department: 'Finance', completed: '2026-03-21' },
+            { id: 'TMW-058', task: 'Amol shared self-attested PAN + Aadhaar for DSC application', owner: 'Amol', department: 'Finance', completed: '2026-03-21' },
+            { id: 'TMW-061', task: 'Index all remaining URLs in GSC — 12 submitted, 2 indexed, 10 queued', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-20' },
+            { id: 'TMW-062', task: 'Clean inbox — 26 emails triaged, 5 action-required flagged', owner: 'Rohan + Claude', department: 'Operations', completed: '2026-03-20' },
+            { id: 'TMW-063', task: 'V3 3D Website — full build + UX overhaul + deploy', owner: 'Rohan + Claude', department: 'Marketing / Design', completed: '2026-03-20' },
+            { id: 'TMW-064', task: 'Stitch AI evaluation — tested SDK, 2 screens generated, 5 use cases mapped', owner: 'Rohan + Claude', department: 'Strategy', completed: '2026-03-20' },
+            { id: 'TMW-065', task: 'Lovable V3 review — contrast issues, 14 V2 pages missing, content gaps', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-20' },
+            { id: 'TMW-068', task: 'V3 UX Overhaul — touch targets, semantic HTML, ScrollToTop, legal pages, pricing CTAs', owner: 'Rohan + Claude', department: 'Design', completed: '2026-03-20' },
+            { id: 'TMW-S011-A', task: 'Update Lovable prompt with finalized 15-color palette', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S011-B', task: 'Update Lovable follow-up prompt with color mapping', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S011-C', task: 'Create canonical Color Palette HTML reference', owner: 'Claude', department: 'Design', completed: '2026-03-18' },
+            { id: 'TMW-S011-D', task: 'Update UX_DESIGN_DIRECTION.md with color tables + gradients', owner: 'Claude', department: 'Design', completed: '2026-03-18' },
+            { id: 'TMW-S011-E', task: 'Update UI/UX Screens Excel (9 → 17 colors)', owner: 'Claude', department: 'Design', completed: '2026-03-18' },
+            { id: 'TMW-S011-F', task: 'Update UI/UX Design Handoff docx (662 hex replacements)', owner: 'Claude', department: 'Design', completed: '2026-03-18' },
+            { id: 'TMW-S011-G', task: 'Session save — S011', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S012-A', task: 'Build V2 website with 6 keyword landing pages', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S012-B', task: 'SEO-optimize index.html (JSON-LD, meta, keywords)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S012-C', task: 'SEO-optimize all 5 compare pages', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S012-D', task: 'Update sitemap.xml + robots.txt for V2', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S012-E', task: 'Research AEO + GEO optimization techniques', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S012-F', task: 'Session save — S012', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S013-A', task: 'Add quick answer blocks to all 12 pages (AEO)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S013-B', task: 'Add Article schema to all 11 subpages', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S013-C', task: 'Add Speakable schema to all 12 pages (GEO)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S013-D', task: 'Add 8 AI crawler rules to robots.txt', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S013-E', task: 'Add comparison tables + ItemList structured data to compare pages', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S013-F', task: 'Update sitemap.xml with lastmod + changefreq', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S013-G', task: 'Session save — S013', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S015-A', task: 'V2 deployment verified live', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S015-B', task: 'Directory submission guide (18 directories)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S015-C', task: 'Install + document 34 Claude skills with reference guide', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S015-D', task: 'Gmail inbox organization (20 filters, 29 labels)', owner: 'Claude + Rohan', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S015-E', task: 'Folder reorganization (6 areas)', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S015-F', task: 'System integrity test (37/37 paths pass)', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S015-G', task: 'Update scheduled tasks with new paths', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S015-H', task: 'Fix SESSION_RESUME_PROMPT.md (3 path corrections)', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S015-I', task: 'Session save — S015', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S016-A', task: 'Payment vendor research + comparison', owner: 'Claude', department: 'Finance', completed: '2026-03-18' },
+            { id: 'TMW-S016-B', task: 'Revenue-after-cuts analysis (DEC-032)', owner: 'Claude', department: 'Finance', completed: '2026-03-18' },
+            { id: 'TMW-S016-C', task: 'Ad strategy deep research', owner: 'Claude', department: 'Product', completed: '2026-03-18' },
+            { id: 'TMW-S016-D', task: 'Global ad behavior research + geo-aware strategy (DEC-033)', owner: 'Claude', department: 'Product', completed: '2026-03-18' },
+            { id: 'TMW-S016-E', task: 'GDPR/ATT compliance plan for ads', owner: 'Claude', department: 'Product', completed: '2026-03-18' },
+            { id: 'TMW-S016-F', task: 'Session save — S016', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S017-A', task: 'GA4 analytics deep dive (28-day traffic analysis)', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S017-B', task: 'Add GA4 waitlist_signup event tracking to V2', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S017-C', task: 'Strategic brainstorm (8 points beyond task list)', owner: 'Claude', department: 'Strategy', completed: '2026-03-18' },
+            { id: 'TMW-S017-D', task: 'Session save — S017', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S018-A', task: 'Log incorporation meeting with CA Raman Bhatia (DEC-034)', owner: 'Claude', department: 'Legal', completed: '2026-03-18' },
+            { id: 'TMW-S018-B', task: 'Customer Personas v1 — 12 personas from brainstorm', owner: 'Claude', department: 'Marketing', completed: '2026-03-18' },
+            { id: 'TMW-S018-C', task: 'Draft design intern hiring message for Ruchi\'s network', owner: 'Claude', department: 'Design', completed: '2026-03-18' },
+            { id: 'TMW-S018-D', task: 'Session save — S018', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S019-A', task: 'MoU v5 vs v6 comparison (3 changes identified)', owner: 'Claude', department: 'Legal', completed: '2026-03-18' },
+            { id: 'TMW-S019-B', task: 'MoU v5 + v6 copied to Legal/Incorporation/Drafts/MoU/', owner: 'Claude', department: 'Legal', completed: '2026-03-18' },
+            { id: 'TMW-S019-C', task: 'Session save — S019', owner: 'Claude', department: 'Operations', completed: '2026-03-18' },
+            { id: 'TMW-S020-A', task: 'Diagnose GSC redirect errors', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-S020-B', task: 'Migrate 268 URLs to www.trackmywings.com', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-S020-C', task: 'Session save — S020', owner: 'Claude', department: 'Operations', completed: '2026-03-19' },
+            { id: 'TMW-S021-A', task: 'Draft Privacy Policy (Word formatting)', owner: 'Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-S021-B', task: 'Draft Terms of Service (Word formatting)', owner: 'Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-S021-C', task: 'Redo Shareholders Agreement from scratch', owner: 'Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-S021-D', task: 'Reformat Term Sheet with tables', owner: 'Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-S021-E', task: 'Insurance research guide (8 types, India providers)', owner: 'Claude', department: 'Legal', completed: '2026-03-19' },
+            { id: 'TMW-S021-F', task: '3 India keyword pages + sitemap update', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-S021-G', task: 'Content freshness script (update_dates.py)', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-S021-H', task: 'Track 1 Foundation Spec + Track 2 Core Tracking Spec', owner: 'Claude', department: 'Product', completed: '2026-03-19' },
+            { id: 'TMW-S021-I', task: '5 SEO blog posts (800–1200 words each)', owner: 'Claude', department: 'Marketing', completed: '2026-03-19' },
+            { id: 'TMW-S021-J', task: 'Operating Plan review with gap analysis', owner: 'Claude', department: 'Finance', completed: '2026-03-19' },
+            { id: '**— S079 sweep 2026-04-29 (32 rows from S046–S068 era) —**', task: '', owner: '', department: '', completed: '' },
+            { id: 'TMW-141', task: 'Website V0 codebase shared with Amol — zip + both spec docs delivered. Unblocks TMW-139 (Amol deploys).', owner: 'Rohan', department: 'Engineering', completed: '2026-04-10' },
+            { id: 'TMW-132', task: 'Stitch batch generation — 142/142 screens × 3 variants complete. Manual retry triggered Apr 10, all 16 remaining screens finished successfully (7.2, 9.2-9.6, LM.1-3, T.1-2, WN.1, A.1-3, W.2).', owner: 'Claude', department: 'Design', completed: '2026-04-10' },
+            { id: 'TMW-138', task: 'Website V0 implementation plan written — 24-task plan with ultra-detail, reviewed, all gaps fixed. Executed via subagent-driven development.', owner: 'Rohan + Claude', department: 'Engineering / Product', completed: '2026-04-09' },
+            { id: 'TMW-115', task: 'Website V0 fully built — 700K+ pages, 24 tasks complete, 71 tests passing, build clean. Codebase at Engineering/Codebase/Website_v0/V0_NextJS/. Figma file at TMW Website V0.', owner: 'Rohan + Claude', department: 'Engineering', completed: '2026-04-09' },
+            { id: 'TMW-116', task: 'SEO + AEO strategy fully designed — Website V0 spec written (700K+ pages, ISR, FAQPage+Speakable on every page). Both Rohan + Amol spec docs complete.', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-04-09' },
+            { id: 'TMW-112', task: 'Set up Claude + Figma workflow (MCP connected)', owner: 'Rohan + Claude', department: 'Design', completed: '2026-04-09' },
+            { id: 'TMW-135', task: 'Verified Claude Code launchd scheduled tasks — all 10 agents firing, iMessages confirmed', owner: 'Rohan', department: 'Operations', completed: '2026-04-08' },
+            { id: 'TMW-103', task: 'GitHub MCP connected (read-only) — trackmywings org, all 5 repos, Contents + Metadata only', owner: 'Rohan', department: 'Engineering', completed: '2026-04-08' },
+            { id: 'TMW-110', task: 'Tool research complete — LTX-2/GStack/Superpowers actioned, verdicts filed', owner: 'Claude', department: 'Strategy', completed: '2026-04-08' },
+            { id: 'TMW-133', task: 'Install Obsidian — vault configured, plugins set up', owner: 'Rohan', department: 'Operations', completed: '2026-04-08' },
+            { id: 'TMW-087', task: 'ESP selected — Loops.so (DEC-081)', owner: 'Rohan', department: 'Marketing', completed: '2026-04-08' },
+            { id: 'TMW-019', task: 'MIS formula review — 1,126 formulas checked, zero errors, P&L Row 25 fixed', owner: 'Rohan + Claude', department: 'Finance', completed: '2026-04-06' },
+            { id: 'TMW-051', task: '5 SEO blog posts reviewed + improved (Posts 3 & 5 expanded, India focus)', owner: 'Adhi + Claude', department: 'Marketing', completed: '2026-04-06' },
+            { id: 'TMW-106', task: 'Launch Playbook v3 — stealth-aware, relative timing, updated team + pipeline', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-04-06' },
+            { id: 'TMW-108', task: 'Briefed Amol on dynamic flight status pages at offsite', owner: 'Rohan', department: 'Engineering', completed: '2026-04-05' },
+            { id: 'TMW-125', task: 'ARCHITECTURE_OVERVIEW.md updated — client arch, entity model, sizing, 16 providers', owner: 'Claude + Rohan', department: 'Engineering', completed: '2026-04-06' },
+            { id: 'TMW-127', task: '6 new MIS cost lines added (₹0 placeholders) + P&L formula fix', owner: 'Rohan + Claude', department: 'Finance', completed: '2026-04-06' },
+            { id: 'TMW-111', task: 'Claude + Obsidian integration — config files created, ready to install', owner: 'Rohan', department: 'Operations', completed: '2026-04-08' },
+            { id: 'TMW-131', task: '85 skills migrated from Cowork to .claude/skills/', owner: 'Rohan + Claude', department: 'Operations', completed: '2026-04-08' },
+            { id: 'TMW-020', task: 'Enter actual expenses into TMW_Expense_Entry.xlsx + MIS — 10 invoices, all actuals, AWS credits', owner: 'Rohan + Claude', department: 'Finance', completed: '2026-04-02' },
+            { id: 'TMW-122', task: 'Follow up with CA Raman Bhatia — ₹15K paid, incorporation ETA Apr 20', owner: 'Rohan', department: 'Legal', completed: '2026-04-02' },
+            { id: 'TMW-124', task: 'Folder cleanup script run — duplicates, lock files, empty folders removed', owner: 'Rohan', department: 'Operations', completed: '2026-04-02' },
+            { id: 'TMW-121', task: 'Coming Soon page built — sent to Amol for deployment (DEC-067). Google Form waitlist, sitemap, robots.txt.', owner: 'Rohan + Claude', department: 'Engineering', completed: '2026-03-31' },
+            { id: 'TMW-097', task: 'Diya Mantri onboarding — CANCELLED, Diya backed out (DEC-066). UI/UX moves to Stitch.', owner: 'Rohan', department: 'Design', completed: '2026-03-30' },
+            { id: 'TMW-017', task: 'Share UI/UX specs with Ruchi for Figma — CANCELLED (DEC-066/068). Ruchi = brand only. Stitch = UI.', owner: 'Rohan', department: 'Design', completed: '2026-03-30' },
+            { id: 'TMW-069', task: 'Stitch AI work — rolled into TMW-113 (Stitch UI design sprint)', owner: 'Rohan + Claude', department: 'Design', completed: '2026-03-30' },
+            { id: 'TMW-032', task: 'Insta saved reels — ideas extracted into tool research tasks (TMW-110 through TMW-114)', owner: 'Rohan', department: 'Marketing', completed: '2026-03-30' },
+            { id: 'TMW-118', task: 'File Rohan\'s Instagram saves + social media links — extracted per task', owner: 'Rohan + Claude', department: 'Operations', completed: '2026-03-30' },
+            { id: 'TMW-105', task: 'Rebuild content calendar — 2,732 posts, 105 days, 12 platforms, 5 pillars (STORY dropped, DEC-065)', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-03-30' },
+            { id: 'TMW-104', task: 'Execute Launch Playbook Phase 0 (superseded by TMW-106, DEC-059 — posting starts May 1 not Apr 1)', owner: 'Rohan + Adhi + Claude', department: 'Marketing', completed: '2026-03-30' },
+            { id: 'TMW-086', task: 'Fill content calendar 949 slots (superseded by TMW-105 — full calendar rebuild for 12 platforms)', owner: 'Rohan + Adhi', department: 'Marketing', completed: '2026-03-30' }
+        ];
+const backlogTasks = [
+            { id: 'TMW-161', task: 'Connect Stripe MCP (pre-launch payment setup) + Canva MCP (post-stealth design assets). Skip: Klaviyo (Loops.so chosen), Atlassian/Notion (not in stack), HubSpot/Gamma/Miro/HuggingFace/VibePros (no c…', owner: 'Rohan', department: 'Operations', priority: 'Medium' },
+            { id: 'TMW-B02', task: 'Create investor pitch deck', owner: 'Rohan', department: 'Strategy', priority: 'Medium' },
+            { id: 'TMW-B04', task: 'Document engineering architecture (ADR format)', owner: 'Amol', department: 'Engineering', priority: 'Medium' },
+            { id: 'TMW-B05', task: 'Create onboarding docs for new team members', owner: 'Rohan', department: 'People', priority: 'Low' },
+            { id: 'TMW-025', task: 'Complete Google Ads campaign setup — upload logo, bid strategy, budget, payment, launch', owner: 'Rohan', department: 'Marketing', priority: 'Medium' },
+            { id: 'TMW-033', task: 'Review insurance guide and decide on coverage', owner: 'Rohan', department: 'Legal', priority: 'Low' },
+            { id: 'TMW-164', task: 'Harden tmw-dashboard auth. Current model is a client-side JS gate (SHA256 password literal in published HTML, brute-forceable in seconds). Move to real auth: (a) make kingerosah-arch/tmw-dashboard re…', owner: 'Rohan + Amol', department: 'Operations', priority: 'Low' }
+        ];
+const selfLearningTasks = [
+            { id: 'SL-001', task: 'Advanced Claude API prompt engineering', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' },
+            { id: 'SL-002', task: 'Google Garage — Digital Marketing course', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' },
+            { id: 'SL-003', task: 'Google Garage — SEO course', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' },
+            { id: 'SL-004', task: 'Claude SEO skill — learn and apply', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' }
+        ];
+const activityFeed = [
+            {
+                        "date": "2026-04-29",
+                        "task_id": "TMW-113",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "UI design sprint via Stitch \u2014 CLOSED ..."
+            },
+            {
+                        "date": "2026-04-29",
+                        "task_id": "TMW-156",
+                        "event": "completed",
+                        "department": "Marketing",
+                        "task_name": "Content calendar + Launch Playbook da..."
+            },
+            {
+                        "date": "2026-04-28",
+                        "task_id": "TMW-157",
+                        "event": "completed",
+                        "department": "Finance / Legal",
+                        "task_name": "Reimburse CA \u20b911,433 for MCA govt fil..."
+            },
+            {
+                        "date": "2026-04-28",
+                        "task_id": "TMW-162",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Wave 2 \u2014 HM apex 15 screens shipped. ..."
+            },
+            {
+                        "date": "2026-04-28",
+                        "task_id": "TMW-163",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Patch v5 fully complete \u2014 Block A: 9 ..."
+            },
+            {
+                        "date": "2026-04-28",
+                        "task_id": "TMW-158",
+                        "event": "completed",
+                        "department": "Legal",
+                        "task_name": "CA chase fully closed \u2014 all remaining..."
+            },
+            {
+                        "date": "2026-04-27",
+                        "task_id": "TMW-155",
+                        "event": "completed",
+                        "department": "Engineering / Product",
+                        "task_name": "Review and verify airport + airlines ..."
+            },
+            {
+                        "date": "2026-04-27",
+                        "task_id": "TMW-160",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Fire Patch v4 (Blocks A\u2013I) per PHASE_..."
+            },
+            {
+                        "date": "2026-04-26",
+                        "task_id": "TMW-159",
+                        "event": "completed",
+                        "department": "Finance / Legal",
+                        "task_name": "Collect Amol's PAN + Aadhaar scans fo..."
+            },
+            {
+                        "date": "2026-04-25",
+                        "task_id": "TMW-147",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Drop nb2.png into sprint folder + con..."
+            },
+            {
+                        "date": "2026-04-25",
+                        "task_id": "TMW-148",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "Grant `/usr/bin/python3` Full Disk Ac..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "TMW-037",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Brand Book \u2014 CANCELLED (S069). Sprint..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "TMW-146",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "Post-sprint housekeeping \u2014 CANCELLED ..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "TMW-B01",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Brand guidelines document from Ruchi ..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "TMW-149",
+                        "event": "completed",
+                        "department": "Legal",
+                        "task_name": "Stamp paper + NOC + rent agreement co..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "TMW-150",
+                        "event": "completed",
+                        "department": "Legal",
+                        "task_name": "Address registration + incorporation ..."
+            },
+            {
+                        "date": "2026-04-23",
+                        "task_id": "**INC**",
+                        "event": "completed",
+                        "department": "Legal",
+                        "task_name": "\ud83c\udf89 **TrackMyWings Technologies Pvt. Lt..."
+            },
+            {
+                        "date": "2026-04-20",
+                        "task_id": "TMW-036",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "Font / Typeface finalized \u2014 Raleway (..."
+            },
+            {
+                        "date": "2026-04-11",
+                        "task_id": "TMW-144",
+                        "event": "completed",
+                        "department": "Operations / Design",
+                        "task_name": "Environment setup for DEC-089 multi-m..."
+            },
+            {
+                        "date": "2026-04-11",
+                        "task_id": "TMW-142",
+                        "event": "completed",
+                        "department": "Design / Product",
+                        "task_name": "Rohan formally approved sprint plan v..."
+            }
+];
+const calendarEvents = [
+            {
+                        "id": "53cb3u3n8icmmad31lgq5tj3kk_20260502T103000Z",
+                        "summary": "Weekly Sync with Amol",
+                        "description": "Recurring weekly product/engineering sync with Amol.\n\nCreated via TrackMyWings Task System (Rohan + Claude)",
+                        "start": "2026-05-02T16:00:00+05:30",
+                        "end": "2026-05-02T18:00:00+05:30",
+                        "location": "",
+                        "status": "confirmed"
+            },
+            {
+                        "id": "53cb3u3n8icmmad31lgq5tj3kk_20260509T103000Z",
+                        "summary": "Weekly Sync with Amol",
+                        "description": "Recurring weekly product/engineering sync with Amol.\n\nCreated via TrackMyWings Task System (Rohan + Claude)",
+                        "start": "2026-05-09T16:00:00+05:30",
+                        "end": "2026-05-09T18:00:00+05:30",
+                        "location": "",
+                        "status": "confirmed"
+            },
+            {
+                        "id": "53cb3u3n8icmmad31lgq5tj3kk_20260516T103000Z",
+                        "summary": "Weekly Sync with Amol",
+                        "description": "Recurring weekly product/engineering sync with Amol.\n\nCreated via TrackMyWings Task System (Rohan + Claude)",
+                        "start": "2026-05-16T16:00:00+05:30",
+                        "end": "2026-05-16T18:00:00+05:30",
+                        "location": "",
+                        "status": "confirmed"
+            },
+            {
+                        "id": "53cb3u3n8icmmad31lgq5tj3kk_20260523T103000Z",
+                        "summary": "Weekly Sync with Amol",
+                        "description": "Recurring weekly product/engineering sync with Amol.\n\nCreated via TrackMyWings Task System (Rohan + Claude)",
+                        "start": "2026-05-23T16:00:00+05:30",
+                        "end": "2026-05-23T18:00:00+05:30",
+                        "location": "",
+                        "status": "confirmed"
+            }
+];
+const taskDependencies = [];
+const milestones = [
+            {
+                        "date": "2026-03-13",
+                        "title": "Founded",
+                        "desc": "Task system created, folder audit, 12 initial tasks"
+            },
+            {
+                        "date": "2026-03-15",
+                        "title": "Product Defined",
+                        "desc": "118 features, 607 components, UI/UX specs complete"
+            },
+            {
+                        "date": "2026-03-16",
+                        "title": "Ops & Finance",
+                        "desc": "MIS workbook, survey kit, Google Ads, dashboard live"
+            },
+            {
+                        "date": "2026-03-17",
+                        "title": "Brand Identity",
+                        "desc": "15-color palette, fonts, brand book kicked off"
+            },
+            {
+                        "date": "2026-03-18",
+                        "title": "Legal + Strategy",
+                        "desc": "MoU signed, Razorpay chosen, ad strategy, V2 website deployed"
+            },
+            {
+                        "date": "2026-03-19",
+                        "title": "Legal Drafts + SEO",
+                        "desc": "Privacy, ToS, SHA, Term Sheet drafted. 19 pages, GSC live"
+            }
+];
+const analyticsData = {
+            "dailyVelocity": [
+                        {
+                                    "date": "2026-04-20",
+                                    "completed": 1,
+                                    "added": 0
+                        },
+                        {
+                                    "date": "2026-04-23",
+                                    "completed": 6,
+                                    "added": 4
+                        },
+                        {
+                                    "date": "2026-04-25",
+                                    "completed": 2,
+                                    "added": 0
+                        },
+                        {
+                                    "date": "2026-04-26",
+                                    "completed": 1,
+                                    "added": 0
+                        },
+                        {
+                                    "date": "2026-04-27",
+                                    "completed": 2,
+                                    "added": 0
+                        },
+                        {
+                                    "date": "2026-04-28",
+                                    "completed": 4,
+                                    "added": 0
+                        },
+                        {
+                                    "date": "2026-04-29",
+                                    "completed": 3,
+                                    "added": 0
+                        },
+                        {
+                                    "date": "2026-04-30",
+                                    "completed": 1,
+                                    "added": 237
+                        }
+            ],
+            "weeklyVelocity": [
+                        {
+                                    "week": "2026-03-30",
+                                    "completed": 4,
+                                    "added": 0
+                        },
+                        {
+                                    "week": "2026-04-06",
+                                    "completed": 20,
+                                    "added": 8
+                        },
+                        {
+                                    "week": "2026-04-20",
+                                    "completed": 10,
+                                    "added": 4
+                        },
+                        {
+                                    "week": "2026-04-27",
+                                    "completed": 10,
+                                    "added": 237
+                        }
+            ],
+            "statusDistribution": [
+                        {
+                                    "status": "Not Started",
+                                    "count": 17
+                        },
+                        {
+                                    "status": "Blocked",
+                                    "count": 7
+                        },
+                        {
+                                    "status": "WIP",
+                                    "count": 5
+                        },
+                        {
+                                    "status": "Parked",
+                                    "count": 2
+                        },
+                        {
+                                    "status": "**S080: Wave 3 Batch 6 SHIPPED (8/8 reviewed, reviewer avg 8.44, 7 PASS + 1 PASS_WITH_NOTES at 7.98). Phase 3 progress: 36/142 mid-fi screens (25%).** Patch v6 cluster confirmed library-level (content/tertiary 3.85:1, content/inverse 1.13:1 forbidden combo, 40\u219244pt icon-button minimums, chip-eyebrow + arc dot-on-path variants). RESUME S081: Patch v6 \u2192 Batch 7 (status display family 2.10-2.22). Then Batch 8 \u2192 PG-4.",
+                                    "count": 1
+                        },
+                        {
+                                    "status": "S080 close GREEN at 42-45%. Patch v6 + Batches 7-8 + PG-4 forecast +18-25% = ~60-70% end-of-Phase-3. Comfortable headroom.",
+                                    "count": 1
+                        },
+                        {
+                                    "status": "**Scheduled \u2014 branch visit 2026-05-02 (Sat)**",
+                                    "count": 1
+                        }
+            ],
+            "ownerWorkload": [
+                        {
+                                    "owner": "Adhi",
+                                    "active": 8,
+                                    "high_priority": 3,
+                                    "overdue": 0
+                        },
+                        {
+                                    "owner": "Amol",
+                                    "active": 6,
+                                    "high_priority": 3,
+                                    "overdue": 0
+                        },
+                        {
+                                    "owner": "Claude",
+                                    "active": 9,
+                                    "high_priority": 4,
+                                    "overdue": 0
+                        },
+                        {
+                                    "owner": "Rohan",
+                                    "active": 32,
+                                    "high_priority": 12,
+                                    "overdue": 0
+                        },
+                        {
+                                    "owner": "Ruchi",
+                                    "active": 1,
+                                    "high_priority": 0,
+                                    "overdue": 0
+                        }
+            ],
+            "departmentHealth": [
+                        {
+                                    "department": "Design",
+                                    "active": 3,
+                                    "wip": 0,
+                                    "not_started": 1,
+                                    "overdue": 0,
+                                    "stale": 1,
+                                    "avg_age_days": 28
+                        },
+                        {
+                                    "department": "Engineering",
+                                    "active": 1,
+                                    "wip": 0,
+                                    "not_started": 0,
+                                    "overdue": 0,
+                                    "stale": 0,
+                                    "avg_age_days": 21
+                        },
+                        {
+                                    "department": "Engineering / Product",
+                                    "active": 1,
+                                    "wip": 0,
+                                    "not_started": 0,
+                                    "overdue": 0,
+                                    "stale": 0,
+                                    "avg_age_days": 24
+                        },
+                        {
+                                    "department": "Finance",
+                                    "active": 4,
+                                    "wip": 1,
+                                    "not_started": 3,
+                                    "overdue": 0,
+                                    "stale": 3,
+                                    "avg_age_days": 44
+                        },
+                        {
+                                    "department": "Finance / Legal",
+                                    "active": 1,
+                                    "wip": 0,
+                                    "not_started": 0,
+                                    "overdue": 0,
+                                    "stale": 0,
+                                    "avg_age_days": 7
+                        },
+                        {
+                                    "department": "Finance / Strategy",
+                                    "active": 1,
+                                    "wip": 0,
+                                    "not_started": 1,
+                                    "overdue": 0,
+                                    "stale": 1,
+                                    "avg_age_days": 7
+                        },
+                        {
+                                    "department": "Legal",
+                                    "active": 3,
+                                    "wip": 1,
+                                    "not_started": 2,
+                                    "overdue": 0,
+                                    "stale": 2,
+                                    "avg_age_days": 26
+                        },
+                        {
+                                    "department": "Legal / Finance",
+                                    "active": 1,
+                                    "wip": 0,
+                                    "not_started": 1,
+                                    "overdue": 0,
+                                    "stale": 1,
+                                    "avg_age_days": 7
+                        },
+                        {
+                                    "department": "Marketing",
+                                    "active": 12,
+                                    "wip": 3,
+                                    "not_started": 5,
+                                    "overdue": 0,
+                                    "stale": 5,
+                                    "avg_age_days": 34
+                        },
+                        {
+                                    "department": "Marketing / Eng",
+                                    "active": 1,
+                                    "wip": 0,
+                                    "not_started": 0,
+                                    "overdue": 0,
+                                    "stale": 0,
+                                    "avg_age_days": 22
+                        },
+                        {
+                                    "department": "Operations",
+                                    "active": 3,
+                                    "wip": 0,
+                                    "not_started": 2,
+                                    "overdue": 0,
+                                    "stale": 1,
+                                    "avg_age_days": 22
+                        },
+                        {
+                                    "department": "Product",
+                                    "active": 1,
+                                    "wip": 0,
+                                    "not_started": 1,
+                                    "overdue": 0,
+                                    "stale": 1,
+                                    "avg_age_days": 43
+                        },
+                        {
+                                    "department": "Product / Eng",
+                                    "active": 1,
+                                    "wip": 0,
+                                    "not_started": 0,
+                                    "overdue": 0,
+                                    "stale": 0,
+                                    "avg_age_days": 31
+                        },
+                        {
+                                    "department": "Sales",
+                                    "active": 1,
+                                    "wip": 0,
+                                    "not_started": 1,
+                                    "overdue": 0,
+                                    "stale": 1,
+                                    "avg_age_days": 48
+                        }
+            ],
+            "staleTasks": [
+                        {
+                                    "id": "TMW-008",
+                                    "task": "Populate Sales/Pipeline with CRM structure",
+                                    "department": "Sales",
+                                    "age_days": 48
+                        },
+                        {
+                                    "id": "TMW-012",
+                                    "task": "Re-upload updated system files to Claude Project weekly",
+                                    "department": "Operations",
+                                    "age_days": 48
+                        },
+                        {
+                                    "id": "TMW-053",
+                                    "task": "Set up Razorpay \u2014 signup, KYC, Subscriptions, plans, Flutter SDK",
+                                    "department": "Finance",
+                                    "age_days": 43
+                        },
+                        {
+                                    "id": "TMW-054",
+                                    "task": "Complete Stripe account activation + Stripe Billing for international web payments",
+                                    "department": "Finance",
+                                    "age_days": 43
+                        },
+                        {
+                                    "id": "TMW-055",
+                                    "task": "Set up App Store billing \u2014 Google Play + Apple IAP + Google alt billing (Razorpay)",
+                                    "department": "Finance",
+                                    "age_days": 43
+                        },
+                        {
+                                    "id": "TMW-056",
+                                    "task": "Define exact ad placements on Stitch UI screens",
+                                    "department": "Product",
+                                    "age_days": 43
+                        },
+                        {
+                                    "id": "TMW-090",
+                                    "task": "Add og:image meta tag to all website pages (staging)",
+                                    "department": "Marketing",
+                                    "age_days": 38
+                        },
+                        {
+                                    "id": "TMW-114",
+                                    "task": "Build ManyChat DM automation via Claude",
+                                    "department": "Marketing",
+                                    "age_days": 31
+                        },
+                        {
+                                    "id": "TMW-117",
+                                    "task": "A/B test framework for social content",
+                                    "department": "Marketing",
+                                    "age_days": 31
+                        },
+                        {
+                                    "id": "TMW-120",
+                                    "task": "Create full T-15 to T+7 content backlog for all 12 platforms (stockpile)",
+                                    "department": "Marketing",
+                                    "age_days": 31
+                        },
+                        {
+                                    "id": "TMW-123",
+                                    "task": "File trademark application for \"TrackMyWings\" \u2014 coordinate with Anshul Bansal",
+                                    "department": "Legal",
+                                    "age_days": 31
+                        },
+                        {
+                                    "id": "TMW-128",
+                                    "task": "Test content pipeline end-to-end \u2014 produce 1 real video through full Claude \u2192 Eleven Labs \u2192 Gemini \u2192 Nano Banana \u2192 Google Flow \u2192 Capcut flow (Path B)",
+                                    "department": "Marketing",
+                                    "age_days": 24
+                        },
+                        {
+                                    "id": "TMW-140",
+                                    "task": "Create PWA icons (192px, 512px, maskable) from TMW logo for Website V0",
+                                    "department": "Design",
+                                    "age_days": 21
+                        },
+                        {
+                                    "id": "TMW-152",
+                                    "task": "Register for UDHYAM + GST + MSME certificates post bank account opening",
+                                    "department": "Legal / Finance",
+                                    "age_days": 7
+                        },
+                        {
+                                    "id": "TMW-153",
+                                    "task": "File copyright application for TrackMyWings (app, content, brand) \u2014 coordinate with Anshul Bansal",
+                                    "department": "Legal",
+                                    "age_days": 7
+                        },
+                        {
+                                    "id": "TMW-154",
+                                    "task": "Apply for startup funding \u2014 Startup India, grants, angel/seed \u2014 run in parallel post bank account",
+                                    "department": "Finance / Strategy",
+                                    "age_days": 7
+                        }
+            ],
+            "deadlineStats": {
+                        "overdue": 0,
+                        "due_3days": 26,
+                        "deadline_hit_rate": "0%"
+            },
+            "burndownData": [
+                        {
+                                    "date": "2026-04-30",
+                                    "remaining": 34
+                        },
+                        {
+                                    "date": "2026-04-29",
+                                    "remaining": 33
+                        },
+                        {
+                                    "date": "2026-04-28",
+                                    "remaining": 33
+                        },
+                        {
+                                    "date": "2026-04-27",
+                                    "remaining": 33
+                        },
+                        {
+                                    "date": "2026-04-26",
+                                    "remaining": 33
+                        },
+                        {
+                                    "date": "2026-04-25",
+                                    "remaining": 33
+                        },
+                        {
+                                    "date": "2026-04-24",
+                                    "remaining": 33
+                        },
+                        {
+                                    "date": "2026-04-23",
+                                    "remaining": 33
+                        },
+                        {
+                                    "date": "2026-04-22",
+                                    "remaining": 29
+                        },
+                        {
+                                    "date": "2026-04-21",
+                                    "remaining": 29
+                        },
+                        {
+                                    "date": "2026-04-20",
+                                    "remaining": 29
+                        },
+                        {
+                                    "date": "2026-04-19",
+                                    "remaining": 29
+                        },
+                        {
+                                    "date": "2026-04-18",
+                                    "remaining": 29
+                        },
+                        {
+                                    "date": "2026-04-17",
+                                    "remaining": 29
+                        }
+            ],
+            "velocity": {
+                        "today": 1,
+                        "this_week": 10,
+                        "overdue": 0,
+                        "stale": 16
+            }
+};
+
+/* =====================================================================
+ * AUTH
+ * ===================================================================== */
 const PASSWORD_HASH = '22900e4738455f5c92593a95b6e0c5d228698a80385e4f1f2d272e8f8f49aec6';
+
 async function sha256(msg) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
   return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
+
 function unlock() {
-  document.body.classList.add('unlocked');
-  document.querySelector('#loginOverlay').style.display = 'none';
+  document.getElementById('loginOverlay').style.display = 'none';
+  document.getElementById('mainShell').style.display = 'block';
+  initDashboard();
 }
-if (sessionStorage.getItem('tmw_auth') === 'true') unlock();
-document.getElementById('loginForm').addEventListener('submit', async e => {
+
+async function handleLogin(e) {
   e.preventDefault();
-  const hash = await sha256(document.getElementById('password').value);
+  const pw = document.getElementById('password').value;
+  const hash = await sha256(pw);
   if (hash === PASSWORD_HASH) {
     sessionStorage.setItem('tmw_auth', 'true');
+    document.getElementById('password').value = '';
+    document.getElementById('loginErr').classList.remove('show');
     unlock();
   } else {
-    const err = document.getElementById('loginError');
-    err.classList.add('show');
-    setTimeout(() => err.classList.remove('show'), 2000);
+    document.getElementById('loginErr').classList.add('show');
     document.getElementById('password').value = '';
+    document.getElementById('password').focus();
   }
-});
+}
 
-// --- Stale banner: warn if >150 min old (hourly @ :15 schedule) ---
-const GENERATED_EPOCH = 1777534807;
-(function(){
-  const ageMin = (Date.now()/1000 - GENERATED_EPOCH) / 60;
+if (sessionStorage.getItem('tmw_auth') === 'true') {
+  document.addEventListener('DOMContentLoaded', unlock);
+} else {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('password').focus();
+  });
+}
+
+/* =====================================================================
+ * SORT STATE
+ * ===================================================================== */
+const sortState = {
+  active:       { key: null, dir: 'asc' },
+  completed:    { key: null, dir: 'asc' },
+  backlog:      { key: null, dir: 'asc' },
+  selfLearning: { key: null, dir: 'asc' }
+};
+
+const PRIORITY_ORDER = { 'Critical': 0, 'High': 1, 'Medium': 2, 'Low': 3 };
+
+function sortTasks(tasks, tableName) {
+  const s = sortState[tableName];
+  if (!s.key) return tasks;
+  return [...tasks].sort((a, b) => {
+    let vA = a[s.key] || '', vB = b[s.key] || '';
+    if (s.key === 'priority') {
+      vA = PRIORITY_ORDER[vA] !== undefined ? PRIORITY_ORDER[vA] : 99;
+      vB = PRIORITY_ORDER[vB] !== undefined ? PRIORITY_ORDER[vB] : 99;
+      return s.dir === 'asc' ? vA - vB : vB - vA;
+    }
+    if (s.key === 'deadline' || s.key === 'created' || s.key === 'completed') {
+      const dA = vA && vA !== '—' ? new Date(vA) : new Date('9999-12-31');
+      const dB = vB && vB !== '—' ? new Date(vB) : new Date('9999-12-31');
+      return s.dir === 'asc' ? dA - dB : dB - dA;
+    }
+    vA = String(vA).toLowerCase(); vB = String(vB).toLowerCase();
+    return s.dir === 'asc' ? vA.localeCompare(vB) : vB.localeCompare(vA);
+  });
+}
+
+/* =====================================================================
+ * DEADLINE HELPERS
+ * ===================================================================== */
+function deadlineStatus(deadline) {
+  if (!deadline || deadline === '—') return 'none';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const dl = new Date(deadline); dl.setHours(0,0,0,0);
+  const days = Math.ceil((dl - today) / 86400000);
+  if (days < 0) return 'overdue';
+  if (days <= 3) return 'due-soon';
+  return 'ok';
+}
+
+function rowClass(deadline) {
+  const s = deadlineStatus(deadline);
+  if (s === 'overdue') return 'row-overdue';
+  if (s === 'due-soon') return 'row-due-soon';
+  return '';
+}
+
+function fmtDeadline(deadline) {
+  if (!deadline || deadline === '—') return '<span style="color:var(--ink-low)">—</span>';
+  const s = deadlineStatus(deadline);
+  const color = s === 'overdue' ? 'var(--danger)' : s === 'due-soon' ? 'var(--warn)' : 'var(--ink-hi)';
+  const suffix = s === 'overdue' ? ' !' : s === 'due-soon' ? ' ~' : '';
+  return `<span style="color:${color};font-variant-numeric:tabular-nums;">${deadline}${suffix}</span>`;
+}
+
+/* =====================================================================
+ * BADGE HELPERS
+ * ===================================================================== */
+function deptBadgeClass(dept) {
+  if (!dept) return 'ds-badge-dept-other';
+  const d = dept.toLowerCase();
+  if (d.includes('finance') && !d.includes('legal')) return 'ds-badge-dept-finance';
+  if (d.includes('legal') && !d.includes('finance')) return 'ds-badge-dept-legal';
+  if (d.includes('archive') || d.includes('people') || d.includes('sales') || d.includes('customer')) return 'ds-badge-dept-other';
+  return 'ds-badge-dept';
+}
+
+function priBadgeClass(pri) {
+  const map = { 'Critical': 'ds-badge-pri-critical', 'High': 'ds-badge-pri-high',
+    'Medium': 'ds-badge-pri-medium', 'Low': 'ds-badge-pri-low' };
+  return map[pri] || 'ds-badge-pri-low';
+}
+
+function priHtml(pri) {
+  if (!pri) return '';
+  return `<span class="ds-badge ${priBadgeClass(pri)}">${pri}</span>`;
+}
+
+function deptHtml(dept) {
+  if (!dept) return '';
+  return `<span class="ds-badge ${deptBadgeClass(dept)}" title="${dept}">${dept}</span>`;
+}
+
+function ownerHtml(owner) {
+  if (!owner) return '';
+  const cls = owner === 'Rohan' ? 'owner-badge owner-rohan' : 'owner-badge';
+  return `<span class="${cls}">${owner}</span>`;
+}
+
+function statusHtml(status) {
+  if (!status) return '';
+  let cls = 'ds-badge ds-badge-other';
+  if (status === 'WIP') cls = 'ds-badge ds-badge-warn';
+  else if (status === 'Blocked' || status.includes('Blocked')) cls = 'ds-badge ds-badge-danger';
+  else if (status === 'Draft Ready' || status === 'Under Legal Review') cls = 'ds-badge ds-badge-sonnet';
+  else if (status === 'Scheduled') cls = 'ds-badge ds-badge-haiku';
+  return `<span class="${cls}">${status}</span>`;
+}
+
+/* =====================================================================
+ * FILTERS
+ * ===================================================================== */
+function getFilters() {
+  return {
+    q:    document.getElementById('searchInput').value.toLowerCase().trim(),
+    dept: document.getElementById('departmentFilter').value,
+    pri:  document.getElementById('priorityFilter').value,
+    stat: document.getElementById('statusFilter').value,
+    own:  document.getElementById('ownerFilter').value,
+  };
+}
+
+function matchTask(task, f) {
+  const q = f.q;
+  if (q) {
+    const text = ((task.id||'') + ' ' + (task.task||'') + ' ' + (task.owner||'') + ' ' + (task.department||'')).toLowerCase();
+    if (!text.includes(q)) return false;
+  }
+  if (f.dept && task.department !== f.dept) return false;
+  if (f.pri && task.priority !== f.pri) return false;
+  if (f.stat) {
+    const s = task.status || '';
+    if (f.stat === 'Blocked') { if (!s.includes('Blocked')) return false; }
+    else if (f.stat === 'Parked') { if (!s.includes('Parked')) return false; }
+    else if (s !== f.stat) return false;
+  }
+  if (f.own && !(task.owner || '').includes(f.own)) return false;
+  return true;
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('departmentFilter').value = '';
+  document.getElementById('priorityFilter').value = '';
+  document.getElementById('statusFilter').value = '';
+  document.getElementById('ownerFilter').value = '';
+  filterTasks();
+}
+
+function setFilter(field, val) {
+  const map = { priority: 'priorityFilter', dept: 'departmentFilter',
+    status: 'statusFilter', owner: 'ownerFilter' };
+  if (map[field]) document.getElementById(map[field]).value = val;
+  filterTasks();
+}
+
+function filterTasks() {
+  renderActiveTasks();
+  renderCompletedTasks();
+  renderBacklogTasks();
+  renderSelfLearningTasks();
+  renderCharts();
+}
+
+/* =====================================================================
+ * RENDER — ACTIVE TASKS
+ * ===================================================================== */
+function renderActiveTasks() {
+  const f = getFilters();
+  let data = activeTasks.filter(t => matchTask(t, f));
+  data = sortTasks(data, 'active');
+
+  // Overdue count (for stat band live update)
+  const today = new Date(); today.setHours(0,0,0,0);
+  const overdue = activeTasks.filter(t => {
+    if (!t.deadline || t.deadline === '—') return false;
+    const dl = new Date(t.deadline); dl.setHours(0,0,0,0);
+    return dl < today;
+  }).length;
+  document.getElementById('metricOverdue').textContent = overdue;
+  const tileOverdue = document.getElementById('tileOverdue');
+  if (overdue > 0) {
+    tileOverdue.classList.add('tone-danger');
+  } else {
+    tileOverdue.classList.remove('tone-danger');
+  }
+  document.getElementById('activeCountLabel').textContent = `(${activeTasks.length})`;
+
+  const tbody = document.getElementById('activeTbody');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" class="ds-table-empty">No tasks match the current filters.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(t => {
+    const rc = rowClass(t.deadline);
+    return `<tr class="clickable${rc ? ' ' + rc : ''}" data-task-id="${t.id || ''}">
+      <td><code class="ds-mono">${t.id || ''}</code></td>
+      <td style="max-width:340px;white-space:normal;">${t.task || ''}</td>
+      <td>${ownerHtml(t.owner)}</td>
+      <td>${deptHtml(t.department)}</td>
+      <td>${priHtml(t.priority)}</td>
+      <td>${statusHtml(t.status)}</td>
+      <td class="ds-num">${fmtDeadline(t.deadline)}</td>
+      <td class="ds-num" style="color:var(--ink-low);">${t.created || '—'}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * RENDER — COMPLETED TASKS
+ * ===================================================================== */
+function renderCompletedTasks() {
+  const f = getFilters();
+  let data = completedTasks.filter(t => matchTask(t, f));
+  data = sortTasks(data, 'completed');
+  document.getElementById('completedCountLabel').textContent = `(${completedTasks.length})`;
+  const tbody = document.getElementById('completedTbody');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="ds-table-empty">No completed tasks match the current filters.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(t => `
+    <tr class="clickable">
+      <td><code class="ds-mono">${t.id || ''}</code></td>
+      <td style="max-width:360px;white-space:normal;">${t.task || ''}</td>
+      <td>${ownerHtml(t.owner)}</td>
+      <td>${deptHtml(t.department)}</td>
+      <td class="ds-num" style="color:var(--ink-mid);">${t.completed || '—'}</td>
+    </tr>`).join('');
+}
+
+/* =====================================================================
+ * RENDER — BACKLOG
+ * ===================================================================== */
+function renderBacklogTasks() {
+  const f = getFilters();
+  let data = backlogTasks.filter(t => matchTask(t, f));
+  data = sortTasks(data, 'backlog');
+  document.getElementById('backlogCountLabel').textContent = `(${backlogTasks.length})`;
+  const tbody = document.getElementById('backlogTbody');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="ds-table-empty">No backlog items match the current filters.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(t => `
+    <tr class="clickable">
+      <td><code class="ds-mono">${t.id || ''}</code></td>
+      <td style="max-width:360px;white-space:normal;">${t.task || ''}</td>
+      <td>${ownerHtml(t.owner)}</td>
+      <td>${deptHtml(t.department)}</td>
+      <td>${priHtml(t.priority)}</td>
+    </tr>`).join('');
+}
+
+/* =====================================================================
+ * RENDER — SELF LEARNING
+ * ===================================================================== */
+function renderSelfLearningTasks() {
+  const f = getFilters();
+  let data = selfLearningTasks.filter(t => matchTask(t, f));
+  data = sortTasks(data, 'selfLearning');
+  document.getElementById('selfLCountLabel').textContent = `(${selfLearningTasks.length})`;
+  const tbody = document.getElementById('selfLTbody');
+  if (data.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="ds-table-empty">No self-learning tasks match filters.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(t => {
+    const rc = rowClass(t.deadline);
+    return `<tr class="clickable${rc ? ' ' + rc : ''}">
+      <td><code class="ds-mono">${t.id || ''}</code></td>
+      <td style="max-width:320px;white-space:normal;">${t.task || ''}</td>
+      <td>${ownerHtml(t.owner)}</td>
+      <td>${priHtml(t.priority)}</td>
+      <td>${statusHtml(t.status)}</td>
+      <td class="ds-num">${fmtDeadline(t.deadline)}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * RENDER — STATS BAND
+ * ===================================================================== */
+function renderStats() {
+  const active = activeTasks.length;
+  const highPri = activeTasks.filter(t => t.priority === 'Critical' || t.priority === 'High').length;
+  const completed = completedTasks.length;
+  const total = active + completed;
+  const rate = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+  document.getElementById('metricActive').textContent = active;
+  document.getElementById('metricHighPri').textContent = highPri;
+  document.getElementById('metricCompletion').textContent = rate + '%';
+
+  // Completion rate from analyticsData if available
+  if (analyticsData && analyticsData.completionRate !== undefined) {
+    document.getElementById('metricCompletion').textContent = analyticsData.completionRate + '%';
+  }
+}
+
+/* =====================================================================
+ * RENDER — CHARTS
+ * ===================================================================== */
+let deptChartInst = null, priChartInst = null;
+
+const CHART_DEFAULTS = {
+  responsive: true,
+  maintainAspectRatio: true,
+  animation: { duration: 400, easing: 'easeOutQuart' },
+  plugins: {
+    legend: {
+      position: 'bottom',
+      labels: { color: 'oklch(55% 0.04 295)', font: { size: 11, family: 'Inter, -apple-system, sans-serif' }, padding: 12, boxWidth: 12 }
+    },
+    tooltip: {
+      backgroundColor: 'oklch(22% 0.05 285)',
+      titleColor: 'oklch(94% 0.04 85)',
+      bodyColor: 'oklch(72% 0.04 300)',
+      borderColor: 'oklch(35% 0.04 300 / 0.40)',
+      borderWidth: 1,
+      padding: 10,
+    }
+  }
+};
+
+function getComputedCssVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function renderCharts() {
+  renderDeptChart();
+  renderPriChart();
+}
+
+function renderDeptChart() {
+  const f = getFilters();
+  const filtered = activeTasks.filter(t => matchTask(t, f));
+  const depts = {};
+  filtered.forEach(t => { depts[t.department] = (depts[t.department] || 0) + 1; });
+
+  const labels = Object.keys(depts);
+  const data = Object.values(depts);
+
+  // Two-color system: gold for primary depts, plum variants for the rest (One-Hue-One-Job)
+  const bgColors = labels.map((l, i) => {
+    if (i === 0) return 'oklch(78% 0.13 75 / 0.85)';
+    if (i === 1) return 'oklch(75% 0.06 320 / 0.85)';
+    if (i === 2) return 'oklch(70% 0.10 350 / 0.85)';
+    // Vary lightness of plum for remaining
+    const L = Math.max(40, 72 - i * 6);
+    return `oklch(${L}% 0.05 320 / 0.80)`;
+  });
+
+  const ctx = document.getElementById('deptChart').getContext('2d');
+  if (deptChartInst) deptChartInst.destroy();
+  deptChartInst = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels,
+      datasets: [{ data, backgroundColor: bgColors, borderColor: 'oklch(18% 0.04 280)', borderWidth: 2 }]
+    },
+    options: { ...CHART_DEFAULTS }
+  });
+}
+
+function renderPriChart() {
+  const f = getFilters();
+  const filtered = activeTasks.filter(t => matchTask(t, f));
+  const counts = { Critical: 0, High: 0, Medium: 0, Low: 0 };
+  filtered.forEach(t => { if (counts[t.priority] !== undefined) counts[t.priority]++; });
+
+  const ctx = document.getElementById('priChart').getContext('2d');
+  if (priChartInst) priChartInst.destroy();
+  priChartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Critical', 'High', 'Medium', 'Low'],
+      datasets: [{
+        label: 'Tasks',
+        data: [counts.Critical, counts.High, counts.Medium, counts.Low],
+        backgroundColor: [
+          'oklch(62% 0.22 25 / 0.85)',
+          'oklch(70% 0.18 50 / 0.85)',
+          'oklch(78% 0.13 75 / 0.85)',
+          'oklch(55% 0.04 295 / 0.60)',
+        ],
+        borderRadius: 3,
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      indexAxis: 'y',
+      plugins: { ...CHART_DEFAULTS.plugins, legend: { display: false } },
+      scales: {
+        x: { ticks: { color: 'oklch(55% 0.04 295)', font: { size: 11 } },
+             grid: { color: 'oklch(35% 0.04 300 / 0.12)' }, beginAtZero: true },
+        y: { ticks: { color: 'oklch(72% 0.04 300)', font: { size: 12 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+/* =====================================================================
+ * RENDER — HERO MILESTONE STRIP
+ * ===================================================================== */
+function renderHeroMilestones() {
+  const rail = document.getElementById('heroRail');
+  if (!heroMilestones.length) { document.getElementById('heroSection').style.display = 'none'; return; }
+
+  // Adjust grid columns to match item count
+  rail.style.gridTemplateColumns = `repeat(${heroMilestones.length}, minmax(200px, 1fr))`;
+
+  rail.innerHTML = heroMilestones.map(m => {
+    const isKeystone = !!m.keystone;
+    const dotHtml = isKeystone
+      ? `<div class="ds-milestone-dot"><img src="logo.jpeg" class="ds-milestone-logo" alt="TMW"></div>`
+      : `<div class="ds-milestone-dot"></div>`;
+    return `
+      <div class="ds-milestone${isKeystone ? ' keystone' : ''}">
+        ${dotHtml}
+        <div class="ds-milestone-date">${m.label || m.date}</div>
+        <div class="ds-milestone-title">${m.title}</div>
+        <div class="ds-milestone-note">${m.note || ''}</div>
+      </div>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * RENDER — MILESTONE TIMELINE (live milestones from TASKS.md)
+ * ===================================================================== */
+function renderMilestoneTimeline() {
+  const rail = document.getElementById('msRail');
+  if (!milestones.length) {
+    rail.innerHTML = '<div style="color:var(--ink-low);font-size:12px;padding:var(--sp-md);">No milestones available.</div>';
+    return;
+  }
+  rail.style.gridTemplateColumns = `repeat(${Math.min(milestones.length, 6)}, minmax(180px, 1fr))`;
+  rail.innerHTML = milestones.map(m => `
+    <div class="ds-milestone">
+      <div class="ds-milestone-dot"></div>
+      <div class="ds-milestone-date">${m.date || ''}</div>
+      <div class="ds-milestone-title">${m.title || ''}</div>
+      <div class="ds-milestone-note">${m.desc || m.description || ''}</div>
+    </div>`).join('');
+}
+
+/* =====================================================================
+ * RENDER — ACTIVITY FEED
+ * ===================================================================== */
+function renderActivityFeed() {
+  const container = document.getElementById('feedContainer');
+  if (!activityFeed.length) {
+    container.innerHTML = '<div class="ds-table-empty">No activity yet.</div>';
+    return;
+  }
+  const now = new Date();
+  container.innerHTML = activityFeed.slice(0, 20).map(item => {
+    const d = new Date(item.date);
+    const diff = now - d;
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor(diff / 3600000);
+    const mins = Math.floor(diff / 60000);
+    let ago = days > 0 ? `${days}d ago` : hours > 0 ? `${hours}h ago` : `${mins}m ago`;
+
+    const evClass = item.event === 'completed' ? 'ev-completed' :
+                    item.event === 'created'   ? 'ev-created' : 'ev-other';
+    const evLabel = item.event || 'update';
+
+    return `<div class="feed-item">
+      <div>
+        <code class="ds-mono" style="color:var(--gold);">${item.task_id || ''}</code>
+        <span class="feed-event ${evClass}">${evLabel}</span>
+        <span style="color:var(--ink-hi);font-size:12.5px;">${(item.task_name || '').replace(/\*\*/g,'')}</span>
+        ${item.department ? `<span style="color:var(--ink-low);font-size:11px;margin-left:4px;">${item.department}</span>` : ''}
+      </div>
+      <time class="feed-time" datetime="${item.date}">${ago}</time>
+    </div>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * RENDER — CALENDAR
+ * ===================================================================== */
+function renderCalendar() {
+  const container = document.getElementById('calWeek');
+  const today = new Date();
+  const dow = today.getDay();
+  const weekStart = new Date(today);
+  weekStart.setDate(today.getDate() - (dow === 0 ? 6 : dow - 1));
+  const dayNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(weekStart);
+    d.setDate(weekStart.getDate() + i);
+    const dateStr = d.toISOString().split('T')[0];
+    const isToday = d.toDateString() === today.toDateString();
+    const evs = calendarEvents.filter(e => {
+      const eDate = (e.start || e.date || '').substring(0, 10);
+      return eDate === dateStr;
+    });
+    const evHtml = evs.map(e =>
+      `<div class="cal-event" title="${e.description || e.summary || ''}">${(e.summary || '').substring(0, 26)}</div>`
+    ).join('') || `<div style="color:var(--ink-low);font-size:10.5px;">—</div>`;
+    html += `<div class="cal-day${isToday ? ' today' : ''}">
+      <div class="cal-day-label">${dayNames[i]} ${d.getDate()}</div>
+      ${evHtml}
+    </div>`;
+  }
+  container.innerHTML = html;
+}
+
+/* =====================================================================
+ * RENDER — DEPENDENCIES
+ * ===================================================================== */
+function renderDependencies() {
+  const container = document.getElementById('depsContainer');
+  if (!taskDependencies.length) return;
+  container.innerHTML = taskDependencies.map(dep => {
+    const isResolved = completedTasks.some(t => t.id === dep.to);
+    const statusCls = isResolved ? 'ds-badge ds-badge-ok' : 'ds-badge ds-badge-warn';
+    const statusTxt = isResolved ? 'Resolved' : 'Active';
+    return `<div class="dep-item">
+      <code class="ds-mono" style="color:var(--gold)">${dep.from}</code>
+      <span class="dep-arrow">← blocked by</span>
+      <code class="ds-mono" style="color:var(--ink-mid)">${dep.to}</code>
+      ${dep.reason ? `<span class="dep-reason">(${dep.reason})</span>` : ''}
+      <span class="${statusCls}">${statusTxt}</span>
+    </div>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * RENDER — KANBAN
+ * ===================================================================== */
+function renderKanban() {
+  const cols = {
+    'Not Started': { label: 'Not Started', tasks: [] },
+    'WIP':         { label: 'WIP / In Progress', tasks: [] },
+    'Blocked':     { label: 'Blocked', tasks: [] },
+    'Completed':   { label: 'Completed (Recent)', tasks: [] },
+  };
+  activeTasks.forEach(t => {
+    const s = t.status || '';
+    if (s === 'WIP' || s === 'Draft Ready' || s === 'Under Legal Review') cols['WIP'].tasks.push(t);
+    else if (s.includes('Blocked') || s.includes('Parked')) cols['Blocked'].tasks.push(t);
+    else cols['Not Started'].tasks.push(t);
+  });
+  completedTasks.slice(0, 12).forEach(t => cols['Completed'].tasks.push(t));
+
+  document.getElementById('kanbanGrid').innerHTML = Object.values(cols).map(col => {
+    const cards = col.tasks.map(t => `
+      <div class="kanban-card" title="${(t.task || '').replace(/"/g, '&quot;')}">
+        <div class="kanban-card-id">${t.id || ''}</div>
+        <div class="kanban-card-title">${t.task || t.Task || ''}</div>
+        <div class="kanban-card-foot">
+          ${t.department ? deptHtml(t.department) : ''}
+          ${t.priority ? priHtml(t.priority) : ''}
+        </div>
+      </div>`).join('');
+    return `<div class="ds-frame ds-frame-flush">
+      <div class="kanban-col-head">
+        <span>${col.label}</span>
+        <span class="kanban-col-count">${col.tasks.length}</span>
+      </div>
+      <div class="kanban-cards">${cards || '<div style="color:var(--ink-low);font-size:12px;padding:var(--sp-sm);">Empty</div>'}</div>
+    </div>`;
+  }).join('');
+}
+
+/* =====================================================================
+ * VIEW TOGGLE
+ * ===================================================================== */
+function toggleView(mode) {
+  const table = document.getElementById('tableViewContainer');
+  const kanban = document.getElementById('kanbanContainer');
+  const btnT = document.getElementById('btnTable');
+  const btnK = document.getElementById('btnKanban');
+  if (mode === 'kanban') {
+    table.style.display = 'none';
+    kanban.style.display = 'block';
+    btnT.classList.remove('active');
+    btnK.classList.add('active');
+    renderKanban();
+  } else {
+    table.style.display = 'block';
+    kanban.style.display = 'none';
+    btnT.classList.add('active');
+    btnK.classList.remove('active');
+  }
+}
+
+/* =====================================================================
+ * SECTION COLLAPSE / EXPAND
+ * ===================================================================== */
+function toggleSection(bodyId, caretId) {
+  const body = document.getElementById(bodyId);
+  const caret = document.getElementById(caretId);
+  const btn = caret ? caret.closest('button') : null;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (caret) caret.classList.toggle('open', !isOpen);
+  if (btn) btn.setAttribute('aria-expanded', !isOpen);
+}
+
+/* =====================================================================
+ * STALE BANNER
+ * ===================================================================== */
+function checkStale() {
+  if (!analyticsData || !analyticsData.generated_at_epoch) return;
+  const ageMin = (Date.now() / 1000 - analyticsData.generated_at_epoch) / 60;
   if (ageMin > 150) {
-    const b = document.getElementById('staleBanner');
-    b.innerHTML = `<b>Snapshot is ${Math.round(ageMin)} min old.</b> The hourly launchd job may have failed. Check <code>~/Library/Logs/TrackMyWings/founder-control-panel.error.log</code>.`;
-    b.classList.add('show');
+    const banner = document.getElementById('staleBanner');
+    const ageEl = document.getElementById('staleAge');
+    ageEl.textContent = `(${Math.round(ageMin)} min old)`;
+    banner.classList.add('show');
   }
-})();
+}
 
-// Keyboard: 'r' reloads, ESC blurs
+/* =====================================================================
+ * SCROLL HELPERS
+ * ===================================================================== */
+function scrollToActive() {
+  document.getElementById('activeSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Ensure active section is open
+  const body = document.getElementById('activeBody');
+  if (!body.classList.contains('open')) toggleSection('activeBody', 'activeCaret');
+}
+
+/* =====================================================================
+ * LAST UPDATED
+ * ===================================================================== */
+function setLastUpdated() {
+  const el = document.getElementById('lastUpdated');
+  if (analyticsData && analyticsData.generated_at) {
+    el.textContent = analyticsData.generated_at;
+  } else {
+    // Fall back to regex-replaced date
+    el.textContent = el.textContent || '—';
+  }
+}
+
+/* =====================================================================
+ * TITLE BADGE
+ * ===================================================================== */
+function setTabTitle() {
+  const overdue = parseInt(document.getElementById('metricOverdue').textContent) || 0;
+  const active = activeTasks.length;
+  let badge = overdue > 0 ? `(${overdue} overdue) ` : `(${active} active) `;
+  document.title = `TMW ${badge}— Tasks`;
+}
+
+/* =====================================================================
+ * KEYBOARD SHORTCUTS
+ * ===================================================================== */
 document.addEventListener('keydown', e => {
-  if (!document.body.classList.contains('unlocked')) return;
-  if (e.key === 'r' && !['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) {
-    location.reload(true);
+  // / focuses search (if not already in an input)
+  if (e.key === '/' && !['INPUT','SELECT','TEXTAREA'].includes(document.activeElement.tagName)) {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+  // Esc clears filters (and closes any open modal — future-proofed)
+  if (e.key === 'Escape') {
+    clearFilters();
+    document.activeElement.blur();
   }
 });
+
+// Sortable header keyboard support
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('sortable')) {
+    e.preventDefault();
+    e.target.click();
+  }
+});
+
+/* =====================================================================
+ * SORTABLE HEADERS — event delegation
+ * ===================================================================== */
+document.addEventListener('click', e => {
+  const th = e.target.closest('th.sortable');
+  if (!th) return;
+  const sortKey = th.dataset.sort;
+  const tableName = th.dataset.table;
+  if (!tableName || !sortKey) return;
+  const s = sortState[tableName];
+  if (s.key === sortKey) {
+    s.dir = s.dir === 'asc' ? 'desc' : 'asc';
+  } else {
+    s.key = sortKey;
+    s.dir = 'asc';
+  }
+  // Update ARIA + active class in that thead
+  const thead = th.closest('thead');
+  thead.querySelectorAll('th.sortable').forEach(h => {
+    h.classList.remove('active');
+    h.removeAttribute('aria-sort');
+  });
+  th.classList.add('active');
+  th.setAttribute('aria-sort', s.dir === 'asc' ? 'ascending' : 'descending');
+  th.textContent = th.textContent.replace(/ [▾▴]$/, '') + (s.dir === 'asc' ? ' ▴' : ' ▾');
+
+  if (tableName === 'active') renderActiveTasks();
+  else if (tableName === 'completed') renderCompletedTasks();
+  else if (tableName === 'backlog') renderBacklogTasks();
+  else if (tableName === 'selfLearning') renderSelfLearningTasks();
+});
+
+/* =====================================================================
+ * INIT
+ * ===================================================================== */
+function initDashboard() {
+  renderStats();
+  renderActiveTasks();
+  renderCompletedTasks();
+  renderBacklogTasks();
+  renderSelfLearningTasks();
+  renderHeroMilestones();
+  renderMilestoneTimeline();
+  renderActivityFeed();
+  renderCalendar();
+  renderDependencies();
+  renderCharts();
+  checkStale();
+  setLastUpdated();
+  setTabTitle();
+}
 </script>
 </body>
 </html>

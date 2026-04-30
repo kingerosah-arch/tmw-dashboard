@@ -85,7 +85,7 @@
   </form>
 </div>
 
-<div class="fc-truth">T-76 launch · TMW-151 on-call · Phase 3 42% · ₹0 cash / ₹87,862 receivable · 6 priorities · 0 overdue · last sync 12m ago</div>
+<div class="fc-truth">T-76 launch · TMW-151 on-call · Phase 3 42% · ₹0 cash / ₹87,862 receivable · 6 priorities · 0 overdue · last sync 10m ago</div>
 
 <div class="ds-wrap">
   <header class="ds-top">
@@ -122,7 +122,7 @@
       </div>
       <div class="ds-metric">
         <div class="ds-metric-lbl">Opus output, TMW · this month</div>
-        <div class="ds-metric-val num">24.36M</div>
+        <div class="ds-metric-val num">24.40M</div>
         <div class="ds-metric-sub">Scoped to TrackMyWings project. Raw output tokens, no ceiling.</div>
       </div>
       <div class="ds-metric ">
@@ -274,7 +274,7 @@
         <div class="fc-sprint-pct num">42%</div>
       </div>
       <div class="fc-sprint-sub">
-        TMW Opus output this month: 24.36M (raw).
+        TMW Opus output this month: 24.40M (raw).
         TMW-143 head task · S081 in flight.
       </div>
     </section>
@@ -369,12 +369,12 @@
       <div class="ds-metrics ds-metrics-3">
         <div class="ds-metric ds-metric-lead">
           <div class="ds-metric-lbl">Claude burn (Opus output)</div>
-          <div class="ds-metric-val num">13.73M</div>
+          <div class="ds-metric-val num">13.77M</div>
           <div class="ds-metric-sub">179 sessions · last 0.0h ago.</div>
         </div>
         <div class="ds-metric">
           <div class="ds-metric-lbl">Tasks completed</div>
-          <div class="ds-metric-val num">21</div>
+          <div class="ds-metric-val num">22</div>
           <div class="ds-metric-sub">From TASKS.md — last 7 days.</div>
         </div>
         <div class="ds-metric">
@@ -406,7 +406,7 @@
         <div class="ds-metric">
           <div class="ds-metric-lbl">/start cold-start</div>
           <div class="ds-metric-val num">11.3K</div>
-          <div class="ds-metric-sub">~44.1 KB always-loaded files. Building 7d history.</div>
+          <div class="ds-metric-sub">~44.2 KB always-loaded files. Building 7d history.</div>
         </div>
         <div class="ds-metric tone-danger">
           <div class="ds-metric-lbl">Legal alerts (30d)</div>
@@ -476,15 +476,15 @@
         <tr>
           <td><code>tasks</code></td>
           <td class="num">2026-04-30 21:05</td>
-          <td>17m ago</td>
+          <td>28m ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
         
         <tr>
           <td><code>founder-control-panel</code></td>
-          <td class="num">2026-04-30 21:10</td>
-          <td>12m ago</td>
+          <td class="num">2026-04-30 21:22</td>
+          <td>10m ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
@@ -492,7 +492,7 @@
         <tr>
           <td><code>claude-usage</code></td>
           <td class="num">2026-04-30 21:15</td>
-          <td>7m ago</td>
+          <td>18m ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
@@ -500,7 +500,7 @@
         <tr>
           <td><code>finance-mis</code></td>
           <td class="num">2026-04-30 21:20</td>
-          <td>2m ago</td>
+          <td>13m ago</td>
           <td><span class="ds-badge ds-badge-pri-low">✓ ok</span></td>
           <td class="num"><span class="num" style="color:var(--ink-low);">0</span></td>
         </tr>
@@ -508,7 +508,7 @@
         <tr>
           <td><code>folder-map-generator</code></td>
           <td class="num">2026-04-30 20:55</td>
-          <td>27m ago</td>
+          <td>38m ago</td>
           <td><span class="ds-badge ds-badge-pri-medium">◉ stale</span></td>
           <td class="num"><span class="num">2</span></td>
         </tr>
@@ -516,7 +516,7 @@
         <tr>
           <td><code>file-watcher</code></td>
           <td class="num">2026-04-30 21:15</td>
-          <td>7m ago</td>
+          <td>18m ago</td>
           <td><span class="ds-badge ds-badge-pri-medium">◉ stale</span></td>
           <td class="num"><span class="num">124</span></td>
         </tr>
@@ -524,7 +524,7 @@
         <tr>
           <td><code>calendar-sync</code></td>
           <td class="num">2026-04-30 21:00</td>
-          <td>21m ago</td>
+          <td>32m ago</td>
           <td><span class="ds-badge ds-badge-pri-medium">◉ stale</span></td>
           <td class="num"><span class="num">6</span></td>
         </tr>
@@ -550,7 +550,7 @@
   </div>
 
   <div class="ds-meta">
-    <span>Generated <span id="generatedAt">2026-04-30T21:22:46</span></span>
+    <span>Generated <span id="generatedAt">2026-04-30T21:33:25</span></span>
     <span>Founder Control v1 · launchd hourly</span>
   </div>
 </div>
@@ -582,7 +582,7 @@ document.getElementById('loginForm').addEventListener('submit', async e => {
 });
 
 // --- Stale banner: warn if >150 min old (hourly @ :15 schedule) ---
-const GENERATED_EPOCH = 1777564366;
+const GENERATED_EPOCH = 1777565005;
 (function(){
   const ageMin = (Date.now()/1000 - GENERATED_EPOCH) / 60;
   if (ageMin > 150) {

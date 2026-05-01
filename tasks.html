@@ -521,6 +521,10 @@ const activeTasks = [
             { id: 'TMW-188', task: 'v15 deferred library items — surfaced during S086 batches: (a) aircraft-card-hero detail variant (5.8 + 2.18 surfaced — current aircraft-card 2022:158 is collection-card style, no detail-page hero pa…', owner: 'Claude', department: 'Design', priority: 'Medium', status: 'Not Started', deadline: 'Post-TMW-143 stable OR if blocking new build', created: '2026-05-01' }
         ];
 const completedTasks = [
+            { id: 'TMW-187', task: 'qr-code glyph gap (6.4) — folded into Patch v13 SPEC §2 (6 variants at sizes 24+48 with default/accent/inverse tones) + §10 cross-references TMW-184/185/186. 0 Figma calls (disk-only). v14 EXECUTOR c…', owner: 'Claude', department: 'Design', completed: '2026-05-01' },
+            { id: 'TMW-186', task: '6.10 airline badges as gold rectangles — root cause: original builder skipped library, hand-built all chips/badges as raw frames with default fills. Fix: 14 component instances installed (4 airline-l…', owner: 'Claude', department: 'Design', completed: '2026-05-01' },
+            { id: 'TMW-185', task: '2.3 search filters overlay structurally empty — root cause: section frames + card bodies + chip scroll + CTA button all sized 1-3pt wide; content existed in tree but clipped invisible. Fix: 41 width…', owner: 'Claude', department: 'Design', completed: '2026-05-01' },
+            { id: 'TMW-184', task: '9.5 paywall pricing tier component layout collapse — root cause: 3 tier cards had layoutSizingHorizontal: HUG in vertical auto-layout parent, shrunk to 140pt each, child content overflowed/cropped ca…', owner: 'Claude', department: 'Design', completed: '2026-05-01' },
             { id: 'TMW-167', task: 'Wave 4 fully closed in S084 single session. All 16 screens BUILT (8 fresh tonight: 4.4/4.5/4.7/4.8 Wave A re-dispatch + 7.1/7.3/7.4/7.5 Wave B fresh) + 16 reviewed under DEC-107 Pass 0 reviewer-side…', owner: 'Claude + Rohan', department: 'Design', completed: '2026-04-30' },
             { id: 'TMW-166', task: 'Tier 1 Figma optimizations SHIPPED. All 3 approved + executed S084: (1) Design/TMW_App_Screens_V1/foundation/LIBRARY_MANIFEST.json authored — 48 components, variant matrices for high-use, text-style…', owner: 'Rohan + Claude', department: 'Operations / Design', completed: '2026-04-30' },
             { id: 'TMW-169', task: 'Ops health tiles SHIPPED — 4 new FCP tiles live: Skills active (70 = 55 plugin + 15 user), Figma MCP today (0/200, daily reset), /start cold-start (~10.8K tokens raw + 7d history bootstrapped), Legal…', owner: 'Claude', department: 'Operations', completed: '2026-04-30' },
@@ -780,6 +784,34 @@ const selfLearningTasks = [
         ];
 const activityFeed = [
             {
+                        "date": "2026-05-01",
+                        "task_id": "TMW-187",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "qr-code glyph gap (6.4) \u2014 folded into..."
+            },
+            {
+                        "date": "2026-05-01",
+                        "task_id": "TMW-186",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "6.10 airline badges as gold rectangle..."
+            },
+            {
+                        "date": "2026-05-01",
+                        "task_id": "TMW-185",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "2.3 search filters overlay structural..."
+            },
+            {
+                        "date": "2026-05-01",
+                        "task_id": "TMW-184",
+                        "event": "completed",
+                        "department": "Design",
+                        "task_name": "9.5 paywall pricing tier component la..."
+            },
+            {
                         "date": "2026-04-30",
                         "task_id": "TMW-012",
                         "event": "completed",
@@ -890,34 +922,6 @@ const activityFeed = [
                         "event": "completed",
                         "department": "Operations",
                         "task_name": "Grant `/usr/bin/python3` Full Disk Ac..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "TMW-037",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "Brand Book \u2014 CANCELLED (S069). Sprint..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "TMW-146",
-                        "event": "completed",
-                        "department": "Operations",
-                        "task_name": "Post-sprint housekeeping \u2014 CANCELLED ..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "TMW-B01",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "Brand guidelines document from Ruchi ..."
-            },
-            {
-                        "date": "2026-04-23",
-                        "task_id": "TMW-149",
-                        "event": "completed",
-                        "department": "Legal",
-                        "task_name": "Stamp paper + NOC + rent agreement co..."
             }
 ];
 const calendarEvents = [
@@ -1044,8 +1048,8 @@ const analyticsData = {
                         },
                         {
                                     "date": "2026-05-01",
-                                    "completed": 1,
-                                    "added": 243
+                                    "completed": 5,
+                                    "added": 247
                         }
             ],
             "weeklyVelocity": [
@@ -1066,8 +1070,8 @@ const analyticsData = {
                         },
                         {
                                     "week": "2026-04-27",
-                                    "completed": 15,
-                                    "added": 248
+                                    "completed": 19,
+                                    "added": 252
                         }
             ],
             "statusDistribution": [
@@ -1440,8 +1444,8 @@ const analyticsData = {
                         }
             ],
             "velocity": {
-                        "today": 1,
-                        "this_week": 15,
+                        "today": 5,
+                        "this_week": 19,
                         "overdue": 0,
                         "stale": 15
             }

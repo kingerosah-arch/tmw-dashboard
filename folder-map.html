@@ -217,9 +217,9 @@
   </header>
 
   <div class="fm-summary">
-    <strong class="fm-summary-num">292</strong> folders ·
-    <strong class="fm-summary-num">330</strong> files —
-    <span class="fm-summary-num">159 md, 51 xlsx, 12 pdf, 11 docx, 8 html, 2 images</span>
+    <strong class="fm-summary-num">309</strong> folders ·
+    <strong class="fm-summary-num">353</strong> files —
+    <span class="fm-summary-num">168 md, 52 xlsx, 12 pdf, 11 docx, 8 html, 2 images</span>
   </div>
 
   <div class="fm-controls">
@@ -253,9 +253,9 @@
   <div class="fm-tree" id="folderTree"></div>
 
   <div class="ds-meta">
-    <span>Generated 2026-05-03 15:55</span>
-    <span>292 folders</span>
-    <span>330 files</span>
+    <span>Generated 2026-05-03 18:55</span>
+    <span>309 folders</span>
+    <span>353 files</span>
   </div>
 </div>
 
@@ -328,7 +328,8 @@ const folderStructure =             { name: 'TrackMyWings', type: 'folder', dept
                     { name: '01_Email_Raman_CA.md                        (Monday email to CA Raman)', type: 'file', dept: 'Operations' },
                     { name: '02_WhatsApp_ICICI_Naik.md                   (Monday trigger to RM)', type: 'file', dept: 'Operations' },
                     { name: '03_Email_Anshul_Bansal.md                   (briefing + KYC document request)', type: 'file', dept: 'Operations' },
-                    { name: '04_Message_Amol.md                          (warm separation framework)', type: 'file', dept: 'Operations' }
+                    { name: '04_Message_Amol.md                          (warm separation framework)', type: 'file', dept: 'Operations' },
+                    { name: '04a_Email_Amol_Reply.md                     (Amol email reply draft awaiting Anshul B review)', type: 'file', dept: 'Operations' }
                 ] },
                 { name: 'Archive', type: 'folder', dept: 'Archive', children: [
                     { name: 'Extracted_Zips', type: 'folder', dept: 'Archive', children: [
@@ -771,23 +772,67 @@ const folderStructure =             { name: 'TrackMyWings', type: 'folder', dept
                             { name: 'MIGRATION_GUIDE.md', type: 'file', dept: 'Operations' },
                             { name: 'setup_scheduled_tasks.sh', type: 'file', dept: 'Operations' }
                         ] },
+                        { name: 'Plans', type: 'folder', dept: 'Operations', children: [
+                            { name: 'TMW-165_*/ (4 files)', type: 'folder', dept: 'Operations', children: [] },
+                            { name: 'S086_OPENING_RUNBOOK.md', type: 'file', dept: 'Operations' },
+                            { name: 'TMW-201_Systems_Upgrade_Plan_v2.md', type: 'file', dept: 'Operations' },
+                            { name: 'TMW-201_v2.1_Benchmark_Report.md', type: 'file', dept: 'Operations' },
+                            { name: 'TMW_Restructure_Questionnaire_2026-05-02.xlsx', type: 'file', dept: 'Operations' }
+                        ] },
                         { name: 'Reports', type: 'folder', dept: 'Operations', children: [
                             { name: 'TMW_System_Audit_S047.md', type: 'file', dept: 'Operations' },
                             { name: 'TMW_System_Improvement_Plan_S047.md', type: 'file', dept: 'Operations' }
                         ] },
+                        { name: 'scripts', type: 'folder', dept: 'Operations', children: [
+                            { name: 'bandwidth_tracker.py', type: 'file', dept: 'Operations' },
+                            { name: 'context_updater.py', type: 'file', dept: 'Operations' },
+                            { name: 'decision_logger.py', type: 'file', dept: 'Operations' },
+                            { name: 'kb_search.py', type: 'file', dept: 'Operations' },
+                            { name: 'restructure_tracker.py', type: 'file', dept: 'Operations' },
+                            { name: 'statutory_calendar.py', type: 'file', dept: 'Operations' },
+                            { name: 'tasks_manager.py', type: 'file', dept: 'Operations' }
+                        ] },
                         { name: 'Session Saves', type: 'folder', dept: 'Operations', children: [
                             { name: 'SESSION_SAVE_S008.md through SESSION_SAVE_S023.md', type: 'file', dept: 'Operations' }
+                        ] },
+                        { name: 'state', type: 'folder', dept: 'Operations', children: [
+                            { name: 'bandwidth.jsonl', type: 'file', dept: 'Operations' },
+                            { name: 'kb_index.jsonl', type: 'file', dept: 'Operations' },
+                            { name: 'kb_index_meta.json', type: 'file', dept: 'Operations' },
+                            { name: 'restructure_status.jsonl', type: 'file', dept: 'Operations' },
+                            { name: 'statutory_status.jsonl', type: 'file', dept: 'Operations' }
                         ] },
                         { name: 'CONTEXT.md', type: 'file', dept: 'Operations' },
                         { name: 'COWORK_PROJECT_INSTRUCTIONS.md', type: 'file', dept: 'Operations' },
                         { name: 'DECISION_LOG.md', type: 'file', dept: 'Operations' },
+                        { name: 'LAUNCH_READINESS.md', type: 'file', dept: 'Operations' },
+                        { name: 'LAUNCHD_RUNBOOK.md', type: 'file', dept: 'Operations' },
                         { name: 'OPERATING_PARTNER_PROMPT.md', type: 'file', dept: 'Operations' },
                         { name: 'resume_launchd_post_sprint.sh', type: 'file', dept: 'Operations' },
                         { name: 'SESSION_LOG.md', type: 'file', dept: 'Operations' },
-                        { name: 'SESSION_LOG_ARCHIVE.md', type: 'file', dept: 'Operations' }
+                        { name: 'SESSION_LOG_ARCHIVE.md', type: 'file', dept: 'Operations' },
+                        { name: 'SKILLS_CHEATSHEET.md', type: 'file', dept: 'Operations' },
+                        { name: 'STATUTORY_CALENDAR.md', type: 'file', dept: 'Operations' }
                     ] },
                     { name: 'Dashboards', type: 'folder', dept: 'Operations', children: [
                         { name: 'FOUNDER_CONTROL_PANEL.md', type: 'file', dept: 'Operations' }
+                    ] },
+                    { name: 'Investor Readiness', type: 'folder', dept: 'Operations', children: [
+                        { name: '60-Month Operating Plan', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Cap Table', type: 'folder', dept: 'Operations', children: [
+                            { name: 'Cap Table History', type: 'folder', dept: 'Operations', children: [] },
+                            { name: 'CAP_TABLE_v2.md', type: 'file', dept: 'Operations' }
+                        ] },
+                        { name: 'Compliance Status', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Corporate Documents', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Decision Log Snapshot', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Financial Statements', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Founder Bio', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'IP Register', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Product Roadmap Snapshot', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Restructure Documentation', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'Vendor Contracts Index', type: 'folder', dept: 'Operations', children: [] },
+                        { name: 'README.md', type: 'file', dept: 'Operations' }
                     ] },
                     { name: 'Knowledge Base', type: 'folder', dept: 'Operations', children: [
                         { name: 'KNOWLEDGE_BASE.md', type: 'file', dept: 'Operations' }

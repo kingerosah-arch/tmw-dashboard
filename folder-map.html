@@ -217,9 +217,9 @@
   </header>
 
   <div class="fm-summary">
-    <strong class="fm-summary-num">309</strong> folders ·
-    <strong class="fm-summary-num">353</strong> files —
-    <span class="fm-summary-num">168 md, 52 xlsx, 12 pdf, 11 docx, 8 html, 2 images</span>
+    <strong class="fm-summary-num">329</strong> folders ·
+    <strong class="fm-summary-num">377</strong> files —
+    <span class="fm-summary-num">188 md, 52 xlsx, 12 pdf, 11 docx, 8 html, 2 images</span>
   </div>
 
   <div class="fm-controls">
@@ -253,9 +253,9 @@
   <div class="fm-tree" id="folderTree"></div>
 
   <div class="ds-meta">
-    <span>Generated 2026-05-04 16:55</span>
-    <span>309 folders</span>
-    <span>353 files</span>
+    <span>Generated 2026-05-04 17:55</span>
+    <span>329 folders</span>
+    <span>377 files</span>
   </div>
 </div>
 
@@ -505,14 +505,33 @@ const folderStructure =             { name: 'TrackMyWings', type: 'folder', dept
                         { name: 'mid_fi', type: 'folder', dept: 'Design', children: [] },
                         { name: 'phase_0/ phase_1/ phase_2/ phase_4/ phase_5/ phase_6', type: 'folder', dept: 'Design', children: [] },
                         { name: 'phase_3', type: 'folder', dept: 'Design', children: [
-                            { name: 'audits', type: 'folder', dept: 'Design', children: [
+                            { name: 'audit', type: 'folder', dept: 'Design', children: [
                                 { name: 'A4_sample_assets', type: 'folder', dept: 'Design', children: [] },
                                 { name: 'A1_SCREEN_TAXONOMY_AUDIT.md', type: 'file', dept: 'Design' },
                                 { name: 'A2_DENSITY_SCROLL_AUDIT.md', type: 'file', dept: 'Design' },
                                 { name: 'A3_UX_BOUNDARY_RECOMMENDATION.md', type: 'file', dept: 'Design' },
                                 { name: 'A4_GRAPHICS_GENERATION_AUDIT.md', type: 'file', dept: 'Design' },
                                 { name: 'A5_FRONTEND_DESIGN_QUALITY_BAR.md', type: 'file', dept: 'Design' },
-                                { name: 'PHASE_B_MIDFI_2_0_SPEC_LOCKED.md', type: 'file', dept: 'Design' }
+                                { name: 'PHASE_B_MIDFI_2_0_SPEC_LOCKED.md', type: 'file', dept: 'Design' },
+                                { name: 'S089_AUDIT_CONSOLIDATION.md', type: 'file', dept: 'Design' },
+                                { name: 'S089_FIRST_AUDIT_REPORT.md', type: 'file', dept: 'Design' },
+                                { name: 'S089_RE_AUDIT_REPORT.md', type: 'file', dept: 'Design' }
+                            ] },
+                            { name: 'prototype', type: 'folder', dept: 'Design', children: [
+                                { name: 'wiring_log', type: 'folder', dept: 'Design', children: [
+                                    { name: 'wiring_run_1.json', type: 'file', dept: 'Design' },
+                                    { name: 'wiring_run_2.json', type: 'file', dept: 'Design' },
+                                    { name: 'wiring_verification.md', type: 'file', dept: 'Design' }
+                                ] },
+                                { name: 'ATOM_MOLECULE_COMPOSITION_MAP.md', type: 'file', dept: 'Design' },
+                                { name: 'ATOM_REGISTRY.md', type: 'file', dept: 'Design' },
+                                { name: 'CANONICAL_FLOWS_LIST.md', type: 'file', dept: 'Design' },
+                                { name: 'MOLECULE_ORGANISM_COMPOSITION_MAP.md', type: 'file', dept: 'Design' },
+                                { name: 'ORGANISM_SCREEN_MATRIX.md', type: 'file', dept: 'Design' },
+                                { name: 'PROTOTYPE_REQUIREMENTS.md', type: 'file', dept: 'Design' },
+                                { name: 'SCREEN_CONNECTIVITY_GRAPH.md', type: 'file', dept: 'Design' },
+                                { name: 'TAP_TARGET_DESTINATION_MAP.md', type: 'file', dept: 'Design' },
+                                { name: 'USER_JOURNEY_DEFINITIONS.md', type: 'file', dept: 'Design' }
                             ] },
                             { name: 'reviews', type: 'folder', dept: 'Design', children: [
                                 { name: '1.2_onboarding_screen_1_welcome_review.md', type: 'file', dept: 'Design' },
@@ -546,6 +565,14 @@ const folderStructure =             { name: 'TrackMyWings', type: 'folder', dept
                             { name: 'triage_decisions.md', type: 'file', dept: 'Design' }
                         ] },
                         { name: 'tools', type: 'folder', dept: 'Design', children: [
+                            { name: 'figma_wiring_plugin', type: 'folder', dept: 'Design', children: [
+                                { name: 'data', type: 'folder', dept: 'Design', children: [] },
+                                { name: 'dist', type: 'folder', dept: 'Design', children: [] },
+                                { name: 'src', type: 'folder', dept: 'Design', children: [] },
+                                { name: 'manifest.json', type: 'file', dept: 'Design' },
+                                { name: 'README.md', type: 'file', dept: 'Design' }
+                            ] },
+                            { name: 'build_screen_tracker.py', type: 'file', dept: 'Design' },
                             { name: 'step_6_extractor.py', type: 'file', dept: 'Design' },
                             { name: 'tier3_dispatch.py', type: 'file', dept: 'Design' }
                         ] },
@@ -582,7 +609,30 @@ const folderStructure =             { name: 'TrackMyWings', type: 'folder', dept
                         { name: 'PHASE_0_ENGINEERING_SPEC_DUPLICATE.md', type: 'file', dept: 'Engineering' }
                     ] },
                     { name: 'Codebase', type: 'folder', dept: 'Engineering', children: [
-                        { name: 'V0_TrackMyWings', type: 'folder', dept: 'Engineering', children: [] },
+                        { name: 'V0_TrackMyWings', type: 'folder', dept: 'Engineering', children: [
+                            { name: '_KB', type: 'folder', dept: 'Engineering', children: [
+                                { name: 'Backend_Architecture_Analysis.md', type: 'file', dept: 'Engineering' },
+                                { name: 'Data_Scraper_Pipeline_Analysis.md', type: 'file', dept: 'Engineering' },
+                                { name: 'Flutter_App_Codebase_Analysis.md', type: 'file', dept: 'Engineering' },
+                                { name: 'Frontend_Web_Analysis.md', type: 'file', dept: 'Engineering' },
+                                { name: 'Infrastructure_AWS_Analysis.md', type: 'file', dept: 'Engineering' },
+                                { name: 'KNOWLEDGE_BASE.md', type: 'file', dept: 'Engineering' }
+                            ] },
+                            { name: '_local_pre_clone_archive', type: 'folder', dept: 'Engineering', children: [
+                                { name: 'backend_ts_lambda', type: 'folder', dept: 'Engineering', children: [] },
+                                { name: 'infra_empty', type: 'folder', dept: 'Engineering', children: [] },
+                                { name: 'landing', type: 'folder', dept: 'Engineering', children: [] },
+                                { name: 'mobile_flutter_REFERENCE_ONLY', type: 'folder', dept: 'Engineering', children: [] },
+                                { name: 'scripts_empty', type: 'folder', dept: 'Engineering', children: [] }
+                            ] },
+                            { name: 'backend', type: 'folder', dept: 'Engineering', children: [] },
+                            { name: 'client_app', type: 'folder', dept: 'Engineering', children: [] },
+                            { name: 'client_web', type: 'folder', dept: 'Engineering', children: [] },
+                            { name: 'data_scrapper', type: 'folder', dept: 'Engineering', children: [] },
+                            { name: 'docs', type: 'folder', dept: 'Engineering', children: [] },
+                            { name: 'static_web', type: 'folder', dept: 'Engineering', children: [] },
+                            { name: 'wing-scroll-verse', type: 'folder', dept: 'Engineering', children: [] }
+                        ] },
                         { name: 'Website_Lovable_Experiment', type: 'folder', dept: 'Engineering', children: [
                             { name: 'Lovable_Follow_Up_Prompt.md', type: 'file', dept: 'Engineering' },
                             { name: 'Lovable_Website_Prompt.md', type: 'file', dept: 'Engineering' },

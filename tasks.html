@@ -484,7 +484,7 @@ const activeTasks = [
             { id: '**TMW-189**', task: 'RESTRUCTURE MASTER — Amol exit + Anshul B appointment + ICICI bank + INC-20A + ADT-1 + share transfer + IP assignment + director loan + handover. Drafts at Legal/Restructure_May_2026/. Sub-tasks TMW-…', owner: 'Rohan + Anshul B + Raman', department: 'Legal / Operations', priority: '**CRITICAL**', status: 'Active', deadline: '2026-06-15 (target close)', created: '2026-05-02' },
             { id: 'TMW-190', task: 'Anshul Bansal appointed Additional Director — DSC + DIN + DIR-12 sequence. Document collection from Anshul B → DSC application via Raman → DIR-3 KYC → DIN allotted → BR-02 passed → DIR-12 filed withi…', owner: 'Rohan + Anshul B + Raman', department: 'Legal', priority: 'Critical', status: 'Not Started', deadline: '2026-05-15', created: '2026-05-02' },
             { id: 'TMW-191', task: 'ICICI Current Account opening + ₹1L initial capital deposit Rohan-only via Director Loan (per DEC-115 solo founder + DEC-116 director loan funding; Amol exits per DEC-113) + INC-20A filing within 30…', owner: 'Rohan + Naik + Raman', department: 'Operations / Legal', priority: 'Critical', status: 'Scheduled Thu 2026-05-07 (Naik confirmed visit pulled in by 1 day per founder S…', deadline: '2026-05-07 (account live)', created: '2026-05-02' },
-            { id: 'TMW-192', task: 'ADT-1 Auditor appointment — Raman\'s firm as statutory auditor for FY 2026-27. BR-07 passed → ADT-1 filed before 22-May-2026. Statutory deadline 23-May-2026.', owner: 'Rohan + Raman', department: 'Legal', priority: '**URGENT**', status: 'Not Started', deadline: '2026-05-22', created: '2026-04-30' },
+            { id: 'TMW-192', task: 'ADT-1 Auditor appointment — Raman\'s firm as statutory auditor for FY 2026-27. BR-07 passed → ADT-1 filed before 22-May-2026. Statutory deadline 23-May-2026. GATED ON TMW-225 (INC-22) per Pawan Dua em…', owner: 'Rohan + Raman', department: 'Legal', priority: '**URGENT**', status: 'Not Started — gated on TMW-225', deadline: '2026-05-22', created: '2026-04-30' },
             { id: 'TMW-193', task: 'Amol Krushnat Patil — Resignation + MoU Mutual Termination + Confirmatory IP Assignment + 3yr NCNS Separation Agreement + SH-4 Share Transfer + Final Settlement Acknowledgment + Handover Document del…', owner: 'Rohan + Amol + Anshul B + Raman', department: 'Legal', priority: 'Critical', status: 'Will occur later in restructure window per Rohan 2026-05-05 — not this week. Se…', deadline: '2026-05-31', created: '2026-05-02' },
             { id: 'TMW-194', task: 'Director Loan Agreement (0% interest, on-demand by lender) + Founder-Reimbursable Expenses Schedule populated by Rohan with bills (Part B split into B.1 pre-inc + B.2 post-inc per S095). BR-05 passed…', owner: 'Rohan + Raman', department: 'Finance / Legal', priority: 'High', status: 'Scheduled Thu 2026-05-07 (paired with TMW-191 ICICI visit). Director Loan Agree…', deadline: '2026-05-31', created: '2026-05-02' },
             { id: 'TMW-196', task: 'Power of Attorney in favour of Anshul B (limited, dormant, trigger-activated). Stamped + notarised + registered with Sub-Registrar. Sealed-envelope custody with spouse + Anshul B.', owner: 'Rohan + Anshul B', department: 'Legal', priority: 'Medium', status: 'Will be done later in restructure window per Rohan 2026-05-05 — POA stamping +…', deadline: '2026-06-15', created: '2026-05-02' },
@@ -501,6 +501,7 @@ const activeTasks = [
             { id: 'TMW-211', task: 'Build tmw-decision-cascade-checker skill — when a new DEC supersedes prior structure (e.g., DEC-115 superseding 62/38), auto-detect downstream files that still carry pre-supersession data and surface…', owner: 'Rohan + Claude', department: 'Operations', priority: 'Low', status: 'Not Started', deadline: 'Phase 2/3', created: '2026-05-04' },
             { id: 'TMW-216', task: 'V1 Flutter mobile build (fresh, post-screens). Scaffold a new Flutter app from scratch in the empty trackmywings/client_app GitHub repo, against (a) the Figma mid-fi/high-fi outputs from TMW-143 + TM…', owner: 'Rohan + Claude', department: 'Engineering / Product', priority: 'High', status: 'Not Started — UNBLOCKED 2026-05-04, awaiting prototype validation', deadline: '2026-07-15 (target launch)', created: '2026-05-04' },
             { id: '**TMW-224**', task: 'TMW-220 V2 Aero Nocturne Phase 0 probe — verdict pending. Per DEC-124. Founder review on Design/Stitch/Outputs/v2_phase_0/REVIEW.html (5 base screens + 12 variants on Stitch project 89339254206616805…', owner: 'Rohan', department: 'Design', priority: 'High', status: 'Awaiting founder verdict on REVIEW.html', deadline: '2026-05-13 (verdict target T+1w)', created: '2026-05-06' },
+            { id: '**TMW-225**', task: 'INC-22 filing — registered office verification under § 12(2) Companies Act. Required within 30 days of incorporation (deadline 2026-05-23, T-16 from today). Required artifacts: (a) rent agreement (al…', owner: 'Rohan + Raman + Pawan', department: 'Legal', priority: '**CRITICAL**', status: 'Not Started — nameplate + photos pending', deadline: '**2026-05-23**', created: '2026-05-07' },
             { id: 'TMW-008', task: 'Populate Sales/Pipeline with CRM structure', owner: 'Rohan', department: 'Sales', priority: 'Low', status: 'Not Started', deadline: '—', created: '2026-03-13' },
             { id: 'TMW-010', task: 'Review and update 60-Month Operating Plan', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'WIP', deadline: '—', created: '2026-03-13' },
             { id: 'TMW-038', task: 'Update website to new brand guidelines (staging site)', owner: 'Rohan + Ruchi', department: 'Design', priority: 'Medium', status: 'Blocked', deadline: 'Post-inc', created: '2026-03-17' },
@@ -537,6 +538,8 @@ const activeTasks = [
             { id: '**TMW-220**', task: 'High-fi sprint S092 BUILT 142/142 but FOUNDER REJECTED — PAUSED, frames preserved per DEC-122. S091 plan series shipped 41 plans + audit + master prompts (composite 4.86/5). S092 (2026-05-05) execute…', owner: 'Rohan + Claude', department: 'Design / Operations', priority: '**CRITICAL**', status: 'S094 (2026-05-06): V2 Stitch pivot Phase 0 probe SHIPPED per DEC-124. New TMW V…', deadline: 'Pending verdict', created: '2026-05-05' }
         ];
 const completedTasks = [
+            { id: 'TMW-164', task: 'Dashboard auth hardening — closed as accepted risk per founder 2026-05-07. Only Rohan has the URL; client-side gate is brute-forceable but blast radius is bounded by URL secrecy. Hardcoded PAT in reb…', owner: 'Rohan', department: 'Operations', completed: '2026-05-07' },
+            { id: 'TMW-223', task: 'DEC-123 8-layer integrity pattern retrofitted across 4 sibling rebuild scripts (claude_usage / finance_mis / folder_map / founder_control_panel). Audit revealed layers 1-4 (template-side) N/A — these…', owner: 'Claude + Rohan', department: 'Operations', completed: '2026-05-07' },
             { id: 'TMW-219', task: 'Adhi\'s Stitch 3× variant review folded into TMW-220 plan-v41 (12 design patterns extracted to memory).', owner: 'Rohan + Claude', department: 'Design', completed: '2026-05-05' },
             { id: 'TMW-221', task: 'TMW-220 sprint kickoff trigger — superseded; S092 ran but founder rejected (see TMW-220 / DEC-122).', owner: 'Rohan', department: 'Operations', completed: '2026-05-05' },
             { id: 'TMW-209', task: 'ICICI letterhead values sourced from MCA portal + 5 letterhead docs filled + printed on company letterhead. Unblocked TMW-191 + TMW-194.', owner: 'Rohan', department: 'Legal', completed: '2026-05-05' },
@@ -808,17 +811,29 @@ const backlogTasks = [
             { id: 'TMW-B04', task: 'Document engineering architecture (ADR format)', owner: 'Amol', department: 'Engineering', priority: 'Medium' },
             { id: 'TMW-B05', task: 'Create onboarding docs for new team members', owner: 'Rohan', department: 'People', priority: 'Low' },
             { id: 'TMW-025', task: 'Complete Google Ads campaign setup — upload logo, bid strategy, budget, payment, launch', owner: 'Rohan', department: 'Marketing', priority: 'Medium' },
-            { id: 'TMW-033', task: 'Review insurance guide and decide on coverage', owner: 'Rohan', department: 'Legal', priority: 'Low' },
-            { id: 'TMW-164', task: 'Harden tmw-dashboard auth. Current model is a client-side JS gate (SHA256 password literal in published HTML, brute-forceable in seconds). Move to real auth: (a) make kingerosah-arch/tmw-dashboard re…', owner: 'Rohan + Amol', department: 'Operations', priority: 'Low' },
-            { id: 'TMW-223', task: 'Retrofit DEC-123 8-layer integrity pattern across sibling rebuild scripts: rebuild_claude_usage.py, rebuild_finance_mis.py, rebuild_folder_map.py, rebuild_founder_control_panel.py. Each likely carrie…', owner: 'Claude + Rohan', department: 'Operations', priority: 'Medium' }
+            { id: 'TMW-033', task: 'Review insurance guide and decide on coverage', owner: 'Rohan', department: 'Legal', priority: 'Low' }
         ];
 const selfLearningTasks = [
-            { id: 'SL-001', task: 'Advanced Claude API prompt engineering', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' },
+            { id: 'SL-001', task: 'Advanced Claude API prompt engineering', owner: 'Rohan', department: '', priority: 'Medium', status: 'Done 2026-05-07', deadline: '—' },
             { id: 'SL-002', task: 'Google Garage — Digital Marketing course', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' },
             { id: 'SL-003', task: 'Google Garage — SEO course', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' },
-            { id: 'SL-004', task: 'Claude SEO skill — learn and apply', owner: 'Rohan', department: '', priority: 'Medium', status: 'Not Started', deadline: '—' }
+            { id: 'SL-004', task: 'Claude SEO skill — learn and apply', owner: 'Rohan', department: '', priority: 'Medium', status: 'Done 2026-05-07', deadline: '—' }
         ];
 const activityFeed = [
+            {
+                        "date": "2026-05-07",
+                        "task_id": "TMW-164",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "Dashboard auth hardening \u2014 closed as ..."
+            },
+            {
+                        "date": "2026-05-07",
+                        "task_id": "TMW-223",
+                        "event": "completed",
+                        "department": "Operations",
+                        "task_name": "DEC-123 8-layer integrity pattern ret..."
+            },
             {
                         "date": "2026-05-05",
                         "task_id": "TMW-222",
@@ -944,20 +959,6 @@ const activityFeed = [
                         "event": "completed",
                         "department": "Marketing",
                         "task_name": "Marketing/Content folder population \u2014..."
-            },
-            {
-                        "date": "2026-05-01",
-                        "task_id": "TMW-187",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "qr-code glyph gap (6.4) \u2014 folded into..."
-            },
-            {
-                        "date": "2026-05-01",
-                        "task_id": "TMW-186",
-                        "event": "completed",
-                        "department": "Design",
-                        "task_name": "6.10 airline badges as gold rectangle..."
             }
 ];
 const calendarEvents = [];
@@ -1069,8 +1070,8 @@ const analyticsData = {
                         },
                         {
                                     "date": "2026-05-07",
-                                    "completed": 1,
-                                    "added": 264
+                                    "completed": 3,
+                                    "added": 267
                         }
             ],
             "weeklyVelocity": [
@@ -1091,14 +1092,14 @@ const analyticsData = {
                         },
                         {
                                     "week": "2026-05-04",
-                                    "completed": 18,
-                                    "added": 271
+                                    "completed": 20,
+                                    "added": 274
                         }
             ],
             "statusDistribution": [
                         {
                                     "status": "Not Started",
-                                    "count": 25
+                                    "count": 24
                         },
                         {
                                     "status": "Blocked",
@@ -1118,6 +1119,10 @@ const analyticsData = {
                         },
                         {
                                     "status": "**Scheduled Thu 2026-05-07** (Naik confirmed visit pulled in by 1 day per founder S095). Letterhead docs printed; Rohan will sign + seal at the visit. INC-20A 30-day window starts on deposit (target close 2026-06-06).",
+                                    "count": 1
+                        },
+                        {
+                                    "status": "Not Started \u2014 gated on TMW-225",
                                     "count": 1
                         },
                         {
@@ -1169,6 +1174,10 @@ const analyticsData = {
                                     "count": 1
                         },
                         {
+                                    "status": "Not Started \u2014 nameplate + photos pending",
+                                    "count": 1
+                        },
+                        {
                                     "status": "Pre-flight clean \u2014 ready to send",
                                     "count": 1
                         },
@@ -1213,14 +1222,20 @@ const analyticsData = {
                                     "overdue": 0
                         },
                         {
+                                    "owner": "Pawan",
+                                    "active": 1,
+                                    "high_priority": 0,
+                                    "overdue": 0
+                        },
+                        {
                                     "owner": "Raman",
-                                    "active": 8,
+                                    "active": 9,
                                     "high_priority": 2,
                                     "overdue": 0
                         },
                         {
                                     "owner": "Rohan",
-                                    "active": 50,
+                                    "active": 51,
                                     "high_priority": 16,
                                     "overdue": 0
                         },
@@ -1306,12 +1321,12 @@ const analyticsData = {
                         },
                         {
                                     "department": "Legal",
-                                    "active": 9,
+                                    "active": 10,
                                     "wip": 1,
-                                    "not_started": 4,
+                                    "not_started": 3,
                                     "overdue": 0,
-                                    "stale": 3,
-                                    "avg_age_days": 14
+                                    "stale": 2,
+                                    "avg_age_days": 13
                         },
                         {
                                     "department": "Legal / Finance",
@@ -1514,12 +1529,6 @@ const analyticsData = {
                                     "age_days": 14
                         },
                         {
-                                    "id": "TMW-192",
-                                    "task": "ADT-1 Auditor appointment \u2014 Raman's firm as statutory auditor for FY 2026-27. BR-07 passed \u2192 ADT-1 filed before 22-May-2026. **Statutory deadline 23-May-2026.**",
-                                    "department": "Legal",
-                                    "age_days": 7
-                        },
-                        {
                                     "id": "TMW-168",
                                     "task": "Build 5 backlog skills on top of Legal Registry (S083): `nda-counterparty-tracker`, `dpdp-compliance-tracker` (HIGH \u2014 DPDP Act 2023), `employment-agreement-tracker`, `vendor-agreement-tracker`, `tmw-status-snapshot`.",
                                     "department": "Operations",
@@ -1540,13 +1549,13 @@ const analyticsData = {
             ],
             "deadlineStats": {
                         "overdue": 0,
-                        "due_3days": 34,
+                        "due_3days": 35,
                         "deadline_hit_rate": "0%"
             },
             "burndownData": [
                         {
                                     "date": "2026-05-07",
-                                    "remaining": 54
+                                    "remaining": 55
                         },
                         {
                                     "date": "2026-05-06",
@@ -1602,10 +1611,10 @@ const analyticsData = {
                         }
             ],
             "velocity": {
-                        "today": 1,
-                        "this_week": 18,
+                        "today": 3,
+                        "this_week": 20,
                         "overdue": 0,
-                        "stale": 19
+                        "stale": 18
             }
 };
 

@@ -482,7 +482,7 @@ const heroMilestones = [
 ];
 const activeTasks = [
             { id: '**TMW-189**', task: 'RESTRUCTURE MASTER (umbrella) — Amol exit + Anshul B appointment + ICICI + INC-20A + INC-22 + ADT-1 + share transfer + IP assignment + director loan + handover. Sub-tasks TMW-190 → TMW-200 + TMW-225.', owner: 'Rohan + Anshul B + Raman', department: 'Legal / Ops', priority: '**CRITICAL**', status: 'Active', deadline: '2026-06-15 (target close)', created: '2026-05-02' },
-            { id: 'TMW-190', task: 'Anshul B Additional Director — DSC + DIN + DIR-3 KYC + BR-02 + DIR-12 within 30d. MUST precede Amol DIR-12 (§ 149(1)(a)).', owner: 'Rohan + Anshul B + Raman', department: 'Legal', priority: 'Critical', status: 'Not Started — DSC-gated', deadline: '2026-05-15', created: '2026-05-02' },
+            { id: 'TMW-190', task: 'Anshul B Additional Director — DSC ✅ (5/9) + DIR-3 KYC fee ✅ (5/9) + DIN expected Tue 5/12 → BR-02 + DIR-12. MUST precede Amol DIR-12 (§ 149(1)(a)).', owner: 'Rohan + Anshul B + Raman', department: 'Legal', priority: 'Critical', status: 'In Progress — DIN-gated', deadline: '2026-05-15', created: '2026-05-02' },
             { id: 'TMW-191', task: 'ICICI Current Account opening + paid-up cap + DL principal. Sole signatory: Rohan. Documents signed 2026-05-07; account live target Mon 2026-05-11; Tue 2026-05-12 deposits per DEC-126: Rohan ₹62k pai…', owner: 'Rohan + Naik + Raman + Amol', department: 'Operations / Legal', priority: 'Critical', status: 'Account live Mon; deposits Tue', deadline: '2026-05-12 (deposits live); INC-20A close target ~2026-06-12', created: '2026-05-02' },
             { id: 'TMW-192', task: 'ADT-1 Auditor appointment — Raman\'s firm as statutory auditor FY 2026-27 (BR-07). Raman handles filing end-to-end; no Rohan action required other than INC-22 close (TMW-225). Gated on TMW-225 per Paw…', owner: 'Raman', department: 'Legal', priority: 'High', status: 'Raman owns; gated on TMW-225', deadline: '**2026-05-23**', created: '2026-04-30' },
             { id: 'TMW-193', task: 'Amol exit bundle — Resignation + MoU Termination + IP Assignment + 3yr NCNS + SH-4 Share Transfer + Final Settlement + Handover. DIR-12 sequenced AFTER Anshul B DIR-12 effective. Notes (S098 2026-05-…', owner: 'Rohan + Amol + Anshul B + Raman', department: 'Legal', priority: 'Critical', status: 'Sequenced post-TMW-190', deadline: '2026-05-31', created: '2026-05-02' },
@@ -527,7 +527,7 @@ const activeTasks = [
             { id: '**TMW-220**', task: 'High-fi sprint — S092 built 142/142 in Figma but founder rejected aesthetically. Paused per DEC-122 (frames preserved on Page-5 2867:39). S094 V2 Stitch Aero Nocturne pivot Phase 0 shipped per DEC-12…', owner: 'Rohan + Claude', department: 'Design / Ops', priority: '**CRITICAL**', status: 'Paused — verdict via TMW-224', deadline: 'TBD post-verdict', created: '2026-05-05' }
         ];
 const completedTasks = [
-            { id: 'TMW-210', task: 'Anshul B DSC application — confirmed complete 2026-05-08; DSC token expected delivery Mon 2026-05-11. Unblocks TMW-190 Anshul B DIR-12.', owner: 'Rohan + Anshul B + Raman', department: 'Legal', completed: '2026-05-08' },
+            { id: 'TMW-210', task: 'Anshul B DSC — DSC CREATED 2026-05-09 (ahead of Mon 5/11 expected). DIR-3 KYC fee ₹550 paid by Rohan (founder OOP, DL B.2 row 17). DIN expected by Tue 2026-05-12. Unblocks TMW-190 DIR-12 chain.', owner: 'Rohan + Anshul B + Raman', department: 'Legal', completed: '2026-05-09' },
             { id: 'TMW-120', task: 'T-15 → T+7 content backlog stockpile — 55 stealth-safe drafts SHIPPED S098 2026-05-08 at Marketing/Content/Pre-Launch_Stockpile_2026-07-15/ across 12 platforms (Twitter 10 · LinkedIn 8 · YouTube Shor…', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-05-08' },
             { id: 'TMW-168', task: 'Build 5 backlog skills on top of Legal Registry — 5/5 SHIPPED S098 2026-05-08: SKILL.md + Python helper + JSONL state per skill (where applicable). nda-counterparty-tracker (P1) · dpdp-compliance-tra…', owner: 'Claude', department: 'Operations', completed: '2026-05-08' },
             { id: 'TMW-179', task: 'Per-platform marketing drafting helpers — 4/4 SHIPPED S098 2026-05-08: ~/.claude/skills/twitter-thread-helper/ (249 lines) · linkedin-post-helper/ (275 lines) · reddit-post-helper/ (293 lines) · yout…', owner: 'Rohan + Claude', department: 'Marketing', completed: '2026-05-08' },
@@ -829,7 +829,7 @@ const activityFeed = [
                         "task_id": "TMW-210",
                         "event": "completed",
                         "department": "Legal",
-                        "task_name": "Anshul B DSC application \u2014 confirmed ..."
+                        "task_name": "Anshul B DSC \u2014 **DSC CREATED 2026-05-..."
             },
             {
                         "date": "2026-05-08",
@@ -1068,12 +1068,12 @@ const analyticsData = {
                         },
                         {
                                     "date": "2026-05-08",
-                                    "completed": 7,
+                                    "completed": 6,
                                     "added": 2
                         },
                         {
                                     "date": "2026-05-09",
-                                    "completed": 1,
+                                    "completed": 2,
                                     "added": 281
                         }
             ],
@@ -1129,7 +1129,7 @@ const analyticsData = {
                                     "count": 1
                         },
                         {
-                                    "status": "Not Started \u2014 DSC-gated",
+                                    "status": "In Progress \u2014 DIN-gated",
                                     "count": 1
                         },
                         {
@@ -1533,7 +1533,7 @@ const analyticsData = {
                         }
             ],
             "velocity": {
-                        "today": 1,
+                        "today": 2,
                         "this_week": 35,
                         "overdue": 0,
                         "stale": 9

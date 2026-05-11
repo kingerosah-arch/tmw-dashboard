@@ -481,11 +481,11 @@ const heroMilestones = [
             }
 ];
 const activeTasks = [
-            { id: '**TMW-189**', task: 'RESTRUCTURE MASTER (umbrella) — Amol exit + Anshul B appointment + ICICI + INC-20A + INC-22 + ADT-1 + share transfer + IP assignment + director loan + handover. Sub-tasks TMW-190 → TMW-200 + TMW-225.', owner: 'Rohan + Anshul B + Raman', department: 'Legal / Ops', priority: '**CRITICAL**', status: 'Active', deadline: '2026-06-15 (target close)', created: '2026-05-02' },
+            { id: '**TMW-189**', task: 'RESTRUCTURE MASTER (umbrella) — Amol exit + Anshul B appointment + ICICI + INC-20A + INC-22 + ADT-1 + share transfer + IP assignment + director loan + handover. Sub-tasks TMW-190 → TMW-200 + TMW-225.…', owner: 'Rohan + Anshul B + Raman', department: 'Legal / Ops', priority: '**CRITICAL**', status: 'Active — lawyer pack-back due 2026-05-16', deadline: '2026-06-15 (target close)', created: '2026-05-02' },
             { id: 'TMW-190', task: 'Anshul B Additional Director — DSC ✅ (5/9) + DIR-3 KYC fee ✅ (5/9) + DIN expected Tue 5/12 → BR-02 + DIR-12. MUST precede Amol DIR-12 (§ 149(1)(a)).', owner: 'Rohan + Anshul B + Raman', department: 'Legal', priority: 'Critical', status: 'In Progress — DIN-gated', deadline: '2026-05-15', created: '2026-05-02' },
-            { id: 'TMW-191', task: 'ICICI Current Account opening + paid-up cap + DL principal. Sole signatory: Rohan. Documents signed 2026-05-07; account live target Mon 2026-05-11; Tue 2026-05-12 deposits per DEC-126: Rohan ₹62k pai…', owner: 'Rohan + Naik + Raman + Amol', department: 'Operations / Legal', priority: 'Critical', status: 'Account live Mon; deposits Tue', deadline: '2026-05-12 (deposits live); INC-20A close target ~2026-06-12', created: '2026-05-02' },
+            { id: 'TMW-191', task: 'ICICI Current Account opening + paid-up cap + DL principal. Sole signatory: Rohan. Documents signed 2026-05-07; account live target Mon 2026-05-11; Tue 2026-05-12 deposits per DEC-126: Rohan ₹62k pai…', owner: 'Rohan + Naik + Raman + Amol', department: 'Operations / Legal', priority: 'Critical', status: 'Form EOD Mon · deposits Tue', deadline: '2026-05-12 (deposits live); INC-20A close target ~2026-06-12', created: '2026-05-02' },
             { id: 'TMW-192', task: 'ADT-1 Auditor appointment — Raman\'s firm as statutory auditor FY 2026-27 (BR-07). Raman handles filing end-to-end; no Rohan action required other than INC-22 close (TMW-225). Gated on TMW-225 per Paw…', owner: 'Raman', department: 'Legal', priority: 'High', status: 'Raman owns; gated on TMW-225', deadline: '**2026-05-23**', created: '2026-04-30' },
-            { id: 'TMW-193', task: 'Amol exit bundle — Resignation + MoU Termination + IP Assignment + 3yr NCNS + SH-4 Share Transfer + Final Settlement + Handover. DIR-12 sequenced AFTER Anshul B DIR-12 effective. Notes (S098 2026-05-…', owner: 'Rohan + Amol + Anshul B + Raman', department: 'Legal', priority: 'Critical', status: 'Sequenced post-TMW-190', deadline: '2026-05-31', created: '2026-05-02' },
+            { id: 'TMW-193', task: 'Amol exit bundle — Resignation + MoU Termination + IP Assignment + 3yr NCNS + SH-4 Share Transfer + Final Settlement + Handover. DIR-12 sequenced AFTER Anshul B DIR-12 effective. Notes (S098 2026-05-…', owner: 'Rohan + Amol + Anshul B + Raman', department: 'Legal', priority: 'Critical', status: 'Sequenced — Amol pack arriving 2026-05-16 from lawyer', deadline: '2026-05-31', created: '2026-05-02' },
             { id: 'TMW-194', task: 'Director Loan Agreement (0% interest, on-demand) + Expense Schedule (B.1 pre-inc + B.2 post-inc; running ≥ ₹17,996.46 incl. S098 ₹941.46 INC-22 nameplate). Signed 2026-05-07; Tue 2026-05-12 = ₹1L pri…', owner: 'Rohan + Raman', department: 'Finance / Legal', priority: 'High', status: 'Signed; Tue principal drawdown', deadline: '2026-05-31', created: '2026-05-02' },
             { id: 'TMW-196', task: 'POA in favour of Anshul B (limited, dormant, trigger-activated). Stamped + notarised + registered. Sealed-envelope custody with spouse + Anshul B.', owner: 'Rohan + Anshul B', department: 'Legal', priority: 'Medium', status: 'Sequenced post-TMW-190', deadline: '2026-06-15', created: '2026-05-02' },
             { id: 'TMW-199', task: 'Email + credential migration — Workspace suspend (Amol/Adhi/Ruchi) + GitHub org transfer + AWS root rotation + IAM cleanup + Mapbox/Razorpay/Stripe/Cloudflare under Company. Checklist at Legal/Restru…', owner: 'Rohan', department: 'Operations', priority: 'High', status: 'Sequenced post-TMW-193', deadline: '2026-05-31', created: '2026-05-02' },
@@ -493,9 +493,9 @@ const activeTasks = [
             { id: 'TMW-206', task: 'Decision: git init ~/tmw? Recommendation: yes, with .gitignore excluding Engineering codebase + secrets. .gitignore pre-staged at ~/tmw/.gitignore S098 2026-05-08 (Engineering codebase + secrets + iC…', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Deferred — post-Amol exit; .gitignore staged', deadline: '2026-05-31', created: '2026-05-03' },
             { id: 'TMW-207', task: 'Install zellij (or tmux) + create tmw saved layout for 5-pane setup (T1 strategic / T2 code worktree / T3 design worktree / T4 local Ollama / T5 monitoring). Per v2.1 Dim 7. Blocked on TMW-206.', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Blocked on TMW-206', deadline: '2026-06-15', created: '2026-05-03' },
             { id: 'TMW-216', task: 'V1 Flutter mobile build (fresh) in trackmywings/client_app against Figma mid-fi/high-fi + current Go backend + Mapbox (DEC-073). V0 reference at _local_pre_clone_archive/mobile_flutter_REFERENCE_ONLY…', owner: 'Rohan + Claude', department: 'Eng / Product', priority: 'High', status: 'Blocked on TMW-220/224 verdict', deadline: '2026-08-15 (launch)', created: '2026-05-04' },
-            { id: '**TMW-224**', task: 'Methodology + DESIGN.md v2.0 LOCKED 2026-05-11 (DEC-142 + DEC-143 + DEC-144 + DEC-145): single-screen craft + Open Design (direction probe ONLY per DEC-143) + Stitch + Figma + FE↔BE concurrent specs.…', owner: 'Rohan + Claude', department: 'Design', priority: '**CRITICAL**', status: 'Active — hybrid re-probe in flight', deadline: 'TBD post-first-screen-ship', created: '2026-05-06' },
-            { id: '**TMW-225**', task: 'INC-22 registered office verification under § 12(2) Companies Act. Artifacts: rent agreement ✅ + NOC ✅ + nameplate design ✅ + nameplate fabricated + delivered ✅ + 3 photos captured + saved 2026-05-08…', owner: 'Rohan + Raman + Pawan', department: 'Legal', priority: '**CRITICAL**', status: 'Photos in; ready to send Pawan/Raman', deadline: '**2026-05-23**', created: '2026-05-07' },
-            { id: 'TMW-227', task: 'BR-22 post-restructure ratification — narrowed scope per DEC-126. DRAFT SHIPPED S098 2026-05-08 appended to Legal/Restructure/03_Board_Resolutions/Board_Resolutions_Pack.md as MEETING #3 (BR-22 with…', owner: 'Rohan + Anshul B + Raman', department: 'Legal', priority: 'Medium', status: 'Draft ready; review by Anshul ji + Raman; pass at Meeting #3 post-2026-05-31', deadline: '2026-06-15', created: '2026-05-08' },
+            { id: '**TMW-224**', task: 'Methodology + DESIGN.md v2.0 LOCKED 2026-05-11 (DEC-142 + DEC-143 + DEC-144 + DEC-145): single-screen craft + Open Design (direction probe ONLY per DEC-143) + Stitch + Figma + FE↔BE concurrent specs.…', owner: 'Rohan + Claude', department: 'Design', priority: '**CRITICAL**', status: 'Active — Stitch generation pending founder go-signal', deadline: 'TBD post-first-screen-ship', created: '2026-05-06' },
+            { id: '**TMW-225**', task: 'INC-22 registered office verification under § 12(2) Companies Act. Artifacts complete: signed rent agreement ✅ (Legal/Incorporation/Rent Agreement/Active/TMW_Rent_Agreement_Signed_2026-05-11.pdf) + s…', owner: 'Rohan + Raman + Pawan', department: 'Legal', priority: '**CRITICAL**', status: 'Founder drafting email today w/ INC-22 pack (decoupled from bank statement)', deadline: '**2026-05-23**', created: '2026-05-07' },
+            { id: 'TMW-227', task: 'BR-22 post-restructure ratification — narrowed scope per DEC-126. DRAFT SHIPPED S098 2026-05-08 appended to Legal/Restructure/03_Board_Resolutions/Board_Resolutions_Pack.md as MEETING #3 (BR-22 with…', owner: 'Rohan + Anshul B + Raman', department: 'Legal', priority: 'Medium', status: 'Refined version in 2026-05-16 lawyer pack-back; pass at Meeting #3 post-2026-05…', deadline: '2026-06-15', created: '2026-05-08' },
             { id: 'TMW-010', task: 'Review + update 60-Month Operating Plan', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'WIP', deadline: 'Quarterly', created: '2026-03-13' },
             { id: 'TMW-038', task: 'Update website to new brand guidelines (staging site). Brand metadata layer shipped S099+ in V0_NextJS app/layout.tsx — full Aero Nocturne theme (#0B0F14), Open Graph + Twitter card + viewport + cano…', owner: 'Rohan + Claude', department: 'Design', priority: 'Medium', status: 'Metadata shipped · visual brand-pass blocked on TMW-224 verdict', deadline: 'Post-inc', created: '2026-03-17' },
             { id: 'TMW-048', task: 'Submit TrackMyWings to startup directories (18 directories, kit ready)', owner: 'Rohan', department: 'Marketing', priority: 'Medium', status: 'Blocked', deadline: 'Post-inc', created: '2026-03-18' },
@@ -1110,10 +1110,6 @@ const analyticsData = {
                                     "count": 3
                         },
                         {
-                                    "status": "Sequenced post-TMW-190",
-                                    "count": 2
-                        },
-                        {
                                     "status": "WIP",
                                     "count": 2
                         },
@@ -1126,7 +1122,7 @@ const analyticsData = {
                                     "count": 2
                         },
                         {
-                                    "status": "Active",
+                                    "status": "Active \u2014 lawyer pack-back due 2026-05-16",
                                     "count": 1
                         },
                         {
@@ -1134,7 +1130,7 @@ const analyticsData = {
                                     "count": 1
                         },
                         {
-                                    "status": "Account live Mon; deposits Tue",
+                                    "status": "Form EOD Mon \u00b7 deposits Tue",
                                     "count": 1
                         },
                         {
@@ -1142,7 +1138,15 @@ const analyticsData = {
                                     "count": 1
                         },
                         {
+                                    "status": "Sequenced \u2014 Amol pack arriving 2026-05-16 from lawyer",
+                                    "count": 1
+                        },
+                        {
                                     "status": "Signed; Tue principal drawdown",
+                                    "count": 1
+                        },
+                        {
+                                    "status": "Sequenced post-TMW-190",
                                     "count": 1
                         },
                         {
@@ -1166,15 +1170,15 @@ const analyticsData = {
                                     "count": 1
                         },
                         {
-                                    "status": "Active \u2014 hybrid re-probe in flight",
+                                    "status": "Active \u2014 Stitch generation pending founder go-signal",
                                     "count": 1
                         },
                         {
-                                    "status": "Photos in; ready to send Pawan/Raman",
+                                    "status": "Founder drafting email today w/ INC-22 pack (decoupled from bank statement)",
                                     "count": 1
                         },
                         {
-                                    "status": "**Draft ready; review by Anshul ji + Raman; pass at Meeting #3 post-2026-05-31**",
+                                    "status": "Refined version in 2026-05-16 lawyer pack-back; pass at Meeting #3 post-2026-05-31",
                                     "count": 1
                         },
                         {

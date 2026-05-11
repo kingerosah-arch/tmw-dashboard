@@ -493,7 +493,7 @@ const activeTasks = [
             { id: 'TMW-206', task: 'Decision: git init ~/tmw? Recommendation: yes, with .gitignore excluding Engineering codebase + secrets. .gitignore pre-staged at ~/tmw/.gitignore S098 2026-05-08 (Engineering codebase + secrets + iC…', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Deferred — post-Amol exit; .gitignore staged', deadline: '2026-05-31', created: '2026-05-03' },
             { id: 'TMW-207', task: 'Install zellij (or tmux) + create tmw saved layout for 5-pane setup (T1 strategic / T2 code worktree / T3 design worktree / T4 local Ollama / T5 monitoring). Per v2.1 Dim 7. Blocked on TMW-206.', owner: 'Rohan', department: 'Operations', priority: 'Medium', status: 'Blocked on TMW-206', deadline: '2026-06-15', created: '2026-05-03' },
             { id: 'TMW-216', task: 'V1 Flutter mobile build (fresh) in trackmywings/client_app against Figma mid-fi/high-fi + current Go backend + Mapbox (DEC-073). V0 reference at _local_pre_clone_archive/mobile_flutter_REFERENCE_ONLY…', owner: 'Rohan + Claude', department: 'Eng / Product', priority: 'High', status: 'Blocked on TMW-220/224 verdict', deadline: '2026-08-15 (launch)', created: '2026-05-04' },
-            { id: '**TMW-224**', task: 'TMW-220 V2 Aero Nocturne Phase 0 probe — Branch D founder verdict 2026-05-10: none of the 5 base + 12 variants land; rejected all. Fresh design exploration required. Next gate: design-pain inventory…', owner: 'Rohan', department: 'Design', priority: '**CRITICAL**', status: 'Branch D rejected — fresh exploration needed (DEC-141)', deadline: '2026-05-17 (revisit window close)', created: '2026-05-06' },
+            { id: '**TMW-224**', task: 'Methodology LOCKED 2026-05-11 (DEC-142): single-screen craft + Open Design tandem (direction probe + polish layer) + Stitch + Figma + FE↔BE concurrent specs. First screen: HM1 Home Dashboard. Per-scr…', owner: 'Rohan + Claude', department: 'Design', priority: '**CRITICAL**', status: 'Methodology locked; HM1 kickoff prep in flight', deadline: 'TBD post-first-screen-ship', created: '2026-05-06' },
             { id: '**TMW-225**', task: 'INC-22 registered office verification under § 12(2) Companies Act. Artifacts: rent agreement ✅ + NOC ✅ + nameplate design ✅ + nameplate fabricated + delivered ✅ + 3 photos captured + saved 2026-05-08…', owner: 'Rohan + Raman + Pawan', department: 'Legal', priority: '**CRITICAL**', status: 'Photos in; ready to send Pawan/Raman', deadline: '**2026-05-23**', created: '2026-05-07' },
             { id: 'TMW-227', task: 'BR-22 post-restructure ratification — narrowed scope per DEC-126. DRAFT SHIPPED S098 2026-05-08 appended to Legal/Restructure/03_Board_Resolutions/Board_Resolutions_Pack.md as MEETING #3 (BR-22 with…', owner: 'Rohan + Anshul B + Raman', department: 'Legal', priority: 'Medium', status: 'Draft ready; review by Anshul ji + Raman; pass at Meeting #3 post-2026-05-31', deadline: '2026-06-15', created: '2026-05-08' },
             { id: 'TMW-010', task: 'Review + update 60-Month Operating Plan', owner: 'Rohan', department: 'Finance', priority: 'Medium', status: 'WIP', deadline: 'Quarterly', created: '2026-03-13' },
@@ -520,7 +520,7 @@ const activeTasks = [
             { id: 'TMW-154', task: 'Apply for startup funding — Startup India, grants, angel/seed — run in parallel post bank account', owner: 'Rohan', department: 'Finance / Strategy', priority: 'Medium', status: 'Not Started', deadline: 'Post TMW-151', created: '2026-04-23' },
             { id: 'TMW-217', task: 'Run TMW Prototype Wiring plugin in Figma Desktop. Plugin bundle ready at Design/App Screens/tools/figma_wiring_plugin/. Iterates 838 hotspots → applies ~617 reactions (221 architectural exclusions).', owner: 'Rohan', department: 'Design / Eng', priority: 'High', status: 'Deferred indefinitely', deadline: '2026-05-11', created: '2026-05-04' },
             { id: 'TMW-218', task: 'Library v15 backlog patches — 8 candidates: gift glyph · country flag sprite · browser-chrome-bar · stat-tile widget variant · tab-bar-top skeleton-state · loader/spinner · surface/map/canvas alias ·…', owner: 'Rohan + Claude', department: 'Design', priority: 'Medium', status: 'Not Started', deadline: '2026-06-15', created: '2026-05-04' },
-            { id: '**TMW-220**', task: 'High-fi sprint — S092 built 142/142 in Figma but founder rejected aesthetically. Paused per DEC-122 (frames preserved on Page-5 2867:39). S094 V2 Stitch Aero Nocturne pivot Phase 0 shipped per DEC-12…', owner: 'Rohan + Claude', department: 'Design / Ops', priority: '**CRITICAL**', status: 'Paused — verdict via TMW-224', deadline: 'TBD post-verdict', created: '2026-05-05' }
+            { id: '**TMW-220**', task: 'High-fi sprint REFRAMED 2026-05-11 per DEC-142 — per-screen craft pipeline (Open Design direction probe + Stitch generation + Figma assembly + Open Design polish + FE↔BE concurrent specs) starting wi…', owner: 'Rohan + Claude', department: 'Design / Ops', priority: '**CRITICAL**', status: 'Active — HM1 first-screen kickoff prep', deadline: 'TBD per Q4 pace empirical signal', created: '2026-05-05' }
         ];
 const completedTasks = [
             { id: 'TMW-008', task: 'CANCELLED 2026-05-10 — Sales/Pipeline CRM structure killed permanently per S101 Q41. No need pre-launch (DEC-067 stealth deprioritization superseded by permanent kill). Revisit post-launch only if CR…', owner: 'Rohan', department: 'Sales', completed: '2026-05-10' },
@@ -1165,7 +1165,7 @@ const analyticsData = {
                                     "count": 1
                         },
                         {
-                                    "status": "Branch D rejected \u2014 fresh exploration needed (DEC-141)",
+                                    "status": "Methodology locked; HM1 kickoff prep in flight",
                                     "count": 1
                         },
                         {
@@ -1205,7 +1205,7 @@ const analyticsData = {
                                     "count": 1
                         },
                         {
-                                    "status": "Paused \u2014 verdict via TMW-224",
+                                    "status": "Active \u2014 HM1 first-screen kickoff prep",
                                     "count": 1
                         }
             ],
@@ -1224,7 +1224,7 @@ const analyticsData = {
                         },
                         {
                                     "owner": "Claude",
-                                    "active": 18,
+                                    "active": 19,
                                     "high_priority": 5,
                                     "overdue": 0
                         },
